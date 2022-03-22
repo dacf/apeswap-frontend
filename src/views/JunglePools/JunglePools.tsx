@@ -178,7 +178,7 @@ const StyledCheckbox = styled(Checkbox)<CheckboxProps>`
 `
 
 const ContainerLabels = styled.div`
-  background: ${({ theme }) => theme.card.background};
+  background: ${({ theme }) => theme.colors.white3};
   border-radius: 16px;
   margin-top: 24px;
   height: 32px;
@@ -417,7 +417,7 @@ const StyledTable = styled.div`
 `
 
 const Container = styled.div`
-  background: ${({ theme }) => theme.card.background};
+  background: ${({ theme }) => theme.colors.white3};
   border-radius: 16px;
   margin: 16px 0px;
   position: relative;
@@ -645,9 +645,7 @@ const JunglePools: React.FC = () => {
     <>
       <Header>
         <HeadingContainer>
-          <StyledHeading as="h1" mb="8px" mt={0} color="white" fontWeight={800}>
-            {TranslateString(999, 'Jungle Farms')}
-          </StyledHeading>
+          <StyledHeading as="h1">{TranslateString(999, 'Jungle Farms')}</StyledHeading>
           {size.width > 968 && (
             <Text fontSize="22px" fontWeight={400} color="white">
               Stake APE-LPs to earn new tokens. <br /> You can unstake at any time. <br /> Rewards are calculated per

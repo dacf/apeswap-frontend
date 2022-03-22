@@ -96,7 +96,6 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
             </Text>
           </Flex>
           <Button
-            variant="danger"
             disabled={!confirmed}
             onClick={() => {
               tokens.map((token) => addToken(token))

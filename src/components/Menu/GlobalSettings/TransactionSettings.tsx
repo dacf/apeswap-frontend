@@ -121,7 +121,7 @@ const SlippageTabs = () => {
                     parseCustomSlippage(event.target.value.replace(/,/g, '.'))
                   }
                 }}
-                isWarning={!slippageInputIsValid}
+                icon={!slippageInputIsValid ? 'error' : 'logo'}
               />
               <Text style={{ position: 'absolute', right: '10px', marginTop: '2px' }}>%</Text>
             </Flex>

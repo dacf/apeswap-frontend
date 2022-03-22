@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { currencyEquals, Trade } from '@apeswapfinance/sdk'
-import { InjectedModalProps } from '@apeswapfinance/uikit'
+import { ModalProps } from '@apeswapfinance/uikit'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
   TransactionErrorContent,
@@ -36,13 +36,13 @@ interface ConfirmSwapModalProps {
   customOnDismiss?: () => void
 }
 
-const ConfirmSwapModal: React.FC<InjectedModalProps & ConfirmSwapModalProps> = ({
+const ConfirmSwapModal: React.FC<ModalProps & ConfirmSwapModalProps> = ({
   trade,
   originalTrade,
   onAcceptChanges,
   allowedSlippage,
   onConfirm,
-  onDismiss,
+  handleClose,
   customOnDismiss,
   recipient,
   swapErrorMessage,
@@ -87,17 +87,17 @@ const ConfirmSwapModal: React.FC<InjectedModalProps & ConfirmSwapModalProps> = (
   const confirmationContent = useCallback(
     () =>
       swapErrorMessage ? (
-        <TransactionErrorContent onDismiss={onDismiss} message={swapErrorMessage} />
+        <TransactionErrorContent handleClose={handleClose} message={swapErrorMessage} />
       ) : (
         <ConfirmationModalContent topContent={modalHeader} bottomContent={modalBottom} />
       ),
-    [onDismiss, modalBottom, modalHeader, swapErrorMessage],
+    [handleClose, modalBottom, modalHeader, swapErrorMessage],
   )
 
   return (
     <TransactionConfirmationModal
       title="Confirm Swap"
-      onDismiss={onDismiss}
+      handleClose={handleClose}
       customOnDismiss={customOnDismiss}
       attemptingTxn={attemptingTxn}
       hash={txHash}

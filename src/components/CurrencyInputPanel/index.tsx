@@ -19,7 +19,7 @@ import { CurrencyLogo, DoubleCurrencyLogo } from '../Logo'
 import { RowBetween } from '../layout/Row'
 import { Input as NumericalInput } from './NumericalInput'
 
-const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })<{ removeLiquidity: boolean }>`
+const CurrencySelectButton = styled(Button).attrs({ scale: 'sm' })<{ removeLiquidity: boolean }>`
   display: flex;s
   justify-content: flex-start;
   background-color: ${({ theme }) => theme.colors.white4};

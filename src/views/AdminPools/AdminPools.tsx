@@ -217,7 +217,7 @@ const StyledCheckbox = styled(Checkbox)<CheckboxProps>`
 `
 
 const ContainerLabels = styled.div`
-  background: ${({ theme }) => theme.card.background};
+  background: ${({ theme }) => theme.colors.background};
   border-radius: 16px;
   margin-top: 24px;
   height: 32px;
@@ -574,9 +574,7 @@ const AdminPools: React.FC = () => {
     <>
       <Header>
         <HeadingContainer>
-          <StyledHeading as="h1" mb="8px" mt={0} color="white">
-            {TranslateString(999, 'Admin Pools')}
-          </StyledHeading>
+          <StyledHeading as="h1">{TranslateString(999, 'Admin Pools')}</StyledHeading>
           {size.width > 968 && (
             <AdminText>
               Stake OBIE to earn new tokens. <br /> Admins will be allocated OBIE tokens from grandpa Obie Dobo. <br />{' '}

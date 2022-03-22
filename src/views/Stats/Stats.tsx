@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Heading, BaseLayout, Text, Card } from '@apeswapfinance/uikit'
+import { Heading, Text, Card } from '@apeswapfinance/uikit'
 import useI18n from 'hooks/useI18n'
 import Page from 'components/layout/Page'
 import BananaStats from 'views/Stats/components/BananaStats'
@@ -10,7 +10,7 @@ import UnlockButton from 'components/UnlockButton'
 import CardStats from './components/CardStats'
 import PageLoader from '../../components/PageLoader'
 
-const Cards = styled(BaseLayout)`
+const Cards = styled.div`
   align-items: stretch;
   justify-content: stretch;
   margin-bottom: 32px;
@@ -105,17 +105,13 @@ const Stats: React.FC = () => {
     <>
       <Header>
         <HeadingContainer>
-          <StyledHeading as="h1" mb="8px" mt={0} color="white" fontWeight={800}>
-            {TranslateString(999, 'Ape Stats')}
-          </StyledHeading>
+          <StyledHeading as="h1">{TranslateString(999, 'Ape Stats')}</StyledHeading>
         </HeadingContainer>
       </Header>
 
       <Page>
         <PaddedCard>
-          <Heading size="lg" color="warning">
-            HEADS UP, APES!
-          </Heading>
+          <Heading color="warning">HEADS UP, APES!</Heading>
           <Text>
             The data on this page is not always up to date. Please do not rely on it for an accurate representation of
             your holdings. For similar services, consider our partners such as{' '}

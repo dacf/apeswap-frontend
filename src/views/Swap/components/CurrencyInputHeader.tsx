@@ -28,7 +28,7 @@ const CurrencyInputHeader: React.FC<Props> = () => {
   const swapActive = path.pathname.includes('swap')
   return (
     <CurrencyInputContainer>
-      <ButtonMenu activeIndex={swapActive ? 0 : 1} size="mds" variant="yellow">
+      <ButtonMenu activeIndex={swapActive ? 0 : 1} variant="yellow">
         <ButtonMenuItem as={Link} to="/swap" fontSize="14px" isMobile={isMobile}>
           SWAP
         </ButtonMenuItem>

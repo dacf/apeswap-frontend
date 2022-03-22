@@ -34,7 +34,8 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={`${TranslateString(316, 'Deposit')} ${tokenName} Tokens`} onDismiss={onDismiss}>
+    // title={`${TranslateString(316, 'Deposit')} ${tokenName} Tokens`}
+    <Modal handleClose={onDismiss}>
       <ModalInput
         value={val}
         onSelectMax={handleSelectMax}

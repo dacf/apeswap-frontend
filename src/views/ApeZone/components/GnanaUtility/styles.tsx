@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Heading, Card, Text, ButtonSquare, CardBody } from '@apeswapfinance/uikit'
+import { Heading, Card, Text, ButtonSquare } from '@apeswapfinance/uikit'
 
 export const UtilityCon = styled.div`
   display: flex;
@@ -180,7 +180,7 @@ export const HeadCard = styled(Card)`
     background: ${({ theme }) => theme.colors.white3};
   }
 `
-export const HeadBody = styled(CardBody)`
+export const HeadBody = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;

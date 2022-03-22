@@ -22,6 +22,7 @@ import ListViewContent from 'components/ListViewContent'
 import DepositModal from '../Modals/DepositModal'
 import WithdrawModal from '../Modals/WithdrawModal'
 import { ActionContainer, CenterContainer, SmallButtonSquare, StyledButtonSquare } from './styles'
+import { FarmButton } from '../styles'
 
 interface StakeActionsProps {
   stakingTokenBalance: string
@@ -70,6 +71,9 @@ const StakeAction: React.FC<StakeActionsProps> = ({ stakingTokenBalance, stakedB
         setPendingDepositTrx(false)
       }}
     />,
+    true,
+    true,
+    'FarmStakeModal',
   )
 
   const [onPresentWithdraw] = useModal(

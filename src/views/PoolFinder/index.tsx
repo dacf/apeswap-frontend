@@ -25,7 +25,7 @@ enum Fields {
   TOKEN1 = 1,
 }
 
-const StyledButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })`
+const StyledButton = styled(Button).attrs({ scale: 'sm' })`
   background-color: ${({ theme }) => theme.colors.white4};
   color: ${({ theme }) => theme.colors.text};
   box-shadow: none;

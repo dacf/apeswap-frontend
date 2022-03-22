@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { JSBI, Pair, Percent } from '@apeswapfinance/sdk'
-import {
-  Text,
-  Card,
-  CardBody,
-  Flex,
-  CardProps,
-  ButtonSquare,
-  ArrowDropDownIcon,
-  ArrowDropUpIcon,
-} from '@apeswapfinance/uikit'
+import { Text, Card, Flex, CardProps, ButtonSquare, ArrowDropDownIcon, ArrowDropUpIcon } from '@apeswapfinance/uikit'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -88,7 +79,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
     <>
       {userPoolBalance && JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
         <Card>
-          <CardBody>
+          <div>
             <AutoColumn gap="16px">
               <FixedHeightRow>
                 <RowFixed>
@@ -141,7 +132,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
                 </FixedHeightRow>
               </AutoColumn>
             </AutoColumn>
-          </CardBody>
+          </div>
         </Card>
       ) : (
         <Card>

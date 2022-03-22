@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import { BaseLayout } from '@apeswapfinance/uikit'
 
-const NftGrid = styled(BaseLayout)`
+const NftGrid = styled.div`
   padding-bottom: 24px;
   padding-top: 24px;
 

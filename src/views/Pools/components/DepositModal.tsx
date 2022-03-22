@@ -35,7 +35,8 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={`${TranslateString(316, 'Deposit')} ${tokenName} Tokens`} onDismiss={onDismiss}>
+    // title={`${TranslateString(316, 'Deposit')} ${tokenName} Tokens`}
+    <Modal handleClose={onDismiss}>
       <ModalInput
         value={val}
         onSelectMax={handleSelectMax}
@@ -63,7 +64,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
         </Button>
         <UnderlinedButton text="Cancel" handleClick={onDismiss} />
       </ModalActions>
-      <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }} fontWeight={800}>
+      <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }}>
         {TranslateString(999, 'Get')} {tokenName}
       </LinkExternal>
     </Modal>

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { useTable, ColumnType } from '@apeswapfinance/uikit'
+import { ColumnType } from '@apeswapfinance/uikit'
 
 import Row, { RowProps } from './Row'
 
@@ -10,7 +10,7 @@ export interface ITableProps {
 }
 
 const Container = styled.div`
-  background: ${({ theme }) => theme.card.background};
+  background: ${({ theme }) => theme.colors.white3};
   border-radius: 16px;
   margin: 16px 0px;
   position: relative;
@@ -46,9 +46,9 @@ const FarmTable: React.FC<ITableProps> = (props) => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const { data, columns } = props
 
-  const { rows } = useTable(columns, data, {
-    sortable: true,
-  })
+  // const { rows } = useTable(columns, data, {
+  //   sortable: true,
+  // })
 
   return (
     <>
@@ -56,9 +56,10 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         <TableContainer>
           <TableWrapper ref={tableWrapperEl}>
             <StyledTable>
-              {rows.map((row) => {
+              {/* {rows.map((row) => {
                 return <Row {...row.original} key={row.id} />
-              })}
+              })} */}
+              <></>
             </StyledTable>
           </TableWrapper>
         </TableContainer>

@@ -104,7 +104,8 @@ const NfaListingModal: React.FC<NfaListingModalProps> = ({ onConfirm, onDismiss,
   }, [onApprove, setApproved])
 
   return (
-    <Modal title={`${TranslateString(316, 'Put Your NFA up for Auction!')}`} onDismiss={onDismiss}>
+    // title={`${TranslateString(316, 'Put Your NFA up for Auction!')}`}
+    <Modal handleClose={onDismiss}>
       <DescriptionWrapper>
         <Text textAlign="center"> Welcome to the Self-Serve Auction House! </Text>
         <TimeText> (The Rules are the Same) </TimeText>

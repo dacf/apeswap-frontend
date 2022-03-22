@@ -8,6 +8,7 @@ import ListViewMenu from 'components/ListViewMenu'
 import { orderBy } from 'lodash'
 import { Farm } from 'state/types'
 import useI18n from 'hooks/useI18n'
+import Page from 'components/layout/Page'
 import DisplayFarms from './components/DisplayFarms'
 import { BLUE_CHIPS, NUMBER_OF_FARMS_VISIBLE, STABLES } from './constants'
 import { Header, HeadingContainer, StyledHeading } from './styles'
@@ -18,7 +19,6 @@ const Farms: React.FC = () => {
   useFetchFarmLpAprs()
   usePollFarms()
   const { pathname } = useLocation()
-  const { chainId } = useActiveWeb3React()
   const TranslateString = useI18n()
   const [observerIsSet, setObserverIsSet] = useState(false)
   const [numberOfFarmsVisible, setNumberOfFarmsVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
@@ -28,16 +28,14 @@ const Farms: React.FC = () => {
   const mergedFarms = farmsLP?.map((farm) => {
     return {
       ...farm,
-      lpApr: (
-        farmLpAprs?.find((farmLp) => farmLp.chainId === chainId)?.lpAprs?.find((lp) => lp.pid === farm.pid)?.lpApr * 100
-      )?.toFixed(2),
+      lpApr: (farmLpAprs?.lpAprs?.find((lp) => lp.pid === farm.pid)?.lpApr * 100)?.toFixed(2),
     }
   })
   const finalFarms = mergedFarms?.map((farm) => {
     return { ...farm, apy: (parseFloat(farm.apy) + parseFloat(farm.lpApr)).toFixed(2) }
   })
   const [query, setQuery] = useState('')
-  const [sortOption, setSortOption] = useState('hot')
+  const [sortOption, setSortOption] = useState('all')
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -114,12 +112,10 @@ const Farms: React.FC = () => {
   }
 
   return (
-    <>
+    <Page>
       <Header>
         <HeadingContainer>
-          <StyledHeading as="h1" mb="12px" mt={0} fontWeight={800}>
-            {TranslateString(999, 'Stake LP tokens to earn BANANA')}
-          </StyledHeading>
+          <StyledHeading as="h1">{TranslateString(999, 'Stake LP tokens to earn BANANA')}</StyledHeading>
         </HeadingContainer>
       </Header>
 
@@ -133,12 +129,13 @@ const Farms: React.FC = () => {
             stakedOnly={stakedOnly}
             query={query}
             showMonkeyImage
+            activeOption={sortOption}
           />
           <DisplayFarms farms={renderFarms()} />
           <div ref={loadMoreRef} />
         </Flex>
       </Flex>
-    </>
+    </Page>
   )
 }
 

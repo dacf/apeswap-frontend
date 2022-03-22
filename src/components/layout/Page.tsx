@@ -3,29 +3,15 @@ import styled from 'styled-components'
 import { Helmet } from 'react-helmet-async'
 import { useLocation } from 'react-router'
 import { customMeta, DEFAULT_META } from 'config/constants/meta'
-import Container from './Container'
 
 interface SizeProps {
   width?: string
 }
 
-const StyledPage = styled(Container)<SizeProps>`
-  min-height: calc(100vh - 64px);
-  padding-top: 16px;
+const StyledPage = styled.div`
   padding-bottom: 16px;
-  margin-left: auto;
-  margin-right: auto;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    padding-top: 32px;
-    padding-bottom: 32px;
-    max-width: ${({ width }) => width || '992px'};
-  }
+  overflow: hidden;
+  width: 100%;
 `
 
 const PageMeta = () => {

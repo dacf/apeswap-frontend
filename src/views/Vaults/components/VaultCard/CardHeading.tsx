@@ -339,9 +339,7 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
       <StyledFlexContainer>
         <LabelContainer>
           <TitleContainer>
-            <StyledHeading fontSize="20px" fontWeight={800}>
-              {lpLabel}
-            </StyledHeading>
+            <StyledHeading>{lpLabel}</StyledHeading>
             {burning && <Tooltip content="Burns at least 50% of every harvest in the form of $BANANA">🔥</Tooltip>}
           </TitleContainer>
           {!removed && (

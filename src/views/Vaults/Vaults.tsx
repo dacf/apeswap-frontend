@@ -179,7 +179,7 @@ const StyledCheckbox = styled(Checkbox)<CheckboxProps>`
 `
 
 const ContainerLabels = styled.div`
-  background: ${({ theme }) => theme.card.background};
+  background: ${({ theme }) => theme.colors.white3};
   border-radius: 16px;
   margin-top: 24px;
   height: 32px;
@@ -419,7 +419,7 @@ const StyledTable = styled.div`
 `
 
 const Container = styled.div`
-  background: ${({ theme }) => theme.card.background};
+  background: ${({ theme }) => theme.colors.white3};
   border-radius: 16px;
   margin: 16px 0px;
   position: relative;
@@ -592,9 +592,7 @@ const Vaults: React.FC = () => {
   const renderHeader = () => {
     const headerContents = (
       <HeadingContainer>
-        <StyledHeading as="h1" mb="8px" mt={0} color="white" fontWeight={800}>
-          {TranslateString(999, 'Burning Vaults')}
-        </StyledHeading>
+        <StyledHeading as="h1">{TranslateString(999, 'Burning Vaults')}</StyledHeading>
       </HeadingContainer>
     )
     if (chainId === CHAIN_ID.MATIC || chainId === CHAIN_ID.MATIC_TESTNET) {

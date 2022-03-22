@@ -1,5 +1,5 @@
 import React from 'react'
-import { Heading, BaseLayout, useMatchBreakpoints, Text } from '@apeswapfinance/uikit'
+import { Heading, useMatchBreakpoints, Text } from '@apeswapfinance/uikit'
 import styled from 'styled-components'
 import Page from 'components/layout/Page'
 import useTheme from 'hooks/useTheme'
@@ -67,7 +67,7 @@ const StyledPage = styled(Page)`
   }
 `
 
-const CardFull = styled(BaseLayout)<{ isMobile: boolean }>`
+const CardFull = styled.div<{ isMobile: boolean }>`
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
@@ -83,7 +83,7 @@ const CardFull = styled(BaseLayout)<{ isMobile: boolean }>`
     border: ${(props) => props.isMobile && '2px solid #ffb300'};
   }
 `
-const Cards = styled(BaseLayout)<{ isMobile: boolean }>`
+const Cards = styled.div<{ isMobile: boolean }>`
   & > div {
     ${({ theme }) => theme.mediaQueries.md} {
       grid-column: span 6;
@@ -132,9 +132,7 @@ const BurningGames: React.FC = () => {
     <ContainerPrincipal>
       <Header banner={banner}>
         <HeadingContainer>
-          <StyledHeading as="h1" mb="12px" mt={0} color="white">
-            BANANA Burns
-          </StyledHeading>
+          <StyledHeading as="h1">BANANA Burns</StyledHeading>
           <SubtitleHeading isMobile={!isDesktop} fontWeight={400} color="white">
             Partners Supporting The Jungle
           </SubtitleHeading>

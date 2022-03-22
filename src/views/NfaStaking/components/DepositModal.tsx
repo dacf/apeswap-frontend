@@ -55,7 +55,8 @@ const DepositModal: React.FC<DepositModalProps> = ({ onConfirm, onDismiss, tier 
   }
 
   return (
-    <Modal title={`${TranslateString(316, 'Deposit')} Tier ${tier} NFAs`} onDismiss={onDismiss}>
+    // title={`${TranslateString(316, 'Deposit')} Tier ${tier} NFAs`}
+    <Modal handleClose={onDismiss}>
       <Text marginBottom="20px">
         NFAs Selected:
         {selectedNfas?.map((index) => {

@@ -13,7 +13,7 @@ const ConfirmModal: React.FC<ApyCalculatorModalProps> = ({ onDismiss, amount }) 
   const TranslateString = useI18n()
 
   return (
-    <Modal title="CONFIRM" onDismiss={onDismiss}>
+    <Modal handleClose={onDismiss}>
       <Description fontSize="12px" color="gray">
         {TranslateString(999, 'Buying Golden Banana has a 30% cost.')}
       </Description>

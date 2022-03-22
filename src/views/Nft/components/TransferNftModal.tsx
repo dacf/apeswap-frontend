@@ -73,7 +73,8 @@ const TransferNftModal: React.FC<TransferNftModalProps> = ({ nft, tokenId, onDis
   }
 
   return (
-    <Modal title={TranslateString(999, 'Transfer NFT')} onDismiss={onDismiss}>
+    // title={TranslateString(999, 'Transfer NFT')}
+    <Modal handleClose={onDismiss}>
       <ModalContent>
         {error && (
           <Text color="error" mb="8px">
@@ -92,7 +93,7 @@ const TransferNftModal: React.FC<TransferNftModalProps> = ({ nft, tokenId, onDis
           placeholder={TranslateString(999, 'Paste address')}
           value={value}
           onChange={handleChange}
-          isWarning={error}
+          icon={error ? 'error' : 'logo'}
           disabled={isLoading}
         />
       </ModalContent>

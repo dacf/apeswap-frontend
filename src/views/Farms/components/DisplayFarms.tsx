@@ -90,7 +90,7 @@ const DisplayFarms: React.FC<{ farms: Farm[] }> = ({ farms }) => {
                 value={userTokenBalance}
                 value2={userTokenBalanceUsd}
                 value2Secondary
-                width={100}
+                width={110}
                 height={50}
                 lineHeight={15}
                 ml={10}

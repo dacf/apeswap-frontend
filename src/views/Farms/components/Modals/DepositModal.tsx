@@ -1,11 +1,52 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal, LinkExternal, AutoRenewIcon } from '@apeswapfinance/uikit'
+import {
+  Button,
+  LinkExternal,
+  AutoRenewIcon,
+  Modal,
+  ModalHeader,
+  Heading,
+  ModalFooter,
+  Text,
+} from '@apeswapfinance/uikit'
+import { ThemeUIStyleObject, Box } from 'theme-ui'
 import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
 import useI18n from 'hooks/useI18n'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import UnderlinedButton from 'components/UnderlinedButton'
+
+const styles: Record<string, ThemeUIStyleObject> = {
+  base: {
+    display: 'flex',
+    my: 9,
+    flexDirection: 'column',
+  },
+  default: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    px: 4,
+    span: {
+      fontSize: 2,
+      fontWeight: 'normal',
+    },
+  },
+  styled: {
+    display: 'flex',
+    borderRadius: 'normal',
+    padding: 9,
+    mb: 9,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    button: {
+      fontWeight: 'normal',
+    },
+    span: { fontSize: 0 },
+    background: 'lvl1',
+  },
+}
 
 interface DepositModalProps {
   max: string
@@ -35,7 +76,11 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={TranslateString(999, 'Stake LP tokens')} onDismiss={onDismiss}>
+    // title={TranslateString(999, 'Stake LP tokens')}
+    <Modal handleClose={onDismiss} minWidth="350px">
+      <ModalHeader handleClose={onDismiss}>
+        <Heading as="h3">{TranslateString(999, 'Stake LP tokens')}</Heading>
+      </ModalHeader>
       <ModalInput
         value={val}
         onSelectMax={handleSelectMax}
@@ -45,7 +90,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
         addLiquidityUrl={addLiquidityUrl}
         inputTitle={TranslateString(999, 'Stake')}
       />
-      <ModalActions>
+      <ModalFooter handleClose={() => onDismiss()}>
         <Button
           fullWidth
           disabled={pendingTx || fullBalance === '0' || val === '0'}
@@ -65,13 +110,9 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
             borderRadius: '10px',
           }}
         >
-          {pendingTx ? TranslateString(488, 'Pending Confirmation') : TranslateString(464, 'Confirm')}
+          {pendingTx ? TranslateString(488, 'Pending Deposit') : TranslateString(464, 'Deposit')}
         </Button>
-        <UnderlinedButton text="Cancel" handleClick={onDismiss} />
-      </ModalActions>
-      <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center', marginTop: '10px' }} fontWeight={800}>
-        {TranslateString(999, 'Get')} {tokenName}
-      </LinkExternal>
+      </ModalFooter>
     </Modal>
   )
 }

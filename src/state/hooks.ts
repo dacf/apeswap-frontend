@@ -375,7 +375,7 @@ export const useToast = () => {
         return push({ id: kebabCase(title), type: toastTypes.SUCCESS, title, description })
       },
       toastWarning: (title: string, description?: ReactNode) => {
-        return push({ id: kebabCase(title), type: toastTypes.WARNING, title, description })
+        return push({ id: kebabCase(title), type: toastTypes.DANGER, title, description })
       },
       push,
       remove: (id: string) => dispatch(removeToast(id)),
@@ -494,7 +494,7 @@ export const useFetchFarmLpAprs = () => {
   }, [slowRefresh, dispatch])
 }
 
-export const useFarmLpAprs = (): FarmLpAprsType[] => {
+export const useFarmLpAprs = (): FarmLpAprsType => {
   const farmLpAprs = useSelector((state: State) => state.stats.FarmLpAprs)
   return farmLpAprs
 }

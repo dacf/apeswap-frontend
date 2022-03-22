@@ -1,25 +1,26 @@
 import React from 'react'
 import { Token } from '@apeswapfinance/sdk'
-import { Modal, InjectedModalProps } from '@apeswapfinance/uikit'
+import { Modal, ModalProps } from '@apeswapfinance/uikit'
 import ImportToken from 'components/SearchModal/ImportToken'
 
-interface Props extends InjectedModalProps {
+interface Props extends ModalProps {
   tokens: Token[]
   onCancel: () => void
 }
 
-const ImportTokenWarningModal: React.FC<Props> = ({ tokens, onDismiss, onCancel }) => {
+const ImportTokenWarningModal: React.FC<Props> = ({ tokens, handleClose, onCancel }) => {
   return (
+    //  title="Import Token"
+
     <Modal
-      title="Import Token"
-      onDismiss={() => {
-        if (onDismiss) {
-          onDismiss()
+      handleClose={() => {
+        if (handleClose) {
+          handleClose()
         }
         onCancel()
       }}
     >
-      <ImportToken tokens={tokens} handleCurrencySelect={onDismiss} />
+      <ImportToken tokens={tokens} handleCurrencySelect={handleClose} />
     </Modal>
   )
 }

@@ -389,7 +389,7 @@ export default function Swap({ history }: RouteComponentProps) {
                           <ArrowWrapper clickable={false}>
                             <ArrowDownIcon width="16px" />
                           </ArrowWrapper>
-                          <Button variant="text" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
+                          <Button id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
                             - Remove send
                           </Button>
                         </AutoRow>

@@ -40,7 +40,7 @@ const WalletTransactions: React.FC = () => {
               Recent Transactions
             </Title>
             {sortedTransactions.length > 0 && (
-              <Button onClick={handleClearAll} variant="text" px="0" padding={10}>
+              <Button onClick={handleClearAll} px="0" padding={10}>
                 <Text>Clear all</Text>
               </Button>
             )}

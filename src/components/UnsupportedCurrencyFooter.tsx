@@ -1,6 +1,6 @@
 import React from 'react'
 import { Currency, Token } from '@apeswapfinance/sdk'
-import { Button, Text, Modal, useModal, InjectedModalProps, Link } from '@apeswapfinance/uikit'
+import { Button, Text, Modal, useModal, ModalProps, Link } from '@apeswapfinance/uikit'
 import styled from 'styled-components'
 import { AutoRow } from 'components/layout/Row'
 import { AutoColumn } from 'components/layout/Column'
@@ -10,7 +10,7 @@ import { getEtherscanLink } from 'utils'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { useUnsupportedTokens } from '../hooks/Tokens'
 
-interface Props extends InjectedModalProps {
+interface Props extends ModalProps {
   currencies: (Currency | undefined)[]
 }
 
@@ -25,7 +25,7 @@ const DetailsFooter = styled.div`
   text-align: center;
 `
 
-const UnsupportedModal: React.FC<Props> = ({ currencies, onDismiss }) => {
+const UnsupportedModal: React.FC<Props> = ({ currencies, handleClose }) => {
   const { chainId } = useActiveWeb3React()
   const tokens =
     chainId && currencies
@@ -37,7 +37,7 @@ const UnsupportedModal: React.FC<Props> = ({ currencies, onDismiss }) => {
   const unsupportedTokens: { [address: string]: Token } = useUnsupportedTokens()
 
   return (
-    <Modal title="Unsupported Assets" onDismiss={onDismiss}>
+    <Modal handleClose={handleClose}>
       <AutoColumn gap="lg">
         {tokens.map((token) => {
           return (
@@ -74,9 +74,7 @@ export default function UnsupportedCurrencyFooter({ currencies }: { currencies: 
 
   return (
     <DetailsFooter>
-      <Button variant="text" onClick={onPresentModal}>
-        Read more about unsupported assets
-      </Button>
+      <Button onClick={onPresentModal}>Read more about unsupported assets</Button>
     </DetailsFooter>
   )
 }

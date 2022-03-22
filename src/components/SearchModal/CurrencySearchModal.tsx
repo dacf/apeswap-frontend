@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { Currency, Token } from '@apeswapfinance/sdk'
-import { InjectedModalProps, Button, Modal } from '@apeswapfinance/uikit'
+import { ModalProps, Button, Modal } from '@apeswapfinance/uikit'
 import styled from 'styled-components'
 import { TokenList } from '@uniswap/token-lists'
 import CurrencySearch from './CurrencySearch'
@@ -29,7 +29,7 @@ const StyledModalBody = styled(Modal)`
   }
 `
 
-interface CurrencySearchModalProps extends InjectedModalProps {
+interface CurrencySearchModalProps extends ModalProps {
   selectedCurrency?: Currency | null
   onCurrencySelect: (currency: Currency) => void
   otherSelectedCurrency?: Currency | null
@@ -37,7 +37,7 @@ interface CurrencySearchModalProps extends InjectedModalProps {
 }
 
 export default function CurrencySearchModal({
-  onDismiss = () => null,
+  handleClose = () => null,
   onCurrencySelect,
   selectedCurrency,
   otherSelectedCurrency,
@@ -47,10 +47,10 @@ export default function CurrencySearchModal({
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
-      onDismiss()
+      handleClose()
       onCurrencySelect(currency)
     },
-    [onDismiss, onCurrencySelect],
+    [handleClose, onCurrencySelect],
   )
 
   // used for import token flow
@@ -62,7 +62,7 @@ export default function CurrencySearchModal({
 
   return (
     <StyledModalContainer>
-      <StyledModalBody title="Tokens" onDismiss={onDismiss} bodyPadding="none">
+      <StyledModalBody handleClose={handleClose}>
         {modalView === CurrencyModalView.search ? (
           <CurrencySearch
             onCurrencySelect={handleCurrencySelect}
@@ -89,7 +89,6 @@ export default function CurrencySearchModal({
         {modalView === CurrencyModalView.search && (
           <Footer>
             <Button
-              variant="text"
               onClick={() => setModalView(CurrencyModalView.manage)}
               className="list-token-manage-button"
               margin="10px 0 10px 0"

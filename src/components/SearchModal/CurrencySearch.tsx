@@ -117,7 +117,6 @@ function CurrencySearch({
           <StyledInput
             id="token-search-input"
             placeholder="Search name or paste address"
-            scale="lg"
             autoComplete="off"
             value={searchQuery}
             ref={inputRef as RefObject<HTMLInputElement>}

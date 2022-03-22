@@ -13,6 +13,7 @@ import {
   useModal,
   Text,
   ButtonSquare,
+  Button,
 } from '@apeswapfinance/uikit'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -180,9 +181,9 @@ const StakeAction: React.FC<StakeActionsProps> = ({
 
   if (firstStake) {
     return (
-      <StyledButtonSquare onClick={onPresentDeposit}>
+      <Button onClick={onPresentDeposit} size="md">
         {TranslateString(999, `STAKE ${stakingTokenName}`)}
-      </StyledButtonSquare>
+      </Button>
     )
   }
 

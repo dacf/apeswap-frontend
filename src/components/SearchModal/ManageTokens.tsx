@@ -75,7 +75,7 @@ export default function ManageTokens({
             </Link>
           </RowFixed>
           <RowFixed>
-            <IconButton variant="text" onClick={() => removeToken(chainId, token.address)}>
+            <IconButton onClick={() => removeToken(chainId, token.address)}>
               <CloseIcon />
             </IconButton>
             <LinkExternal href={getEtherscanLink(token.address, 'address', chainId)} />
@@ -94,13 +94,12 @@ export default function ManageTokens({
           <Row>
             <Input
               id="token-search-input"
-              scale="lg"
               placeholder="0x0000"
               value={searchQuery}
               autoComplete="off"
               ref={inputRef as RefObject<HTMLInputElement>}
               onChange={handleInput}
-              isWarning={!isAddressValid}
+              icon={!isAddressValid ? 'error' : 'logo'}
             />
           </Row>
           {!isAddressValid && <Text color="error">Enter valid token address</Text>}
@@ -118,11 +117,7 @@ export default function ManageTokens({
           <Text bold textAlign="center">
             {userAddedTokens?.length} {userAddedTokens.length === 1 ? 'Custom Token' : 'Custom Tokens'}
           </Text>
-          {userAddedTokens.length > 0 && (
-            <Button variant="tertiary" onClick={handleRemoveAll}>
-              Clear all
-            </Button>
-          )}
+          {userAddedTokens.length > 0 && <Button onClick={handleRemoveAll}>Clear all</Button>}
         </Footer>
       </Column>
     </Wrapper>

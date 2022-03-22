@@ -8,7 +8,7 @@ import {
   Flex,
   Link,
   Modal,
-  InjectedModalProps,
+  ModalProps,
   ButtonSquare,
   MetamaskIcon,
   Spinner,
@@ -78,11 +78,7 @@ function TransactionSubmittedContent({
           </Link>
         )}
         {currencyToAdd && library?.provider?.isMetaMask && (
-          <Button
-            variant="tertiary"
-            mt="12px"
-            onClick={() => registerToken(token.address, token.symbol, token.decimals, '')}
-          >
+          <Button mt="12px" onClick={() => registerToken(token.address, token.symbol, token.decimals, '')}>
             <RowFixed>
               <Text>{`Add ${currencyToAdd.getSymbol(chainId)} to Metamask`}</Text>
               <MetamaskIcon width="16px" ml="6px" />
@@ -112,7 +108,7 @@ export function ConfirmationModalContent({
   )
 }
 
-export function TransactionErrorContent({ message, onDismiss }: { message: string; onDismiss: () => void }) {
+export function TransactionErrorContent({ message, handleClose }: { message: string; handleClose: () => void }) {
   return (
     <Wrapper>
       <AutoColumn justify="center">
@@ -123,7 +119,7 @@ export function TransactionErrorContent({ message, onDismiss }: { message: strin
       </AutoColumn>
 
       <Flex justifyContent="center" pt="24px">
-        <Button onClick={onDismiss}>Dismiss</Button>
+        <Button onClick={handleClose}>Dismiss</Button>
       </Flex>
     </Wrapper>
   )
@@ -139,9 +135,9 @@ interface ConfirmationModalProps {
   currencyToAdd?: Currency | undefined
 }
 
-const TransactionConfirmationModal: React.FC<InjectedModalProps & ConfirmationModalProps> = ({
+const TransactionConfirmationModal: React.FC<ModalProps & ConfirmationModalProps> = ({
   title,
-  onDismiss,
+  handleClose,
   customOnDismiss,
   attemptingTxn,
   hash,
@@ -155,21 +151,21 @@ const TransactionConfirmationModal: React.FC<InjectedModalProps & ConfirmationMo
     if (customOnDismiss) {
       customOnDismiss()
     }
-    onDismiss()
-  }, [customOnDismiss, onDismiss])
+    handleClose()
+  }, [customOnDismiss, handleClose])
 
   if (!chainId) return null
 
   return (
     <div style={{ maxWidth: '420px', zIndex: 101 }}>
-      <Modal title={title} onDismiss={handleDismiss}>
+      <Modal handleClose={handleDismiss}>
         {attemptingTxn ? (
           <ConfirmationPendingContent pendingText={pendingText} />
         ) : hash ? (
           <TransactionSubmittedContent
             chainId={chainId}
             hash={hash}
-            onDismiss={onDismiss}
+            onDismiss={handleClose}
             currencyToAdd={currencyToAdd}
           />
         ) : (

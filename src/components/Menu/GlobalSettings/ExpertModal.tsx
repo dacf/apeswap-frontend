@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Text, Flex, Modal, InjectedModalProps, Checkbox, ButtonSquare } from '@apeswapfinance/uikit'
+import { Text, Flex, Modal, Checkbox, ButtonSquare, ModalProps } from '@apeswapfinance/uikit'
 import { useExpertModeManager } from 'state/user/hooks'
 import UnderlinedButton from 'components/UnderlinedButton'
 
-interface ExpertModalProps extends InjectedModalProps {
+interface ExpertModalProps extends ModalProps {
   setShowConfirmExpertModal: (boolean) => void
   setShowExpertModeAcknowledgement: (boolean) => void
 }
@@ -14,11 +14,7 @@ const ExpertModal: React.FC<ExpertModalProps> = ({ setShowConfirmExpertModal, se
 
   return (
     <div style={{ zIndex: 101, maxWidth: '360px' }}>
-      <Modal
-        title="Expert Mode"
-        onBack={() => setShowConfirmExpertModal(false)}
-        onDismiss={() => setShowConfirmExpertModal(false)}
-      >
+      <Modal handleClose={() => setShowConfirmExpertModal(false)}>
         <Text>
           Expert mode turns off the Confirm transaction prompt, and allows high slippage trades that often result in bad
           rates and lost funds

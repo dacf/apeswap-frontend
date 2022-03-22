@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Text, Flex, Modal, InjectedModalProps, ButtonMenu, ButtonMenuItem } from '@apeswapfinance/uikit'
+import { Text, Flex, Modal, ModalProps, ButtonMenu, ButtonMenuItem } from '@apeswapfinance/uikit'
 import {
   useExpertModeManager,
   useUserExpertModeAcknowledgementShow,
@@ -19,7 +19,7 @@ const ScrollableContainer = styled(Flex)`
   }
 `
 
-const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
+const SettingsModal: React.FC<ModalProps> = ({ handleClose }) => {
   const [showConfirmExpertModal, setShowConfirmExpertModal] = useState(false)
   const [showExpertModeAcknowledgement, setShowExpertModeAcknowledgement] = useUserExpertModeAcknowledgementShow()
   const [expertMode, toggleExpertMode] = useExpertModeManager()
@@ -31,7 +31,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
     return (
       <ExpertModal
         setShowConfirmExpertModal={setShowConfirmExpertModal}
-        onDismiss={onDismiss}
+        handleClose={handleClose}
         setShowExpertModeAcknowledgement={setShowExpertModeAcknowledgement}
       />
     )
@@ -51,7 +51,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
 
   return (
     <div style={{ zIndex: 101, width: '360px' }}>
-      <Modal title="Transaction Settings" onDismiss={onDismiss}>
+      <Modal handleClose={handleClose}>
         <ScrollableContainer>
           <TransactionSettings />
           <Flex justifyContent="space-between" alignItems="center" mb="24px" mt="5px">

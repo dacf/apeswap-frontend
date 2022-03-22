@@ -54,7 +54,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, sta
   }
 
   return (
-    <Modal title="Withdraw NFAs" onDismiss={onDismiss}>
+    // title="Withdraw NFAs"
+    <Modal handleClose={onDismiss}>
       <Text marginBottom="20px">
         NFAs Selected:
         {selectedNfas.map((index) => {

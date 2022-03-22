@@ -1,8 +1,8 @@
-import { ButtonSquare, Flex } from '@apeswapfinance/uikit'
+import { Button, ButtonSquare, Flex } from '@apeswapfinance/uikit'
 import UnlockButton from 'components/UnlockButton'
 import styled from 'styled-components'
 
-export const StyledButtonSquare = styled(ButtonSquare)`
+export const StyledButtonSquare = styled(Button)`
   border-radius: 10px;
   font-size: 16px;
   font-weight: 700;
@@ -28,6 +28,7 @@ export const SmallButtonSquare = styled(ButtonSquare)`
 export const ActionContainer = styled(Flex)`
   width: 100%;
   justify-content: space-between;
+  align-items: center;
   ${({ theme }) => theme.mediaQueries.md} {
     width: auto;
   }
