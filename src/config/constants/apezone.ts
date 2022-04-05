@@ -5,7 +5,7 @@ const ApeZone: { ifos: Ifo[] } = {
   ifos: [
     {
       id: 'animalconcerts',
-      address: '0x8C32C05243CDBEEa9632eAAa30e9471D7Ab78215', // Leave empty for "Coming Soon!"
+      address: '', // Leave empty for "Coming Soon!"
       isActive: true,
       isLinear: true,
       name: 'Animal Concerts',

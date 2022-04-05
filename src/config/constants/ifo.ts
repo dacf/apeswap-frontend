@@ -5,7 +5,7 @@ import { Ifo } from './types'
 const ifos: Ifo[] = [
   {
     id: 'animalconcerts',
-    address: '0x4bcfC7571D650e707e9C6506e1ED0E3e434E9bb4', // Leave empty for "Coming Soon!"
+    address: '', // Leave empty for "Coming Soon!"
     isActive: true,
     isLinear: true,
     name: 'Animal Concerts',
