@@ -1,16 +1,18 @@
-// import { apiBaseUrl } from 'hooks/api'
+import axiosRetry from 'axios-retry'
+import axios from 'axios'
 import { ServiceData } from 'state/types'
-
-const apiBaseUrl = ' https://apeswap-api-development.herokuapp.com'
+import { apiBaseUrl } from 'hooks/api'
 
 const getHomepageServiceStats = async (): Promise<ServiceData[]> => {
   try {
-    const response = await fetch(`${apiBaseUrl}/stats/features`)
-    const serviceResp = await response.json()
-    if (serviceResp.statusCode === 500) {
-      return null
-    }
-    return serviceResp
+    axiosRetry(axios, {
+      retries: 3,
+      retryCondition: () => true,
+      retryDelay: () => 10000,
+    })
+    const serviceResp = await axios.get(`${apiBaseUrl}/stats/features`)
+    if (serviceResp.status === 500) return null
+    return serviceResp.data
   } catch (error) {
     return null
   }

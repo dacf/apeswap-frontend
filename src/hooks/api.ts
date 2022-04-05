@@ -1,3 +1,5 @@
+import axiosRetry from 'axios-retry'
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import useRefresh from './useRefresh'
 
@@ -53,8 +55,14 @@ export const useGetNfaSales = (id: number) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/nfas/history/${id}`)
-        const responsedata: SaleHistory[] = await response.json()
+        axiosRetry(axios, {
+          retries: 3,
+          retryCondition: () => true,
+          retryDelay: () => 10000,
+        })
+        const response = await axios.get(`${apiBaseUrl}/nfas/history/${id}`)
+        if (response.status !== 200) setSale([])
+        const responsedata: SaleHistory[] = response.data
 
         setSale(responsedata)
       } catch (error) {
@@ -72,8 +80,14 @@ export const useGetNfaAuctionHistory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/nfas/latestBids`)
-        const responsedata: AuctionHistory[] = await response.json()
+        axiosRetry(axios, {
+          retries: 3,
+          retryCondition: () => true,
+          retryDelay: () => 10000,
+        })
+        const response = await axios.get(`${apiBaseUrl}/nfas/latestBids`)
+        if (response.status !== 200) setHistory([])
+        const responsedata: AuctionHistory[] = response.data
         setHistory(responsedata)
       } catch (error) {
         console.warn('Unable to fetch data:', error)

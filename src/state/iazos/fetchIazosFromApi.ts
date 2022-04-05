@@ -1,15 +1,19 @@
+import axiosRetry from 'axios-retry'
+import axios from 'axios'
 import { apiBaseUrl } from 'hooks/api'
 import { IazoSocialInfo, IazoFeeInfo, IazoTimeInfo, IazoStatus, Iazo, IazoTokenInfo } from 'state/types'
 
 const getIazosFromApi = async (chainId: number) => {
   const apiUrl = chainId === 97 ? 'https://apeswap-api-development.herokuapp.com' : apiBaseUrl
   try {
-    const response = await fetch(`${apiUrl}/iazo`)
-    const statRes = await response.json()
-    if (statRes.statusCode === 500) {
-      return null
-    }
-    return statRes
+    axiosRetry(axios, {
+      retries: 3,
+      retryCondition: () => true,
+      retryDelay: () => 10000,
+    })
+    const statRes = await axios.get(`${apiUrl}/iazo`)
+    if (statRes.status === 500) return null
+    return statRes.data
   } catch (error) {
     console.error(error)
     return null
@@ -19,12 +23,14 @@ const getIazosFromApi = async (chainId: number) => {
 const getIazoFromApi = async (chainId: number, address: string) => {
   const apiUrl = chainId === 97 ? 'https://apeswap-api-development.herokuapp.com' : apiBaseUrl
   try {
-    const response = await fetch(`${apiUrl}/iazo/${address}`)
-    const statRes = await response.json()
-    if (statRes.statusCode === 500) {
-      return null
-    }
-    return statRes
+    axiosRetry(axios, {
+      retries: 3,
+      retryCondition: () => true,
+      retryDelay: () => 10000,
+    })
+    const statRes = await axios.get(`${apiUrl}/iazo/${address}`)
+    if (statRes.status === 500) return null
+    return statRes.data
   } catch (error) {
     console.error(error)
     return null
