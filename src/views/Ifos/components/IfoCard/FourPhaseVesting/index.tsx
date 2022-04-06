@@ -33,8 +33,17 @@ export interface IfoCardProps {
   gnana?: boolean
 }
 
-const getStatus = (currentBlock: number, startBlock: number, endBlock: number): IfoStatus | null => {
-  if (currentBlock < startBlock) {
+const getStatus = (
+  currentBlock: number,
+  startBlock: number,
+  endBlock: number,
+  ifoAddress: string,
+): IfoStatus | null => {
+  console.log('4currentBlock', currentBlock)
+  console.log('4startBlock', startBlock)
+  console.log('4endBlock', endBlock)
+  console.log('4ifoAddress', ifoAddress)
+  if (ifoAddress === '' || currentBlock < startBlock) {
     return 'coming_soon'
   }
 
@@ -86,6 +95,10 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo, gnana }) => {
   useEffect(() => {
     const fetchProgress = async () => {
       if (!address) {
+        // setState({
+        //   ...state,
+        //   status: 'coming_soon',
+        // })
         // Allow IAO details to be shown before contracts are deployed
         return
       }
@@ -113,7 +126,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo, gnana }) => {
       const startBlockNum = start || parseInt(startBlock, 10)
       const endBlockNum = parseInt(endBlock, 10)
 
-      const status = getStatus(currentBlock, startBlockNum, endBlockNum)
+      const status = getStatus(currentBlock, startBlockNum, endBlockNum, address)
       const blocksRemaining = endBlockNum - currentBlock
 
       setState({
@@ -122,7 +135,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo, gnana }) => {
         secondsUntilStart: (startBlockNum - currentBlock) * BSC_BLOCK_TIME,
         raisingAmount: new BigNumber(raisingAmount.toString()),
         totalAmount: new BigNumber(totalAmount.toString()),
-        status,
+        status: !address ? 'coming_soon' : status,
         blocksRemaining,
         startBlockNum,
         endBlockNum,
@@ -134,7 +147,8 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo, gnana }) => {
 
   const { userTokenStatus, userInfo, offeringTokenBalance } = useUserInfo(contract, tokenDecimals, address)
 
-  const isComingSoon = state.status === 'coming_soon'
+  console.log('4IAO status', state.status)
+  const isComingSoon = address === '' || state.status === 'coming_soon'
   const isActive = state.status === 'live'
   const isFinished = state.status === 'finished'
   const hasStarted = currentBlock && state.startBlockNum && state.startBlockNum <= currentBlock
@@ -198,7 +212,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo, gnana }) => {
       return texts
     }
 
-    if (hasStarted) {
+    if (address && hasStarted) {
       texts.splice(2, 0, {
         label: 'Total raised (% of the target)',
         value: `${state.totalAmount.dividedBy(state.raisingAmount).multipliedBy(100).toFixed(2)}%`,
@@ -225,6 +239,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo, gnana }) => {
     currencyPrice,
     currency,
     statsType,
+    address,
   ])
 
   return (

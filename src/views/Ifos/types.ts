@@ -1,1 +1,1 @@
-export type TabOption = 'current' | 'past'
+export type TabOption = 'current' | 'past' | 'coming_soon'

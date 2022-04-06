@@ -157,7 +157,8 @@ const Banana = styled.img`
 `
 
 const firstPastIfoId = pastIfos.length > 0 ? pastIfos[0].id : undefined
-const activeIfoId = ifos.find((ifo) => ifo.isActive).id
+const activeIfoId = ifos.find((ifo) => ifo.address === '' && ifo.isActive).id
+console.log('activeIfoId', activeIfoId)
 
 const Ifos = () => {
   const TranslateString = useI18n()
