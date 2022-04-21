@@ -127,13 +127,25 @@ const Farms: React.FC = () => {
 
   return (
     <>
-      <Header>
-        <HeadingContainer>
-          <StyledHeading as="h1">{TranslateString(999, 'Stake LP tokens to earn BANANA')}</StyledHeading>
-        </HeadingContainer>
-      </Header>
-      <Flex justifyContent="center" mb="100px" style={{ position: 'relative', top: '30px', width: '100%' }}>
-        <Flex flexDirection="column" alignSelf="center" style={{ maxWidth: '1130px', width: '100%' }}>
+      <Flex
+        justifyContent="center"
+        mb="100px"
+        flexDirection="column"
+        alignItems="center"
+        style={{ position: 'relative', top: '30px', width: '100%' }}
+      >
+        <Flex alignContent="center" mt="30px" justifyContent="center" style={{ maxWidth: '1130px', width: '100%' }}>
+          <Header>
+            <HeadingContainer>
+              <StyledHeading as="h1">{TranslateString(999, 'Stake LP tokens to earn BANANA')}</StyledHeading>
+            </HeadingContainer>
+          </Header>
+        </Flex>
+        <Flex
+          flexDirection="column"
+          alignSelf="center"
+          style={{ maxWidth: '1130px', width: '100%', marginTop: '30px' }}
+        >
           <Flex alignItems="center" justifyContent="center">
             <ListViewMenu
               onHandleQueryChange={handleChangeQuery}

@@ -8,19 +8,23 @@ export const HeadingContainer = styled.div`
 `
 
 export const Header = styled.div`
+  position: relative;
   padding-top: 36px;
   padding-left: 10px;
   padding-right: 10px;
-  background-image: ${({ theme }) => (theme.isDark ? 'url(/images/farm-night.svg)' : 'url(/images/farm-day.svg)')};
+  background-image: ${({ theme }) =>
+    theme.isDark ? 'url(/images/test-farm-banner.svg)' : 'url(/images/test-farm-banner.svg)'};
   background-repeat: no-repeat;
   background-size: cover;
-  height: 250px;
   background-position: center;
+  border-radius: 10px;
+  width: 100%;
+  height: calc(20vw);
+  max-height: 300px;
 
   ${({ theme }) => theme.mediaQueries.md} {
     padding-left: 24px;
     padding-right: 24px;
-    height: 300px;
   }
 `
 
