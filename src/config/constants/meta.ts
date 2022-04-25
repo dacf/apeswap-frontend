@@ -13,6 +13,9 @@ export const customMeta: { [key: string]: PageMeta } = {
   '/stats': {
     title: 'Ape Stats | ApeSwap',
   },
+  '/swap': {
+    title: 'Swap & Liquidity | ApeSwap',
+  },
   '/nft': {
     title: 'NFA Collectibles | ApeSwap',
   },

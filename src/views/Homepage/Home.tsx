@@ -2,6 +2,7 @@ import { CHAIN_ID } from 'config/constants/chains'
 import SwiperProvider from 'contexts/SwiperProvider'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React from 'react'
+import Page from 'components/layout/Page'
 import LaunchCalendar from './components/LaunchCalendar/LaunchCalendar'
 import News from './components/News/News'
 import Services from './components/Services/Services'
@@ -15,7 +16,7 @@ const Home: React.FC = () => {
   const { chainId } = useActiveWeb3React()
 
   return (
-    <>
+    <Page>
       <Banner />
       <WelcomeContent />
       <StatCards />
@@ -34,7 +35,7 @@ const Home: React.FC = () => {
       <SwiperProvider>
         <LaunchCalendar />
       </SwiperProvider>
-    </>
+    </Page>
   )
 }
 

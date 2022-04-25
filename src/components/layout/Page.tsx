@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Helmet } from 'react-helmet-async'
 import { useLocation } from 'react-router'
 import { customMeta, DEFAULT_META } from 'config/constants/meta'
+import styled from 'styled-components'
 import Container from './Container'
+import PageMeta from './PageMeta'
 
 interface SizeProps {
   width?: string
@@ -28,26 +28,15 @@ const StyledPage = styled(Container)<SizeProps>`
   }
 `
 
-const PageMeta = () => {
+const Page: React.FC<SizeProps> = ({ children, ...props }) => {
   const { pathname } = useLocation()
   const pageMeta = customMeta[pathname] || {}
   const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
 
   return (
-    <Helmet>
-      <title>{title}</title>
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-    </Helmet>
-  )
-}
-
-const Page: React.FC<SizeProps> = ({ children, ...props }) => {
-  return (
     <>
-      <PageMeta />
-      <StyledPage {...props}>{children}</StyledPage>
+      <PageMeta title={title} description={description} image={image} />
+      {title.includes('Home') ? <div {...props}>{children}</div> : <StyledPage {...props}>{children}</StyledPage>}
     </>
   )
 }
