@@ -1,6 +1,7 @@
 import { Flex, Skeleton } from '@apeswapfinance/uikit'
 import BigNumber from 'bignumber.js'
 import ListViewContent from 'components/ListViewContent'
+import ReactPlayer from 'react-player'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React from 'react'
 import { Bills } from 'state/types'
@@ -15,11 +16,16 @@ import BillModal from '../Modals'
 const BillCard: React.FC<{ bills: Bills[]; ml?: string }> = ({ bills, ml }) => {
   const { chainId } = useActiveWeb3React()
   const scrollDown = () => window.scrollBy({ top: 500, behavior: 'smooth' })
-  const ownedBillsAmount = bills?.flatMap((bill) => (bill?.userOwnedBillsData ? bill?.userOwnedBillsData : []))?.length
+  const ownedBillsAmount = bills
+    ?.flatMap((bill) => (bill?.userOwnedBillsData ? bill?.userOwnedBillsData : []))
+    .filter((b) => parseFloat(b.pendingRewards) > 0)?.length
   const billsCardView = bills
     .flatMap((bill) => {
       const ownedBills = bill?.userOwnedBillsData
-      return ownedBills?.map((ownedBill, i) => {
+      return ownedBills?.flatMap((ownedBill, i) => {
+        if (parseFloat(ownedBill.pendingRewards) === 0 && parseFloat(ownedBill.payout) === 0) {
+          return []
+        }
         const pendingRewards = getBalanceNumber(
           new BigNumber(ownedBill.pendingRewards),
           bill?.earnToken?.decimals,
@@ -48,7 +54,11 @@ const BillCard: React.FC<{ bills: Bills[]; ml?: string }> = ({ bills, ml }) => {
                   justifyContent="flex-end"
                 />
               </Flex>
-              <Claim billAddress={bill.contractAddress[chainId]} billIds={[ownedBill.id]} />
+              <Claim
+                billAddress={bill.contractAddress[chainId]}
+                billIds={[ownedBill.id]}
+                pendingRewards={ownedBill?.pendingRewards}
+              />
             </CardContainer>
           </SwiperSlide>
         )
@@ -78,7 +88,9 @@ const BillCard: React.FC<{ bills: Bills[]; ml?: string }> = ({ bills, ml }) => {
         {ownedBillsAmount < 4 && (
           <SwiperSlide style={{ maxWidth: '270px', height: '307px' }}>
             <CardContainer>
-              <BillsImage image="images/hidden-bill.png" />
+              <BillsImage>
+                <ReactPlayer playing muted loop url="videos/bills-video.mp4" height="100%" width="100%" />
+              </BillsImage>
               <Flex
                 padding="0px 15px"
                 alignItems="center"

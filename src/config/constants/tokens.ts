@@ -455,7 +455,7 @@ const tokens = {
     decimals: 18,
   },
   sx: {
-    symbol: 'sx',
+    symbol: 'SX',
     address: {
       56: '0x6f26e8a40c8daae8c4358ce557c10226527cebce',
     },
@@ -1024,6 +1024,48 @@ const tokens = {
     },
     decimals: 18,
   },
+  aspo: {
+    symbol: 'ASPO',
+    address: {
+      56: '0x1a9b49E9f075c37Fe5f86C916bac9DEb33556D7E',
+    },
+    decimals: 18,
+  },
+  bico: {
+    symbol: 'BICO',
+    address: {
+      56: '0x06250a4962558F0F3E69FC07F4c67BB9c9eAc739',
+    },
+    decimals: 18,
+  },
+  cpo: {
+    symbol: 'CPO',
+    address: {
+      56: '0xea395DFaFEd39924988b475f2Ca7f4C72655203A',
+    },
+    decimals: 18,
+  },
+  coc: {
+    symbol: 'COC',
+    address: {
+      56: '0xbDC3b3639f7AA19e623A4d603A3Fb7Ab20115A91',
+    },
+    decimals: 18,
+  },
+  froyo: {
+    symbol: 'FROYO',
+    address: {
+      56: '0xe369fec23380f9F14ffD07a1DC4b7c1a9fdD81c9',
+    },
+    decimals: 18,
+  },
+  primate: {
+    symbol: 'PRIMATE',
+    address: {
+      56: '0xA19863E302FD1B41276fCe5A48D9C511DBeEf34c',
+    },
+    decimals: 18,
+  },
 
   // LP Tokens
   bananaBnb: {
@@ -1110,6 +1152,14 @@ const tokens = {
     symbol: 'DRF-BUSD',
     address: {
       56: '0x5FFc5b392Fcc33357c6a8240bda1C9374A55E6B8',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  cocBnb: {
+    symbol: 'COC-BNB',
+    address: {
+      56: '0x5467dD00ca4d91010Ab2A3aEF8a0162DC218801A',
     },
     decimals: 18,
     lpToken: true,

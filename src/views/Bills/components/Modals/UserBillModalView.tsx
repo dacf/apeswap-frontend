@@ -4,7 +4,7 @@ import ServiceTokenDisplay from 'components/ServiceTokenDisplay'
 import { Bills } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import BillsSpinner from 'components/BillsSpinner'
+import ReactPlayer from 'react-player'
 import BigNumber from 'bignumber.js'
 import {
   BillDescriptionContainer,
@@ -60,10 +60,9 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill, billId })
             <BillsImage image={userOwnedBillNftData?.image} />
           ) : (
             <Flex alignItems="center" justifyContent="center">
-              <BillsImage image="images/hidden-bill.png" />
-              <div style={{ position: 'absolute' }}>
-                <BillsSpinner />
-              </div>
+              <BillsImage>
+                <ReactPlayer playing muted loop url="videos/bills-video.mp4" height="100%" width="100%" />
+              </BillsImage>
             </Flex>
           )}
           <BillDescriptionContainer minHeight={360}>
@@ -107,7 +106,12 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill, billId })
                   })}
             </Flex>
             <UserActionButtonsContainer>
-              <Claim billAddress={bill.contractAddress[chainId]} billIds={[billId]} buttonSize={218} />
+              <Claim
+                billAddress={bill.contractAddress[chainId]}
+                billIds={[billId]}
+                buttonSize={218}
+                pendingRewards={userOwnedBill?.payout}
+              />
               <StyledButton onClick={onPresentTransferBillModal} style={{ width: '218px' }}>
                 Transfer
               </StyledButton>
