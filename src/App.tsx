@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy } from 'react'
+import React, { useEffect, Suspense, lazy, useCallback } from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useEagerConnect from 'hooks/useEagerConnect'
@@ -90,7 +90,7 @@ const StyledChevronUpIcon = styled(ChevronUpIcon)`
   width: 40px;
   height: 40px;
   background-color: rgb(255, 179, 0, 0.7);
-  border: 1px solid #ffb300;
+  border: 1px solid ${({ theme }) => theme.colors.yellow};
   border-radius: 50%;
   z-index: 10;
   cursor: pointer;
@@ -105,9 +105,19 @@ const App: React.FC = () => {
 
   const { account, chainId } = useActiveWeb3React()
 
+  const showScrollToTopIcon = useCallback(() => {
+    return window.location.pathname === '/farms' ||
+      window.location.pathname === '/pools' ||
+      window.location.pathname === '/vaults' ||
+      window.location.pathname === '/iazos' ? (
+      <StyledChevronUpIcon onClick={scrollToTop} />
+    ) : null
+  }, [])
+
   useEffect(() => {
+    showScrollToTopIcon()
     if (account) dataLayer?.push({ event: 'wallet_connect', user_id: account })
-  }, [account])
+  }, [account, showScrollToTopIcon])
 
   const scrollToTop = (): void => {
     window.scrollTo({
@@ -289,10 +299,7 @@ const App: React.FC = () => {
       <ResetCSS />
       <GlobalStyle />
       <MarketingModalCheck />
-      {(window.location.pathname === '/farms' ||
-        window.location.pathname === '/pools' ||
-        window.location.pathname === '/vaults' ||
-        window.location.pathname === '/iazos') && <StyledChevronUpIcon onClick={scrollToTop} />}
+      {showScrollToTopIcon()}
       {loadMenu()}
       <ToastListener />
     </Router>
