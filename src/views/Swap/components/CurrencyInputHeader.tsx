@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Flex, Button, useMatchBreakpoints, Tabs, Tab } from '@apeswapfinance/uikit'
+import { Button as NewButton } from '@ape.swap/uikit'
 import GlobalSettings from 'components/Menu/GlobalSettings'
 import { CHAIN_ID } from 'config/constants/chains'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -69,7 +70,8 @@ const CurrencyInputHeader: React.FC<Props> = () => {
           activeTab={getActiveTab()}
         />
       </Tabs>
-      <Flex>
+      <Flex style={{ flexDirection: 'row' }}>
+        <NewButton variant="tertiary">New</NewButton>
         <a href="https://app.multichain.org/" target="_blank" rel="noopener noreferrer">
           <Button
             style={{
