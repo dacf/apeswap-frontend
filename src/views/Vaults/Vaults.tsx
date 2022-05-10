@@ -11,6 +11,7 @@ import useWindowSize, { Size } from 'hooks/useDimensions'
 import { useVaults, useNetworkChainId, usePollVaultsData } from 'state/hooks'
 import { Vault } from 'state/types'
 import Page from 'components/layout/Page'
+import ScrollToTop from 'components/ScrollToTop'
 import MenuTabButtons from 'components/ListViewMenu/MenuTabButtons'
 import ToggleView from './components/ToggleView/ToggleView'
 import SearchInput from './components/SearchInput'
@@ -670,6 +671,7 @@ const Vaults: React.FC = () => {
         {viewMode === ViewMode.CARD ? cardLayout : tableLayout}
         <div ref={loadMoreRef} />
       </StyledPage>
+      <ScrollToTop />
     </>
   )
 }

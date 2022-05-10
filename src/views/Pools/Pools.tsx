@@ -10,6 +10,7 @@ import useI18n from 'hooks/useI18n'
 import useWindowSize, { Size } from 'hooks/useDimensions'
 import { useBlock } from 'state/block/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
+import ScrollToTop from 'components/ScrollToTop'
 import { usePollPools, usePools } from 'state/hooks'
 import { Pool } from 'state/types'
 import PoolMenu from './components/Menu'
@@ -167,6 +168,7 @@ const Pools: React.FC = () => {
           <div ref={loadMoreRef} />
         </Flex>
       </Flex>
+      <ScrollToTop />
     </>
   )
 }

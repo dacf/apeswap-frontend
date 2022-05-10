@@ -1,9 +1,8 @@
-import React, { useEffect, Suspense, lazy, useCallback } from 'react'
+import React, { useEffect, Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useEagerConnect from 'hooks/useEagerConnect'
-import { ResetCSS, ChevronUpIcon, ApeSwapTheme } from '@apeswapfinance/uikit'
-import styled from 'styled-components'
+import { ResetCSS, ApeSwapTheme } from '@apeswapfinance/uikit'
 import BigNumber from 'bignumber.js'
 import MarketingModalCheck from 'components/MarketingModalCheck'
 import { CHAIN_ID } from 'config/constants/chains'
@@ -83,19 +82,6 @@ BigNumber.config({
   DECIMAL_PLACES: 80,
 })
 
-const StyledChevronUpIcon = styled(ChevronUpIcon)`
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
-  background-color: rgb(255, 179, 0, 0.7);
-  border: 1px solid ${({ theme }) => theme.colors.yellow};
-  border-radius: 50%;
-  z-index: 10;
-  cursor: pointer;
-`
-
 const App: React.FC = () => {
   useUpdateNetwork()
   useEagerConnect()
@@ -105,26 +91,9 @@ const App: React.FC = () => {
 
   const { account, chainId } = useActiveWeb3React()
 
-  const showScrollToTopIcon = useCallback(() => {
-    return window.location.pathname === '/farms' ||
-      window.location.pathname === '/pools' ||
-      window.location.pathname === '/vaults' ||
-      window.location.pathname === '/iazos' ? (
-      <StyledChevronUpIcon onClick={scrollToTop} />
-    ) : null
-  }, [])
-
   useEffect(() => {
-    showScrollToTopIcon()
     if (account) dataLayer?.push({ event: 'wallet_connect', user_id: account })
-  }, [account, showScrollToTopIcon])
-
-  const scrollToTop = (): void => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
-  }
+  }, [account])
 
   const swapRoutes = (
     <>
@@ -299,7 +268,6 @@ const App: React.FC = () => {
       <ResetCSS />
       <GlobalStyle />
       <MarketingModalCheck />
-      {showScrollToTopIcon()}
       {loadMenu()}
       <ToastListener />
     </Router>

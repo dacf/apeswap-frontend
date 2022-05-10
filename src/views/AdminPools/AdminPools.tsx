@@ -10,6 +10,7 @@ import useI18n from 'hooks/useI18n'
 import { useBlock } from 'state/block/hooks'
 import useWindowSize, { Size } from 'hooks/useDimensions'
 import { getBalanceNumber } from 'utils/formatBalance'
+import ScrollToTop from 'components/ScrollToTop'
 import { usePools } from 'state/hooks'
 import { Pool } from 'state/types'
 import Page from 'components/layout/Page'
@@ -641,6 +642,7 @@ const AdminPools: React.FC = () => {
         {cardLayout}
         <div ref={loadMoreRef} />
       </StyledPage>
+      <ScrollToTop />
     </>
   )
 }

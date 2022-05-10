@@ -13,6 +13,7 @@ import useWindowSize, { Size } from 'hooks/useDimensions'
 import { DualFarm } from 'state/types'
 import { orderBy } from 'lodash'
 import useI18n from 'hooks/useI18n'
+import ScrollToTop from 'components/ScrollToTop'
 import FarmCard from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import SearchInput from './components/SearchInput'
@@ -662,6 +663,7 @@ const DualFarms: React.FC = () => {
         </ContainerLabels>
         {viewMode === null ? null : renderContent()}
       </StyledPage>
+      <ScrollToTop />
     </>
   )
 }
