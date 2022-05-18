@@ -6,6 +6,7 @@ const tokens = {
       97: '0x4Fb99590cA95fc3255D9fA66a1cA46c43C34b09a',
       56: '0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95',
       137: '0x5d47baba0d66083c52009271faf3f50dcc01023c',
+      1: '0x92df60c51c710a1b1c20e42d85e221f3a1bfc7f2',
     },
     decimals: 18,
   },
@@ -1066,6 +1067,20 @@ const tokens = {
     },
     decimals: 18,
   },
+  lc: {
+    symbol: 'LC',
+    address: {
+      56: '0x6012C3a742f92103d238F1c8306cF8fbcDEca8B3',
+    },
+    decimals: 18,
+  },
+  grvs: {
+    symbol: 'GRVS',
+    address: {
+      56: '0x190CEC0657a02E9eAB1C1DF5d59f9139131cf539',
+    },
+    decimals: 18,
+  },
 
   // LP Tokens
   bananaBnb: {
@@ -1160,6 +1175,14 @@ const tokens = {
     symbol: 'COC-BNB',
     address: {
       56: '0x5467dD00ca4d91010Ab2A3aEF8a0162DC218801A',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  lcBnb: {
+    symbol: 'LC-BNB',
+    address: {
+      56: '0xc5a69133432eF17CD15C501CAa5f9cF28C22aA00',
     },
     decimals: 18,
     lpToken: true,
