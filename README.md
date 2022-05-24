@@ -35,5 +35,5 @@ Socials
 - 💬 Telegram Announcements: https://t.me/ape_swap_news
 - 🖥 GitHub: https://github.com/ApeSwapFinance
 - 🤳 Instagram: https://instagram.com/apeswap.finance
-- 🤩 Reddit: https://www.reddit.com/r/Apeswap/
+- 🤩 Reddit: https://www.reddit.com/r/Apeswap
 - 👾 Discord: https://discord.gg/ApeSwap
