@@ -6,8 +6,21 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useFarmLpAprs, usePriceBananaBusd, useTokenPrices } from 'state/hooks'
-import { DualFarm, State } from 'state/types'
-import { fetchDualFarmsPublicDataAsync, fetchDualFarmUserDataAsync } from '.'
+import { DualFarm, DualFarmsState, State } from 'state/types'
+import { fetchDualFarmsPublicDataAsync, fetchDualFarmUserDataAsync, updateFarmsConfig } from '.'
+
+export const useUpdateFarmsConfig = () => {
+  const dispatch = useAppDispatch()
+  const { slowRefresh } = useRefresh()
+  useEffect(() => {
+    dispatch(updateFarmsConfig())
+  }, [dispatch, slowRefresh])
+}
+
+export const useLiveFarmsConfig = () => {
+  const { data: farmsConfig }: DualFarmsState = useSelector((state: State) => state.dualFarms)
+  return { dualFarmsConfig: farmsConfig }
+}
 
 export const usePollDualFarms = () => {
   const { chainId } = useActiveWeb3React()
@@ -16,26 +29,29 @@ export const usePollDualFarms = () => {
   // Made a string because hooks will refresh bignumbers
   const bananaPrice = usePriceBananaBusd().toString()
   const farmLpAprs = useFarmLpAprs()
+  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
 
   useEffect(() => {
     const fetchFarms = () => {
       if (chainId === CHAIN_ID.MATIC) {
-        dispatch(fetchDualFarmsPublicDataAsync(chainId, tokenPrices, new BigNumber(bananaPrice), farmLpAprs))
+        dispatch(fetchDualFarmsPublicDataAsync(dFConfig, chainId, tokenPrices, new BigNumber(bananaPrice), farmLpAprs))
       }
     }
     fetchFarms()
-  }, [dispatch, chainId, tokenPrices, bananaPrice, farmLpAprs])
+  }, [dispatch, chainId, tokenPrices, bananaPrice, farmLpAprs, dFConfig])
 }
 
 export const useDualFarms = (account): DualFarm[] => {
   const { slowRefresh } = useRefresh()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
+  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
+
   useEffect(() => {
     if (account && (chainId === CHAIN_ID.MATIC || chainId === CHAIN_ID.MATIC_TESTNET)) {
-      dispatch(fetchDualFarmUserDataAsync(chainId, account))
+      dispatch(fetchDualFarmUserDataAsync(dFConfig, chainId, account))
     }
-  }, [account, dispatch, slowRefresh, chainId])
+  }, [account, dispatch, slowRefresh, chainId, dFConfig])
   const farms = useSelector((state: State) => state.dualFarms.data)
   return farms
 }

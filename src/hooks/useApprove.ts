@@ -6,6 +6,7 @@ import { approve } from 'utils/callHelpers'
 import track from 'utils/track'
 import { CHAIN_ID } from 'config/constants'
 import { updateDualFarmUserAllowances } from 'state/dualFarms'
+import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
 import { updateVaultUserAllowance } from 'state/vaults'
 import useActiveWeb3React from './useActiveWeb3React'
 import { useAuctionAddress } from './useAddress'
@@ -139,6 +140,7 @@ export const useDualFarmApprove = (lpContract, pid: number) => {
   const dispatch = useDispatch()
   const { account, chainId } = useActiveWeb3React()
   const miniChefContract = useMiniChefContract()
+  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
 
   const handleApprove = useCallback(async () => {
     try {
@@ -151,13 +153,13 @@ export const useDualFarmApprove = (lpContract, pid: number) => {
           cat: 'enable',
         },
       })
-      dispatch(updateDualFarmUserAllowances(chainId, pid, account))
+      dispatch(updateDualFarmUserAllowances(dFConfig, chainId, pid, account))
       return tx
     } catch (e) {
       console.warn(e)
       return false
     }
-  }, [account, dispatch, lpContract, miniChefContract, pid, chainId])
+  }, [account, dispatch, lpContract, miniChefContract, pid, chainId, dFConfig])
 
   return { onApprove: handleApprove }
 }

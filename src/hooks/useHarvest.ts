@@ -11,6 +11,7 @@ import { SousChef } from 'config/abi/types'
 import { poolsConfig } from 'config/constants'
 import { updateDualFarmRewarderEarnings, updateDualFarmUserEarnings } from 'state/dualFarms'
 import { updateUserNfaStakingPendingReward, updateNfaStakingUserBalance } from 'state/nfaStakingPools'
+import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
 import { useMasterchef, useMiniChefContract, useSousChef, useNfaStakingChef } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
 
@@ -122,6 +123,7 @@ export const useMiniChefHarvest = (farmPid: number) => {
   const dispatch = useDispatch()
   const { account, chainId } = useWeb3React()
   const miniChefContract = useMiniChefContract()
+  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
 
   const handleHarvest = useCallback(async () => {
     const txHash = await miniChefHarvest(miniChefContract, farmPid, account)
@@ -133,10 +135,10 @@ export const useMiniChefHarvest = (farmPid: number) => {
         pid: farmPid,
       },
     })
-    dispatch(updateDualFarmUserEarnings(chainId, farmPid, account))
-    dispatch(updateDualFarmRewarderEarnings(chainId, farmPid, account))
+    dispatch(updateDualFarmUserEarnings(dFConfig, chainId, farmPid, account))
+    dispatch(updateDualFarmRewarderEarnings(dFConfig, chainId, farmPid, account))
     return txHash
-  }, [account, dispatch, farmPid, miniChefContract, chainId])
+  }, [account, dispatch, farmPid, miniChefContract, chainId, dFConfig])
 
   return { onReward: handleHarvest }
 }

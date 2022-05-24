@@ -6,6 +6,7 @@ export const baseUrl = 'https://api.apeswap.com/api/v1'
 export const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'https://ape-swap-api.herokuapp.com'
 
 export const baseUrlStrapi = 'https://apeswap-strapi.herokuapp.com'
+export const baseYieldApi = 'https://babadrape.github.io/apeswap-yields/config'
 const EXCHANGE_SUBGRAPH_URL = 'https://graph.apeswap.finance/subgraphs/name/ape-swap/apeswap-subgraph'
 const EXCHANGE_POLYGON_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/apeswapfinance/dex-polygon'
 

@@ -25,6 +25,7 @@ import {
   updateDualFarmUserStakedBalances,
   updateDualFarmUserTokenBalances,
 } from 'state/dualFarms'
+import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
 import { useNetworkChainId } from 'state/hooks'
 import { useMasterchef, useMiniChefContract, useNfaStakingChef, useSousChef, useVaultApe } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
@@ -195,16 +196,17 @@ export const useMiniChefUnstake = (pid: number) => {
   const dispatch = useDispatch()
   const { account, chainId } = useWeb3React()
   const miniChefContract = useMiniChefContract()
+  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
 
   const handleUnstake = useCallback(
     async (amount: string) => {
       const txHash = await miniChefUnstake(miniChefContract, pid, amount, account)
-      dispatch(updateDualFarmUserEarnings(chainId, pid, account))
-      dispatch(updateDualFarmUserStakedBalances(chainId, pid, account))
-      dispatch(updateDualFarmUserTokenBalances(chainId, pid, account))
+      dispatch(updateDualFarmUserEarnings(dFConfig, chainId, pid, account))
+      dispatch(updateDualFarmUserStakedBalances(dFConfig, chainId, pid, account))
+      dispatch(updateDualFarmUserTokenBalances(dFConfig, chainId, pid, account))
       return txHash
     },
-    [account, dispatch, miniChefContract, pid, chainId],
+    [account, dispatch, miniChefContract, pid, chainId, dFConfig],
   )
 
   return { onUnstake: handleUnstake }
