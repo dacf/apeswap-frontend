@@ -196,17 +196,18 @@ export const useMiniChefUnstake = (pid: number) => {
   const dispatch = useDispatch()
   const { account, chainId } = useWeb3React()
   const miniChefContract = useMiniChefContract()
-  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveFarmsConfig()
 
   const handleUnstake = useCallback(
     async (amount: string) => {
       const txHash = await miniChefUnstake(miniChefContract, pid, amount, account)
-      dispatch(updateDualFarmUserEarnings(dFConfig, chainId, pid, account))
-      dispatch(updateDualFarmUserStakedBalances(dFConfig, chainId, pid, account))
-      dispatch(updateDualFarmUserTokenBalances(dFConfig, chainId, pid, account))
+      dispatch(updateDualFarmUserEarnings(dualFarmsConfig, chainId, pid, account))
+      dispatch(updateDualFarmUserStakedBalances(dualFarmsConfig, chainId, pid, account))
+      dispatch(updateDualFarmUserTokenBalances(dualFarmsConfig, chainId, pid, account))
       return txHash
     },
-    [account, dispatch, miniChefContract, pid, chainId, dFConfig],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [miniChefContract, pid, account, dispatch, chainId],
   )
 
   return { onUnstake: handleUnstake }

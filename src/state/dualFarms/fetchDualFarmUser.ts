@@ -2,11 +2,15 @@ import BigNumber from 'bignumber.js'
 import erc20ABI from 'config/abi/erc20.json'
 import miniChefABI from 'config/abi/miniApeV2.json'
 import rewarderABI from 'config/abi/miniComplexRewarder.json'
+import { DualFarmConfig } from 'config/constants/types'
 import { getMiniChefAddress } from 'utils/addressHelper'
 import multicall from 'utils/multicall'
-import { dualFarmsConfig } from 'config/constants'
 
-export const fetchDualFarmUserAllowances = async (chainId: number, account: string) => {
+export const fetchDualFarmUserAllowances = async (
+  dualFarmsConfig: DualFarmConfig[],
+  chainId: number,
+  account: string,
+) => {
   const miniChefAddress = getMiniChefAddress(chainId)
   const calls = dualFarmsConfig.map((farm) => {
     const lpContractAddress = farm.stakeTokenAddress
@@ -20,7 +24,11 @@ export const fetchDualFarmUserAllowances = async (chainId: number, account: stri
   return parsedLpAllowances
 }
 
-export const fetchDualFarmUserTokenBalances = async (chainId: number, account: string) => {
+export const fetchDualFarmUserTokenBalances = async (
+  dualFarmsConfig: DualFarmConfig[],
+  chainId: number,
+  account: string,
+) => {
   const calls = dualFarmsConfig.map((farm) => {
     const lpContractAddress = farm.stakeTokenAddress
     return {
@@ -38,8 +46,8 @@ export const fetchDualFarmUserTokenBalances = async (chainId: number, account: s
 }
 
 export const fetchDualFarmUserStakedBalances = async (
+  dualFarmsConfig: DualFarmConfig[],
   chainId: number,
-
   account: string,
 ) => {
   const miniChefAddress = getMiniChefAddress(chainId)
@@ -59,8 +67,8 @@ export const fetchDualFarmUserStakedBalances = async (
 }
 
 export const fetchDualMiniChefEarnings = async (
+  dualFarmsConfig: DualFarmConfig[],
   chainId: number,
-
   account: string,
 ) => {
   const miniChefAddress = getMiniChefAddress(chainId)
@@ -79,7 +87,11 @@ export const fetchDualMiniChefEarnings = async (
   return parsedEarnings
 }
 
-export const fetchDualFarmRewarderEarnings = async (chainId: number, account: string) => {
+export const fetchDualFarmRewarderEarnings = async (
+  dualFarmsConfig: DualFarmConfig[],
+  chainId: number,
+  account: string,
+) => {
   const calls = dualFarmsConfig.map((farm) => {
     return {
       address: farm.rewarderAddress,

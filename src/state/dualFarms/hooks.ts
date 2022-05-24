@@ -11,10 +11,9 @@ import { fetchDualFarmsPublicDataAsync, fetchDualFarmUserDataAsync, updateFarmsC
 
 export const useUpdateFarmsConfig = () => {
   const dispatch = useAppDispatch()
-  const { slowRefresh } = useRefresh()
   useEffect(() => {
     dispatch(updateFarmsConfig())
-  }, [dispatch, slowRefresh])
+  }, [dispatch])
 }
 
 export const useLiveFarmsConfig = () => {
@@ -29,29 +28,31 @@ export const usePollDualFarms = () => {
   // Made a string because hooks will refresh bignumbers
   const bananaPrice = usePriceBananaBusd().toString()
   const farmLpAprs = useFarmLpAprs()
-  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveFarmsConfig()
 
   useEffect(() => {
     const fetchFarms = () => {
       if (chainId === CHAIN_ID.MATIC) {
-        dispatch(fetchDualFarmsPublicDataAsync(dFConfig, chainId, tokenPrices, new BigNumber(bananaPrice), farmLpAprs))
+        dispatch(
+          fetchDualFarmsPublicDataAsync(dualFarmsConfig, chainId, tokenPrices, new BigNumber(bananaPrice), farmLpAprs),
+        )
       }
     }
     fetchFarms()
-  }, [dispatch, chainId, tokenPrices, bananaPrice, farmLpAprs, dFConfig])
+  }, [dispatch, chainId, tokenPrices, bananaPrice, farmLpAprs, dualFarmsConfig])
 }
 
 export const useDualFarms = (account): DualFarm[] => {
   const { slowRefresh } = useRefresh()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
-  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveFarmsConfig()
 
   useEffect(() => {
     if (account && (chainId === CHAIN_ID.MATIC || chainId === CHAIN_ID.MATIC_TESTNET)) {
-      dispatch(fetchDualFarmUserDataAsync(dFConfig, chainId, account))
+      dispatch(fetchDualFarmUserDataAsync(dualFarmsConfig, chainId, account))
     }
-  }, [account, dispatch, slowRefresh, chainId, dFConfig])
+  }, [account, dispatch, slowRefresh, chainId, dualFarmsConfig])
   const farms = useSelector((state: State) => state.dualFarms.data)
   return farms
 }

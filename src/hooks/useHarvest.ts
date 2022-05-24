@@ -123,7 +123,7 @@ export const useMiniChefHarvest = (farmPid: number) => {
   const dispatch = useDispatch()
   const { account, chainId } = useWeb3React()
   const miniChefContract = useMiniChefContract()
-  const { dualFarmsConfig: dFConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveFarmsConfig()
 
   const handleHarvest = useCallback(async () => {
     const txHash = await miniChefHarvest(miniChefContract, farmPid, account)
@@ -135,10 +135,10 @@ export const useMiniChefHarvest = (farmPid: number) => {
         pid: farmPid,
       },
     })
-    dispatch(updateDualFarmUserEarnings(dFConfig, chainId, farmPid, account))
-    dispatch(updateDualFarmRewarderEarnings(dFConfig, chainId, farmPid, account))
+    dispatch(updateDualFarmUserEarnings(dualFarmsConfig, chainId, farmPid, account))
+    dispatch(updateDualFarmRewarderEarnings(dualFarmsConfig, chainId, farmPid, account))
     return txHash
-  }, [account, dispatch, farmPid, miniChefContract, chainId, dFConfig])
+  }, [account, dispatch, farmPid, miniChefContract, chainId, dualFarmsConfig])
 
   return { onReward: handleHarvest }
 }

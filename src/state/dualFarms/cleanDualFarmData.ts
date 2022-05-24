@@ -1,11 +1,12 @@
 import BigNumber from 'bignumber.js'
-import { dualFarmsConfig } from 'config/constants'
+import { DualFarmConfig } from 'config/constants/types'
 import { FarmLpAprsType, TokenPrices } from 'state/types'
 import { getDualFarmApr } from 'utils/apr'
 import { getRoi, tokenEarnedPerThousandDollarsCompounding } from 'utils/compoundApyHelpers'
 import { getBalanceNumber } from '../../utils/formatBalance'
 
 const cleanDualFarmData = (
+  dualFarmsConfig: DualFarmConfig[],
   farmIds: number[],
   chunkedFarms: any[],
   tokenPrices: TokenPrices[],
