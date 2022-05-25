@@ -28,11 +28,13 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number }> = ({ pools, ope
   const poolsListView = pools.map((pool) => {
     const token1 = pool?.stakingToken?.symbol
     const token2 = pool?.rewardToken?.symbol
+    // console.log("token1:::", pool?.stakingToken)
+    // console.log('token2:::', pool?.rewardToken)
     const totalDollarAmountStaked = Math.round(getBalanceNumber(pool?.totalStaked) * pool?.stakingToken?.price)
     const liquidityUrl = !pool?.lpStaking
-      ? pool.stakingToken.symbol === 'GNANA'
+      ? pool?.stakingToken?.symbol === 'GNANA'
         ? 'https://apeswap.finance/gnana'
-        : `https://apeswap.finance/swap?outputCurrency=${pool?.stakingToken.address[chainId]}`
+        : `https://apeswap.finance/swap?outputCurrency=${pool?.stakingToken?.address[chainId]}`
       : `${BASE_ADD_LIQUIDITY_URL}/${pool?.lpTokens?.token?.address[chainId]}/${pool?.lpTokens?.quoteToken?.address[chainId]}`
     const userAllowance = pool?.userData?.allowance
     const userEarnings = getBalanceNumber(
@@ -71,6 +73,8 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number }> = ({ pools, ope
               </>
             )}
           </Flex>
+          {/* {console.log('poolAPR:::', pool?.apr)}
+          {console.log('poolAPRToFixed(2):::', pool?.apr?.toFixed(2))} */}
           <ListViewContent
             title={t('APR')}
             value={`${isActive ? pool?.apr?.toFixed(2) : '0.00'}%`}

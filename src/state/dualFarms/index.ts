@@ -2,7 +2,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js'
 import { DualFarmConfig } from 'config/constants/types'
-import fetchDualFarms from './fetchDualFarms'
 import {
   fetchDualMiniChefEarnings,
   fetchDualFarmUserAllowances,
@@ -11,6 +10,7 @@ import {
   fetchDualFarmRewarderEarnings,
 } from './fetchDualFarmUser'
 import { TokenPrices, DualFarm, DualFarmsState, FarmLpAprsType } from '../types'
+import fetchDualFarms from './fetchDualFarms'
 import fetchFarmConfigFromApi from './fetchDualFarmsConfig'
 
 const initialState: DualFarmsState = {

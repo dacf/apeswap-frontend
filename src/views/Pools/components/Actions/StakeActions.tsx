@@ -6,7 +6,7 @@ import { useSousStake } from 'hooks/useStake'
 import { fetchPoolsUserDataAsync } from 'state/pools'
 import { useSousUnstake } from 'hooks/useUnstake'
 import useIsMobile from 'hooks/useIsMobile'
-import { useToast } from 'state/hooks'
+import { useToast, useLivePoolsConfig } from 'state/hooks'
 import { useAppDispatch } from 'state'
 import { getEtherscanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -47,6 +47,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
   const { onStake } = useSousStake(sousId)
   const { onUnstake } = useSousUnstake(sousId)
   const { t } = useTranslation()
+  const { poolsConfig } = useLivePoolsConfig()
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -66,7 +67,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
             console.error(e)
             setPendingDepositTrx(false)
           })
-        dispatch(fetchPoolsUserDataAsync(chainId, account))
+        dispatch(fetchPoolsUserDataAsync(poolsConfig, chainId, account))
         setPendingDepositTrx(false)
       }}
     />,
@@ -90,7 +91,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
             console.error(e)
             setPendingWithdrawTrx(false)
           })
-        dispatch(fetchPoolsUserDataAsync(chainId, account))
+        dispatch(fetchPoolsUserDataAsync(poolsConfig, chainId, account))
         setPendingWithdrawTrx(false)
       }}
     />,

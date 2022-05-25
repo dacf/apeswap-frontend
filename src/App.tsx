@@ -7,7 +7,13 @@ import { ScrollToTop } from '@ape.swap/uikit'
 import BigNumber from 'bignumber.js'
 import MarketingModalCheck from 'components/MarketingModalCheck'
 import { CHAIN_ID } from 'config/constants/chains'
-import { useFetchTokenPrices, useFetchProfile, useUpdateNetwork, useFetchLiveIfoStatus } from 'state/hooks'
+import {
+  useFetchTokenPrices,
+  useFetchProfile,
+  useUpdateNetwork,
+  useFetchLiveIfoStatus,
+  useUpdatePoolsConfig,
+} from 'state/hooks'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { useUpdateFarmsConfig } from 'state/dualFarms/hooks'
 import GlobalStyle from './style/Global'
@@ -95,6 +101,7 @@ const App: React.FC = () => {
   useFetchProfile()
   useFetchLiveIfoStatus()
   useUpdateFarmsConfig()
+  useUpdatePoolsConfig()
 
   const { account, chainId } = useActiveWeb3React()
   const [showScrollIcon, setShowScrollIcon] = useState(false)

@@ -6,7 +6,7 @@ import { useAppDispatch } from 'state'
 import { updateUserAllowance } from 'state/pools'
 import { getEtherscanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useToast } from 'state/hooks'
+import { useToast, useLivePoolsConfig } from 'state/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { StyledButton } from '../styles'
 
@@ -24,6 +24,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ stakingTokenContractAdd
   const { onApprove } = useSousApprove(stakingTokenContract, sousId)
   const { toastSuccess } = useToast()
   const { t } = useTranslation()
+  const { poolsConfig } = useLivePoolsConfig()
 
   return (
     <>
@@ -48,7 +49,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ stakingTokenContractAdd
                 console.error(e)
                 setPendingTrx(false)
               })
-            dispatch(updateUserAllowance(chainId, sousId, account))
+            dispatch(updateUserAllowance(poolsConfig, chainId, sousId, account))
 
             setPendingTrx(false)
           }}

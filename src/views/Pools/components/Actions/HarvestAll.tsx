@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSousHarvestAll } from 'hooks/useHarvest'
-import { useToast } from 'state/hooks'
+import { useToast, useLivePoolsConfig } from 'state/hooks'
 import { fetchPoolsUserDataAsync } from 'state/pools'
 import { getEtherscanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -20,6 +20,7 @@ const HarvestAll: React.FC<HarvestActionsProps> = ({ sousIds, disabled }) => {
   const { onHarvestAll } = useSousHarvestAll(sousIds)
   const { toastSuccess } = useToast()
   const { t } = useTranslation()
+  const { poolsConfig } = useLivePoolsConfig()
 
   const handleHarvestAll = async () => {
     setPendingTrx(true)
@@ -36,7 +37,7 @@ const HarvestAll: React.FC<HarvestActionsProps> = ({ sousIds, disabled }) => {
         console.error(e)
         setPendingTrx(false)
       })
-    dispatch(fetchPoolsUserDataAsync(chainId, account))
+    dispatch(fetchPoolsUserDataAsync(poolsConfig, chainId, account))
     setPendingTrx(false)
   }
 

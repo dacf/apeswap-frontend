@@ -26,7 +26,7 @@ import {
   updateDualFarmUserTokenBalances,
 } from 'state/dualFarms'
 import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
-import { useNetworkChainId } from 'state/hooks'
+import { useLivePoolsConfig, useNetworkChainId } from 'state/hooks'
 import { useMasterchef, useMiniChefContract, useNfaStakingChef, useSousChef, useVaultApe } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
 
@@ -63,6 +63,7 @@ export const useSousUnstake = (sousId) => {
   const masterChefContract = useMasterchef()
   const sousChefContract = useSousChef(sousId)
   const isOldSyrup = SYRUPIDS.includes(sousId)
+  const { poolsConfig } = useLivePoolsConfig()
 
   const handleUnstake = useCallback(
     async (amount: string) => {
@@ -74,9 +75,9 @@ export const useSousUnstake = (sousId) => {
       } else {
         trxHash = await sousUnstake(sousChefContract, amount)
       }
-      dispatch(updateUserStakedBalance(chainId, sousId, account))
-      dispatch(updateUserBalance(chainId, sousId, account))
-      dispatch(updateUserPendingReward(chainId, sousId, account))
+      dispatch(updateUserStakedBalance(poolsConfig, chainId, sousId, account))
+      dispatch(updateUserBalance(poolsConfig, chainId, sousId, account))
+      dispatch(updateUserPendingReward(poolsConfig, chainId, sousId, account))
       track({
         event: 'pool',
         chain: chainId,
@@ -88,7 +89,7 @@ export const useSousUnstake = (sousId) => {
       })
       return trxHash
     },
-    [account, dispatch, isOldSyrup, masterChefContract, sousChefContract, sousId, chainId],
+    [account, dispatch, isOldSyrup, masterChefContract, sousChefContract, sousId, chainId, poolsConfig],
   )
 
   return { onUnstake: handleUnstake }
@@ -98,13 +99,15 @@ export const useSousEmergencyWithdraw = (sousId) => {
   const dispatch = useDispatch()
   const { account, chainId } = useWeb3React()
   const sousChefContract = useSousChef(sousId)
+  const { poolsConfig } = useLivePoolsConfig()
+
   const handleEmergencyWithdraw = useCallback(async () => {
     const txHash = await sousEmegencyWithdraw(sousChefContract)
-    dispatch(updateUserStakedBalance(chainId, sousId, account))
-    dispatch(updateUserBalance(chainId, sousId, account))
-    dispatch(updateUserPendingReward(chainId, sousId, account))
+    dispatch(updateUserStakedBalance(poolsConfig, chainId, sousId, account))
+    dispatch(updateUserBalance(poolsConfig, chainId, sousId, account))
+    dispatch(updateUserPendingReward(poolsConfig, chainId, sousId, account))
     console.info(txHash)
-  }, [account, dispatch, sousChefContract, sousId, chainId])
+  }, [account, dispatch, sousChefContract, sousId, poolsConfig, chainId])
   return { onEmergencyWithdraw: handleEmergencyWithdraw }
 }
 

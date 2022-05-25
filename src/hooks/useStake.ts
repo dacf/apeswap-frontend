@@ -17,7 +17,7 @@ import {
   updateDualFarmUserTokenBalances,
 } from 'state/dualFarms'
 import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
-import { useNetworkChainId } from 'state/hooks'
+import { useLivePoolsConfig, useNetworkChainId } from 'state/hooks'
 import { useMasterchef, useMiniChefContract, useNfaStakingChef, useSousChef, useVaultApe } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
 
@@ -50,6 +50,7 @@ export const useSousStake = (sousId) => {
   const { account, chainId } = useWeb3React()
   const masterChefContract = useMasterchef()
   const sousChefContract = useSousChef(sousId)
+  const { poolsConfig } = useLivePoolsConfig()
 
   const handleStake = useCallback(
     async (amount: string) => {
@@ -70,11 +71,11 @@ export const useSousStake = (sousId) => {
         },
       })
 
-      dispatch(updateUserStakedBalance(chainId, sousId, account))
-      dispatch(updateUserBalance(chainId, sousId, account))
+      dispatch(updateUserStakedBalance(poolsConfig, chainId, sousId, account))
+      dispatch(updateUserBalance(poolsConfig, chainId, sousId, account))
       return trxHash
     },
-    [account, dispatch, masterChefContract, sousChefContract, sousId, chainId],
+    [account, dispatch, masterChefContract, sousChefContract, sousId, chainId, poolsConfig],
   )
 
   return { onStake: handleStake }

@@ -14,7 +14,7 @@ const fetchPoolCalls = (pool: PoolConfig, chainId: number): Call[] => {
     },
   ]
   const bananaCall = {
-    address: pool.stakingToken.address[chainId],
+    address: pool?.stakingToken?.address[chainId],
     name: 'balanceOf',
     params: [pool.contractAddress[chainId]],
   }
@@ -26,7 +26,7 @@ const fetchPoolCalls = (pool: PoolConfig, chainId: number): Call[] => {
   if (pool.sousId === 0) {
     return [bananaCall]
   }
-  return [...standardCalls, pool.reflect || pool.stakingToken.symbol === 'GNANA' ? gnanaCall : bananaCall]
+  return [...standardCalls, pool.reflect || pool?.stakingToken?.symbol === 'GNANA' ? gnanaCall : bananaCall]
 }
 
 export default fetchPoolCalls

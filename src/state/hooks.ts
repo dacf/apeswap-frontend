@@ -10,6 +10,8 @@ import { CHAIN_ID } from 'config/constants/chains'
 import { useBananaAddress, useTreasuryAddress } from 'hooks/useAddress'
 import { useAppDispatch } from 'state'
 import useSwitchNetwork from 'hooks/useSelectNetwork'
+import { QuoteToken } from 'config/constants/types'
+import getProvider from 'utils/getProvider'
 import {
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
@@ -39,6 +41,7 @@ import {
   LaunchCalendarCard,
   ServiceData,
   FarmLpAprsType,
+  PoolsState,
 } from './types'
 import { fetchNfaStakingPoolsPublicDataAsync, fetchNfaStakingPoolsUserDataAsync } from './nfaStakingPools'
 import { fetchProfile } from './profile'
@@ -58,6 +61,7 @@ import { fetchIazo, fetchIazos, fetchSettings } from './iazos'
 import { fetchUserNetwork } from './network'
 import { fetchLpTokenPrices } from './lpPrices'
 import { fetchAllNfas } from './nfas'
+import { updatePoolsConfig } from './pools'
 
 const ZERO = new BigNumber(0)
 
@@ -96,11 +100,13 @@ export const usePollPools = () => {
   const chainId = useNetworkChainId()
   const { tokenPrices } = useTokenPrices()
   const dispatch = useAppDispatch()
+  const { poolsConfig } = useLivePoolsConfig()
+
   useEffect(() => {
     if (chainId === CHAIN_ID.BSC) {
-      dispatch(fetchPoolsPublicDataAsync(chainId, tokenPrices))
+      dispatch(fetchPoolsPublicDataAsync(poolsConfig, chainId, tokenPrices))
     }
-  }, [dispatch, tokenPrices, chainId])
+  }, [dispatch, tokenPrices, chainId, poolsConfig])
 }
 
 // Vault data
@@ -143,16 +149,42 @@ export const useVaultUser = (pid) => {
 }
 
 // Pools
+export const useUpdatePoolsConfig = () => {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(updatePoolsConfig())
+  }, [dispatch])
+}
+
+export const useLivePoolsConfig = () => {
+  const { data: poolsConfig }: PoolsState = useSelector((state: State) => state.pools)
+  return { poolsConfig }
+}
+
+export const usePoolTypes = () => {
+  const { poolsConfig } = useLivePoolsConfig()
+
+  // Pool 0, Cake / Cake is a different kind of contract (master chef)
+  // BNB pools use the native BNB token (wrapping ? unwrapping is done at the contract level)
+  const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.address !== QuoteToken.BNB)
+  const bnbPools = poolsConfig.filter((p) => p.stakingToken.address === QuoteToken.BNB)
+  const nonMasterPools = poolsConfig.filter((p) => p.sousId !== 0)
+  const provider = getProvider(56)
+
+  return { nonBnbPools, bnbPools, nonMasterPools, provider }
+}
 
 export const usePools = (account): Pool[] => {
   const { slowRefresh } = useRefresh()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
+  const { poolsConfig } = useLivePoolsConfig()
+
   useEffect(() => {
     if (account && (chainId === CHAIN_ID.BSC || chainId === CHAIN_ID.BSC_TESTNET)) {
-      dispatch(fetchPoolsUserDataAsync(chainId, account))
+      dispatch(fetchPoolsUserDataAsync(poolsConfig, chainId, account))
     }
-  }, [account, dispatch, slowRefresh, chainId])
+  }, [account, dispatch, slowRefresh, chainId, poolsConfig])
 
   const pools = useSelector((state: State) => state.pools.data)
   return pools

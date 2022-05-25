@@ -47,11 +47,11 @@ export enum QuoteToken {
 }
 
 export enum PoolCategory {
-  'COMMUNITY' = 'Community',
-  'APEZONE' = 'ApeZone',
-  'CORE' = 'Core',
-  'JUNGLE' = 'Jungle',
-  'BINANCE' = 'Binance', // Pools using native BNB behave differently than pools using a token
+  'COMMUNITY' = 'COMMUNITY',
+  'APEZONE' = 'APEZONE',
+  'CORE' = 'CORE',
+  'JUNGLE' = 'JUNGLE',
+  'BINANCE' = 'BINANCE', // Pools using native BNB behave differently than pools using a token
 }
 
 export interface Address {

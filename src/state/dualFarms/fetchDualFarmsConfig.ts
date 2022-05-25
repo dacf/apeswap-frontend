@@ -8,7 +8,7 @@ const fetchFarmConfigFromApi = async () => {
     console.log('fetchFarms:::', fetchFarms.data)
     return fetchFarms.data
   } catch (error) {
-    console.warn('fetchIfoStatusFromApiError::', error)
+    console.warn('fetchDualFarmsFromApiError::', error)
     return null
   }
 }

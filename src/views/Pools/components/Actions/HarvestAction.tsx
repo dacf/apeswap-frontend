@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSousHarvest } from 'hooks/useHarvest'
 import useIsMobile from 'hooks/useIsMobile'
-import { useToast } from 'state/hooks'
+import { useToast, useLivePoolsConfig } from 'state/hooks'
 import { getEtherscanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useSousStake } from 'hooks/useStake'
@@ -30,6 +30,7 @@ const HarvestAction: React.FC<HarvestActionsProps> = ({ sousId, earnTokenSymbol,
   const { toastSuccess } = useToast()
   const isMobile = useIsMobile()
   const { t } = useTranslation()
+  const { poolsConfig } = useLivePoolsConfig()
 
   const handleHarvest = async () => {
     setPendingTrx(true)
@@ -45,7 +46,7 @@ const HarvestAction: React.FC<HarvestActionsProps> = ({ sousId, earnTokenSymbol,
         console.error(e)
         setPendingTrx(false)
       })
-    dispatch(updateUserPendingReward(chainId, sousId, account))
+    dispatch(updateUserPendingReward(poolsConfig, chainId, sousId, account))
     setPendingTrx(false)
   }
 
@@ -63,7 +64,7 @@ const HarvestAction: React.FC<HarvestActionsProps> = ({ sousId, earnTokenSymbol,
         console.error(e)
         setPendingApeHarderTrx(false)
       })
-    dispatch(fetchPoolsUserDataAsync(chainId, account))
+    dispatch(fetchPoolsUserDataAsync(poolsConfig, chainId, account))
     setPendingApeHarderTrx(false)
   }
 

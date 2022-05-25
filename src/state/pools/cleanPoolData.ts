@@ -1,11 +1,16 @@
 import BigNumber from 'bignumber.js'
-import { poolsConfig } from 'config/constants'
 import { PoolConfig } from 'config/constants/types'
 import { TokenPrices } from 'state/types'
 import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 
-const cleanPoolData = (poolIds: number[], chunkedPools: any[], tokenPrices: TokenPrices[], chainId: number) => {
+const cleanPoolData = (
+  poolsConfig: PoolConfig[],
+  poolIds: number[],
+  chunkedPools: any[],
+  tokenPrices: TokenPrices[],
+  chainId: number,
+) => {
   const data = chunkedPools.map((chunk, index) => {
     const poolConfig = poolsConfig.find((pool) => pool.sousId === poolIds[index])
     const [startBlock, endBlock, totalStaked] = chunk
