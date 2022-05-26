@@ -20,7 +20,7 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setPoolsConfig: (state, action) => {
-      state.data = [...action.payload]
+      state.data = action.payload
     },
     setPoolsPublicData: (state, action) => {
       const livePoolsData: Pool[] = action.payload
