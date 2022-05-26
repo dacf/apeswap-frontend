@@ -6,6 +6,7 @@ import { useToast } from 'state/hooks'
 import { getEtherscanLink } from 'utils'
 import { useAppDispatch } from 'state'
 import { fetchBillsUserDataAsync, fetchUserOwnedBillsDataAsync } from 'state/bills'
+import { useBills } from 'state/bills/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { ClaimProps } from './types'
 import { StyledButton } from '../styles'
@@ -17,6 +18,7 @@ const Claim: React.FC<ClaimProps> = ({ billAddress, billIds, buttonSize, pending
   const [pendingTrx, setPendingTrx] = useState(false)
   const { toastSuccess } = useToast()
   const { t } = useTranslation()
+  const billsConfig = useBills()
 
   const handleClaim = async () => {
     setPendingTrx(true)
@@ -32,8 +34,8 @@ const Claim: React.FC<ClaimProps> = ({ billAddress, billIds, buttonSize, pending
         console.error(e)
         setPendingTrx(false)
       })
-    dispatch(fetchUserOwnedBillsDataAsync(chainId, account))
-    dispatch(fetchBillsUserDataAsync(chainId, account))
+    dispatch(fetchUserOwnedBillsDataAsync(billsConfig, chainId, account))
+    dispatch(fetchBillsUserDataAsync(billsConfig, chainId, account))
     setPendingTrx(false)
   }
   return (

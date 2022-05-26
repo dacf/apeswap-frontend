@@ -12,9 +12,9 @@ import BillMenu from './components/Menu'
 const Bills: React.FC = () => {
   usePollBills()
   usePollUserBills()
-  const bills = useBills()
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
+  const bills = useBills()
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)

@@ -6,6 +6,7 @@ import { updateUserAllowance } from 'state/bills'
 import { getEtherscanLink } from 'utils'
 import { useAppDispatch } from 'state'
 import { useTranslation } from 'contexts/Localization'
+import { useBills } from 'state/bills/hooks'
 import useApproveBill from '../../hooks/useApproveBill'
 import { StyledButton } from '../styles'
 import { ApproveProps } from './types'
@@ -17,6 +18,7 @@ const Approve: React.FC<ApproveProps> = ({ lpToken, billAddress, billIndex }) =>
   const [pendingTrx, setPendingTrx] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
+  const billsConfig = useBills()
 
   const handleApprove = async () => {
     setPendingTrx(true)
@@ -33,7 +35,7 @@ const Approve: React.FC<ApproveProps> = ({ lpToken, billAddress, billIndex }) =>
         toastError(e?.data?.message || t('Something went wrong please try again'))
         setPendingTrx(false)
       })
-    dispatch(updateUserAllowance(chainId, billIndex, account))
+    dispatch(updateUserAllowance(billsConfig, chainId, billIndex, account))
     setPendingTrx(false)
   }
 

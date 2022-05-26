@@ -22,7 +22,7 @@ export const dualFarmsSlice = createSlice({
   initialState,
   reducers: {
     setFarmsConfig: (state, action) => {
-      state.data = [...action.payload]
+      state.data = action.payload
     },
     setDualFarmsPublicData: (state, action) => {
       const liveFarmsData: DualFarm[] = action.payload

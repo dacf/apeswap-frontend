@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import bills from 'config/constants/bills'
+import { BillsConfig } from 'config/constants/types'
 import {
   fetchBillsAllowance,
   fetchUserBalances,
@@ -8,19 +8,24 @@ import {
   fetchUserOwnedBillNftData,
 } from './fetchBillsUser'
 import { TokenPrices, AppThunk, BillsState, Bills } from '../types'
-import fetchBills from './fetchBills'
 import { getNewBillNftData } from './getBillNftData'
+import fetchBills from './fetchBills'
+import fetchBillsConfigFromApi from './fetchBillsConfig'
 
-const initialState: BillsState = { data: [...bills] }
+const initialState: BillsState = { data: [] }
 
 export const billsSlice = createSlice({
   name: 'Bills',
   initialState,
   reducers: {
+    setBillsConfig: (state, action) => {
+      state.data = action.payload
+    },
     setBillsPublicData: (state, action) => {
       const liveBillsData: Bills[] = action.payload
       state.data = state.data.map((bill) => {
         const liveBillData = liveBillsData.find((entry) => entry.index === bill.index)
+        console.log('liveBillData:::', { ...bill, ...liveBillData })
         return { ...bill, ...liveBillData }
       })
     },
@@ -68,14 +73,27 @@ export const {
   setUserOwnedBillsData,
   setUserOwnedBillsNftData,
   updateBillsUserData,
+  setBillsConfig,
 } = billsSlice.actions
 
 // Thunks
+export const updateBillsConfig = () => async (dispatch) => {
+  try {
+    const liveBillsConfig = await fetchBillsConfigFromApi()
+    console.log('liveBillsConfigInReducer:::', liveBillsConfig)
+    dispatch(setBillsConfig(liveBillsConfig))
+  } catch (error) {
+    console.warn(error)
+  }
+}
+
 export const fetchBillsPublicDataAsync =
-  (chainId: number, tokenPrices: TokenPrices[]): AppThunk =>
+  (billsConfig: BillsConfig[], chainId: number, tokenPrices: TokenPrices[]): AppThunk =>
   async (dispatch) => {
     try {
-      const returnedBills = await fetchBills(chainId, tokenPrices)
+      console.log('billsConfig:::', billsConfig)
+      const returnedBills = await fetchBills(billsConfig, chainId, tokenPrices)
+      console.log('billsInReducer::::', returnedBills)
       dispatch(setBillsPublicData(returnedBills))
     } catch (error) {
       console.warn(error)
@@ -83,13 +101,14 @@ export const fetchBillsPublicDataAsync =
   }
 
 export const fetchBillsUserDataAsync =
-  (chainId: number, account): AppThunk =>
+  (billsConfig: BillsConfig[], chainId: number, account): AppThunk =>
   async (dispatch) => {
     try {
+      console.log('fetchBillsUserDataAsync-:::', billsConfig)
       // fetch and set user bill interaction data
-      const allowances = await fetchBillsAllowance(chainId, account)
-      const stakingTokenBalances = await fetchUserBalances(chainId, account)
-      const userData = bills.map((bill) => ({
+      const allowances = await fetchBillsAllowance(billsConfig, chainId, account)
+      const stakingTokenBalances = await fetchUserBalances(billsConfig, chainId, account)
+      const userData = billsConfig.map((bill) => ({
         index: bill.index,
         allowance: allowances[bill.index],
         stakingTokenBalance: stakingTokenBalances[bill.index],
@@ -101,15 +120,16 @@ export const fetchBillsUserDataAsync =
   }
 
 export const fetchUserOwnedBillsDataAsync =
-  (chainId: number, account): AppThunk =>
+  (billsConfig: BillsConfig[], chainId: number, account): AppThunk =>
   async (dispatch) => {
     try {
+      console.log('fetchUserOwnedBillsDataAsync-:::', billsConfig)
       // Fetch and set user owned bill data without NFT Data
-      const userOwnedBills = await fetchUserOwnedBills(chainId, account)
-      const mapUserOwnedBills = bills.map((bill) =>
+      const userOwnedBills = await fetchUserOwnedBills(billsConfig, chainId, account)
+      const mapUserOwnedBills = billsConfig.map((bill) =>
         userOwnedBills.filter((b) => b.address === bill.contractAddress[chainId]),
       )
-      const userOwnedBillsData = bills.map((bill, i) => ({
+      const userOwnedBillsData = billsConfig.map((bill, i) => ({
         index: bill.index,
         userOwnedBills: mapUserOwnedBills[i],
       }))
@@ -124,7 +144,7 @@ export const fetchUserOwnedBillsDataAsync =
       const userBillNftData = await fetchUserOwnedBillNftData(ownedBillIds)
       const ownedBillsWithNftData = mapUserOwnedBills.map((bs, index) => {
         return {
-          index: bills[index].index,
+          index: billsConfig[index].index,
           userOwnedBillsNfts: [
             ...bs.map((b) => {
               return userBillNftData.find((nftB) => parseInt(nftB.id) === parseInt(b.id))?.data
@@ -139,16 +159,18 @@ export const fetchUserOwnedBillsDataAsync =
   }
 
 export const updateUserAllowance =
-  (chainId: number, index: number, account: string): AppThunk =>
+  (billsConfig: BillsConfig[], chainId: number, index: number, account: string): AppThunk =>
   async (dispatch) => {
-    const allowances = await fetchBillsAllowance(chainId, account)
+    console.log('updateUserAllowance-:::', billsConfig)
+    const allowances = await fetchBillsAllowance(billsConfig, chainId, account)
     dispatch(updateBillsUserData({ index, field: 'allowance', value: allowances[index] }))
   }
 
 export const updateUserBalance =
-  (chainId: number, index: string, account: string): AppThunk =>
+  (billsConfig: BillsConfig[], chainId: number, index: string, account: string): AppThunk =>
   async (dispatch) => {
-    const tokenBalances = await fetchUserBalances(chainId, account)
+    console.log('updateUserBalance-:::', billsConfig)
+    const tokenBalances = await fetchUserBalances(billsConfig, chainId, account)
     dispatch(updateBillsUserData({ index, field: 'stakingTokenBalance', value: tokenBalances[index] }))
   }
 

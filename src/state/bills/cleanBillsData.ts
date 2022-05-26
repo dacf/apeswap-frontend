@@ -1,10 +1,16 @@
-import bills from 'config/constants/bills'
+import { BillsConfig } from 'config/constants/types'
 import { TokenPrices } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 
-const cleanBillsData = (billIds: number[], chunkedBills: any[], tokenPrices: TokenPrices[], chainId: number) => {
+const cleanBillsData = (
+  billsConfig: BillsConfig[],
+  billIds: number[],
+  chunkedBills: any[],
+  tokenPrices: TokenPrices[],
+  chainId: number,
+) => {
   const data = chunkedBills.map((chunk, index) => {
-    const billConfig = bills.find((bill) => bill.index === billIds[index])
+    const billConfig = billsConfig.find((bill) => bill.index === billIds[index])
     const lpPrice = tokenPrices?.find((token) => token.address[chainId] === billConfig.lpToken.address[chainId])?.price
     const earnTokenPrice = tokenPrices?.find(
       (token) => token.address[chainId] === billConfig.earnToken.address[chainId],

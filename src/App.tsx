@@ -16,6 +16,7 @@ import {
 } from 'state/hooks'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { useUpdateFarmsConfig } from 'state/dualFarms/hooks'
+import { useUpdateBillsConfig } from 'state/bills/hooks'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import ToastListener from './components/ToastListener'
@@ -102,6 +103,7 @@ const App: React.FC = () => {
   useFetchLiveIfoStatus()
   useUpdateFarmsConfig()
   useUpdatePoolsConfig()
+  useUpdateBillsConfig()
 
   const { account, chainId } = useActiveWeb3React()
   const [showScrollIcon, setShowScrollIcon] = useState(false)

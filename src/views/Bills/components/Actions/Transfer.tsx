@@ -6,6 +6,7 @@ import { useToast } from 'state/hooks'
 import { getEtherscanLink } from 'utils'
 import { useAppDispatch } from 'state'
 import { fetchBillsUserDataAsync, fetchUserOwnedBillsDataAsync } from 'state/bills'
+import { useBills } from 'state/bills/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { StyledButton } from '../styles'
 import { TransferProps } from './types'
@@ -17,6 +18,7 @@ const Transfer: React.FC<TransferProps> = ({ billNftAddress, billId, toAddress, 
   const [pendingTrx, setPendingTrx] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
+  const billsConfig = useBills()
 
   const handleTransfer = async () => {
     setPendingTrx(true)
@@ -33,8 +35,8 @@ const Transfer: React.FC<TransferProps> = ({ billNftAddress, billId, toAddress, 
         toastError(e?.data?.message || t('Something went wrong please try again'))
         setPendingTrx(false)
       })
-    dispatch(fetchUserOwnedBillsDataAsync(chainId, account))
-    dispatch(fetchBillsUserDataAsync(chainId, account))
+    dispatch(fetchUserOwnedBillsDataAsync(billsConfig, chainId, account))
+    dispatch(fetchBillsUserDataAsync(billsConfig, chainId, account))
     setPendingTrx(false)
   }
   return (

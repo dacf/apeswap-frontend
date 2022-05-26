@@ -1,29 +1,32 @@
-import bills from 'config/constants/bills'
 import erc20ABI from 'config/abi/erc20.json'
 import billAbi from 'config/abi/bill.json'
 import multicall from 'utils/multicall'
 import BigNumber from 'bignumber.js'
+import { BillsConfig } from 'config/constants/types'
 import { UserBill } from 'state/types'
 import getBillNftData from './getBillNftData'
 
-export const fetchBillsAllowance = async (chainId: number, account) => {
-  const calls = bills.map((b) => ({
+export const fetchBillsAllowance = async (billsConfig: BillsConfig[], chainId: number, account) => {
+  const calls = billsConfig.map((b) => ({
     address: b.lpToken.address[chainId],
     name: 'allowance',
     params: [account, b.contractAddress[chainId]],
   }))
   const allowances = await multicall(chainId, erc20ABI, calls)
-  return bills.reduce((acc, bill, index) => ({ ...acc, [bill.index]: new BigNumber(allowances[index]).toString() }), {})
+  return billsConfig.reduce(
+    (acc, bill, index) => ({ ...acc, [bill.index]: new BigNumber(allowances[index]).toString() }),
+    {},
+  )
 }
 
-export const fetchUserBalances = async (chainId: number, account) => {
-  const calls = bills.map((b) => ({
+export const fetchUserBalances = async (billsConfig: BillsConfig[], chainId: number, account) => {
+  const calls = billsConfig.map((b) => ({
     address: b.lpToken.address[chainId],
     name: 'balanceOf',
     params: [account],
   }))
   const tokenBalancesRaw = await multicall(chainId, erc20ABI, calls)
-  const tokenBalances = bills.reduce(
+  const tokenBalances = billsConfig.reduce(
     (acc, bill, index) => ({ ...acc, [bill.index]: new BigNumber(tokenBalancesRaw[index]).toString() }),
     {},
   )
@@ -38,8 +41,12 @@ export const fetchUserOwnedBillNftData = async (ids: string[]) => {
   return Promise.all(billNftData)
 }
 
-export const fetchUserOwnedBills = async (chainId: number, account: string): Promise<UserBill[]> => {
-  const billIdCalls = bills.map((b) => ({
+export const fetchUserOwnedBills = async (
+  billsConfig: BillsConfig[],
+  chainId: number,
+  account: string,
+): Promise<UserBill[]> => {
+  const billIdCalls = billsConfig.map((b) => ({
     address: b.contractAddress[chainId],
     name: 'getBillIds',
     params: [account],
@@ -51,9 +58,9 @@ export const fetchUserOwnedBills = async (chainId: number, account: string): Pro
     idArray[0].map(
       (id: BigNumber) =>
         id.gt(0) &&
-        (billDataCalls.push({ address: bills[index].contractAddress[chainId], name: 'billInfo', params: [id] }),
+        (billDataCalls.push({ address: billsConfig[index].contractAddress[chainId], name: 'billInfo', params: [id] }),
         billsPendingRewardCall.push({
-          address: bills[index].contractAddress[chainId],
+          address: billsConfig[index].contractAddress[chainId],
           name: 'pendingPayoutFor',
           params: [id],
         })),

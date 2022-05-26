@@ -10,6 +10,7 @@ import { getEtherscanLink } from 'utils'
 import { useAppDispatch } from 'state'
 import { fetchBillsUserDataAsync, fetchUserOwnedBillsDataAsync } from 'state/bills'
 import { Field, selectCurrency } from 'state/swap/actions'
+import { useBills } from 'state/bills/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { BuyProps } from './types'
 import { BuyButton, GetLPButton, MaxButton, StyledInput } from './styles'
@@ -32,6 +33,7 @@ const Buy: React.FC<BuyProps> = ({
   const [pendingTrx, setPendingTrx] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
+  const billsConfig = useBills()
 
   const handleInput = (val: string) => {
     setAmount(val)
@@ -62,8 +64,8 @@ const Buy: React.FC<BuyProps> = ({
         setPendingTrx(false)
         onTransactionSubmited(false)
       })
-    dispatch(fetchUserOwnedBillsDataAsync(chainId, account))
-    dispatch(fetchBillsUserDataAsync(chainId, account))
+    dispatch(fetchUserOwnedBillsDataAsync(billsConfig, chainId, account))
+    dispatch(fetchBillsUserDataAsync(billsConfig, chainId, account))
     setPendingTrx(false)
   }
 
