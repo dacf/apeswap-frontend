@@ -21,10 +21,8 @@ const fetchDualFarms = async (
     return fetchDualFarmCalls(farm, chainId)
   })
   const vals = await multicall(chainId, [...miniApeV2, ...erc20], farmCalls)
-  console.log('vals:::', vals)
   const chunkSize = farmCalls.length / dualFarmsConfig.length
   const chunkedFarms = chunk(vals, chunkSize)
-  console.log('chunkedFarms:::', chunkedFarms)
   return cleanDualFarmData(dualFarmsConfig, farmIds, chunkedFarms, tokenPrices, bananaPrice, farmLpAprs, chainId)
 }
 
