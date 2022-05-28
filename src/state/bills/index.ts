@@ -25,7 +25,6 @@ export const billsSlice = createSlice({
       const liveBillsData: Bills[] = action.payload
       state.data = state.data.map((bill) => {
         const liveBillData = liveBillsData.find((entry) => entry.index === bill.index)
-        console.log('liveBillData:::', { ...bill, ...liveBillData })
         return { ...bill, ...liveBillData }
       })
     },
@@ -80,7 +79,6 @@ export const {
 export const updateBillsConfig = () => async (dispatch) => {
   try {
     const liveBillsConfig = await fetchBillsConfigFromApi()
-    console.log('liveBillsConfigInReducer:::', liveBillsConfig)
     dispatch(setBillsConfig(liveBillsConfig))
   } catch (error) {
     console.warn(error)
@@ -91,9 +89,7 @@ export const fetchBillsPublicDataAsync =
   (billsConfig: BillsConfig[], chainId: number, tokenPrices: TokenPrices[]): AppThunk =>
   async (dispatch) => {
     try {
-      console.log('billsConfig:::', billsConfig)
       const returnedBills = await fetchBills(billsConfig, chainId, tokenPrices)
-      console.log('billsInReducer::::', returnedBills)
       dispatch(setBillsPublicData(returnedBills))
     } catch (error) {
       console.warn(error)
@@ -104,7 +100,6 @@ export const fetchBillsUserDataAsync =
   (billsConfig: BillsConfig[], chainId: number, account): AppThunk =>
   async (dispatch) => {
     try {
-      console.log('fetchBillsUserDataAsync-:::', billsConfig)
       // fetch and set user bill interaction data
       const allowances = await fetchBillsAllowance(billsConfig, chainId, account)
       const stakingTokenBalances = await fetchUserBalances(billsConfig, chainId, account)
@@ -123,7 +118,6 @@ export const fetchUserOwnedBillsDataAsync =
   (billsConfig: BillsConfig[], chainId: number, account): AppThunk =>
   async (dispatch) => {
     try {
-      console.log('fetchUserOwnedBillsDataAsync-:::', billsConfig)
       // Fetch and set user owned bill data without NFT Data
       const userOwnedBills = await fetchUserOwnedBills(billsConfig, chainId, account)
       const mapUserOwnedBills = billsConfig.map((bill) =>
@@ -161,7 +155,6 @@ export const fetchUserOwnedBillsDataAsync =
 export const updateUserAllowance =
   (billsConfig: BillsConfig[], chainId: number, index: number, account: string): AppThunk =>
   async (dispatch) => {
-    console.log('updateUserAllowance-:::', billsConfig)
     const allowances = await fetchBillsAllowance(billsConfig, chainId, account)
     dispatch(updateBillsUserData({ index, field: 'allowance', value: allowances[index] }))
   }
@@ -169,7 +162,6 @@ export const updateUserAllowance =
 export const updateUserBalance =
   (billsConfig: BillsConfig[], chainId: number, index: string, account: string): AppThunk =>
   async (dispatch) => {
-    console.log('updateUserBalance-:::', billsConfig)
     const tokenBalances = await fetchUserBalances(billsConfig, chainId, account)
     dispatch(updateBillsUserData({ index, field: 'stakingTokenBalance', value: tokenBalances[index] }))
   }
