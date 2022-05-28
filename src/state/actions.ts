@@ -9,6 +9,14 @@ export {
   updateUserPendingReward,
   updateUserStakedBalance,
 } from './pools'
+export {
+  fetchJungleFarmsPublicDataAsync,
+  fetchJungleFarmsUserDataAsync,
+  updateJungleFarmsUserAllowance,
+  updateJungleFarmsUserBalance,
+  updateJungleFarmsUserPendingReward,
+  updateJungleFarmsUserStakedBalance,
+} from './jungleFarms'
 export { profileFetchStart, profileFetchSucceeded, profileFetchFailed } from './profile'
 export {
   statsFetchStart,
@@ -17,6 +25,7 @@ export {
   fetchLiveIfoFailure,
   fetchLiveIfoStart,
   fetchLiveIfoSuccess,
+  fetchLiveTags,
 } from './stats'
 export { statsOverallFetchStart, statsOverallFetchSucceeded, statsOverallFetchFailed } from './statsOverall'
 export { tokenPricesFetchStart, tokenPricesFetchSucceeded, tokenPricesFetchFailed } from './tokenPrices'
