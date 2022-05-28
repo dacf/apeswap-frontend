@@ -7,6 +7,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { updateJungleFarmsUserPendingReward } from 'state/jungleFarms'
 import ListViewContent from 'components/ListViewContent'
 import { useTranslation } from 'contexts/Localization'
+import { useLiveJungleFarmsConfig } from 'state/jungleFarms/hooks'
 import { useAppDispatch } from 'state'
 import { StyledButton } from '../styles'
 import { ActionContainer } from './styles'
@@ -23,6 +24,7 @@ const HarvestAction: React.FC<HarvestActionsProps> = ({ jungleId, earnTokenSymbo
   const dispatch = useAppDispatch()
   const [pendingTrx, setPendingTrx] = useState(false)
   const { onHarvest } = useJungleHarvest(jungleId)
+  const { jungleFarmsConfig } = useLiveJungleFarmsConfig()
 
   const { toastSuccess } = useToast()
   const isMobile = useIsMobile()
@@ -42,7 +44,7 @@ const HarvestAction: React.FC<HarvestActionsProps> = ({ jungleId, earnTokenSymbo
         console.error(e)
         setPendingTrx(false)
       })
-    dispatch(updateJungleFarmsUserPendingReward(chainId, jungleId, account))
+    dispatch(updateJungleFarmsUserPendingReward(jungleFarmsConfig, chainId, jungleId, account))
     setPendingTrx(false)
   }
 

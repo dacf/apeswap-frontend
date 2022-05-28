@@ -8,6 +8,7 @@ import { useJungleUnstake } from 'hooks/useUnstake'
 import useIsMobile from 'hooks/useIsMobile'
 import { useToast } from 'state/hooks'
 import { useAppDispatch } from 'state'
+import { useLiveJungleFarmsConfig } from 'state/jungleFarms/hooks'
 import { getEtherscanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import ListViewContent from 'components/ListViewContent'
@@ -45,6 +46,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
   const { onStake } = useJungleStake(jungleId)
   const { onUnstake } = useJungleUnstake(jungleId)
   const { t } = useTranslation()
+  const { jungleFarmsConfig } = useLiveJungleFarmsConfig()
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -63,7 +65,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
             console.error(e)
             setPendingDepositTrx(false)
           })
-        dispatch(fetchJungleFarmsUserDataAsync(chainId, account))
+        dispatch(fetchJungleFarmsUserDataAsync(jungleFarmsConfig, chainId, account))
         setPendingDepositTrx(false)
       }}
     />,
@@ -86,7 +88,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
             console.error(e)
             setPendingWithdrawTrx(false)
           })
-        dispatch(fetchJungleFarmsUserDataAsync(chainId, account))
+        dispatch(fetchJungleFarmsUserDataAsync(jungleFarmsConfig, chainId, account))
         setPendingWithdrawTrx(false)
       }}
     />,

@@ -1,4 +1,4 @@
-import { jungleFarmsConfig } from 'config/constants'
+import { JungleFarmConfig } from 'config/constants/types'
 import jungleChefABI from 'config/abi/jungleChef.json'
 import bananaABI from 'config/abi/banana.json'
 import { TokenPrices } from 'state/types'
@@ -7,7 +7,7 @@ import multicall from 'utils/multicall'
 import fetchJungleFarmCalls from './fetchJungleFarmCalls'
 import cleanJungleFarmData from './cleanJungleFarmData'
 
-const fetchJungleFarms = async (chainId: number, tokenPrices: TokenPrices[]) => {
+const fetchJungleFarms = async (jungleFarmsConfig: JungleFarmConfig[], chainId: number, tokenPrices: TokenPrices[]) => {
   const farmIds = []
   const farmCalls = jungleFarmsConfig.flatMap((farm) => {
     farmIds.push(farm.jungleId)
@@ -18,7 +18,7 @@ const fetchJungleFarms = async (chainId: number, tokenPrices: TokenPrices[]) => 
   const chunkSize = vals.length / jungleFarmsConfig.length
   const chunkedFarms = chunk(vals, chunkSize)
 
-  return cleanJungleFarmData(farmIds, chunkedFarms, tokenPrices, chainId)
+  return cleanJungleFarmData(jungleFarmsConfig, farmIds, chunkedFarms, tokenPrices, chainId)
 }
 
 export default fetchJungleFarms

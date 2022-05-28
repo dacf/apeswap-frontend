@@ -7,6 +7,7 @@ import { updateJungleFarmsUserAllowance } from 'state/jungleFarms'
 import { getEtherscanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useToast } from 'state/hooks'
+import { useLiveJungleFarmsConfig } from 'state/jungleFarms/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { StyledButton } from '../styles'
 
@@ -26,6 +27,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
   const [pendingTrx, setPendingTrx] = useState(false)
   const dispatch = useAppDispatch()
   const { onApprove } = useJungleApprove(stakingTokenContract, jungleId)
+  const { jungleFarmsConfig } = useLiveJungleFarmsConfig()
   const { toastSuccess } = useToast()
   const { t } = useTranslation()
 
@@ -52,7 +54,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
                 console.error(e)
                 setPendingTrx(false)
               })
-            dispatch(updateJungleFarmsUserAllowance(chainId, jungleId, account))
+            dispatch(updateJungleFarmsUserAllowance(jungleFarmsConfig, chainId, jungleId, account))
 
             setPendingTrx(false)
           }}

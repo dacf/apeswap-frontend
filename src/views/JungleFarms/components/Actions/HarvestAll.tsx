@@ -6,6 +6,7 @@ import { getEtherscanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from 'contexts/Localization'
 import { useAppDispatch } from 'state'
+import { useLiveJungleFarmsConfig } from 'state/jungleFarms/hooks'
 import { StyledButtonSquare } from './styles'
 
 interface HarvestActionsProps {
@@ -20,6 +21,7 @@ const HarvestAll: React.FC<HarvestActionsProps> = ({ jungleIds, disabled }) => {
   const { onHarvestAll } = useJungleHarvestAll(jungleIds)
   const { toastSuccess } = useToast()
   const { t } = useTranslation()
+  const { jungleFarmsConfig } = useLiveJungleFarmsConfig()
 
   const handleHarvestAll = async () => {
     setPendingTrx(true)
@@ -36,7 +38,7 @@ const HarvestAll: React.FC<HarvestActionsProps> = ({ jungleIds, disabled }) => {
         console.error(e)
         setPendingTrx(false)
       })
-    dispatch(fetchJungleFarmsUserDataAsync(chainId, account))
+    dispatch(fetchJungleFarmsUserDataAsync(jungleFarmsConfig, chainId, account))
     setPendingTrx(false)
   }
 
