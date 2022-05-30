@@ -5,13 +5,13 @@ import { useDispatch } from 'react-redux'
 import { soushHarvest, harvest, nfaStakeHarvest, miniChefHarvest, jungleHarvest } from 'utils/callHelpers'
 import { CHAIN_ID } from 'config/constants/chains'
 import track from 'utils/track'
-import { useNetworkChainId } from 'state/hooks'
+import { useLivePoolsConfig, useNetworkChainId } from 'state/hooks'
 import { getContract } from 'utils'
 import { SousChef, JungleChef } from 'config/abi/types'
-import { jungleFarmsConfig, poolsConfig } from 'config/constants'
 import { updateDualFarmRewarderEarnings, updateDualFarmUserEarnings } from 'state/dualFarms'
 import { updateUserNfaStakingPendingReward, updateNfaStakingUserBalance } from 'state/nfaStakingPools'
 import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
+import { useLiveJungleFarmsConfig } from 'state/jungleFarms/hooks'
 import { useMasterchef, useMiniChefContract, useSousChef, useNfaStakingChef, useJungleChef } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
 
@@ -105,6 +105,7 @@ export const useSousHarvest = (sousId) => {
 export const useSousHarvestAll = (sousIds: number[]) => {
   const { account, library, chainId } = useActiveWeb3React()
   const masterChefContract = useMasterchef()
+  const { poolsConfig } = useLivePoolsConfig()
 
   const handleHarvestAll = useCallback(async () => {
     const harvestPromises = sousIds.map((sousId) => {
@@ -113,12 +114,13 @@ export const useSousHarvestAll = (sousIds: number[]) => {
       return sousId === 0 ? harvest(masterChefContract, 0) : soushHarvest(sousChefContract)
     })
     return Promise.all(harvestPromises)
-  }, [account, sousIds, library, masterChefContract, chainId])
+  }, [account, sousIds, library, masterChefContract, chainId, poolsConfig])
   return { onHarvestAll: handleHarvestAll }
 }
 
 export const useJungleHarvestAll = (jungleIds: number[]) => {
   const { account, library, chainId } = useActiveWeb3React()
+  const { jungleFarmsConfig } = useLiveJungleFarmsConfig()
 
   const handleHarvestAll = useCallback(async () => {
     const harvestPromises = jungleIds.map((jungleId) => {
@@ -127,7 +129,7 @@ export const useJungleHarvestAll = (jungleIds: number[]) => {
       return jungleHarvest(jungleChefContract)
     })
     return Promise.all(harvestPromises)
-  }, [account, jungleIds, library, chainId])
+  }, [account, jungleIds, library, chainId, jungleFarmsConfig])
   return { onHarvestAll: handleHarvestAll }
 }
 
