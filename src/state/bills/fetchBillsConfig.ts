@@ -5,7 +5,6 @@ import { BillsConfig } from 'config/constants/types'
 const fetchBillsConfigFromApi = async () => {
   try {
     const fetchBills = await axios.get<BillsConfig[]>(`${baseYieldApi}/bills.json`)
-    console.log('fetchBills:::', fetchBills.data)
     return fetchBills.data
   } catch (error) {
     console.warn('fetchDualFarmsFromApiError::', error)
