@@ -24,7 +24,7 @@ const cleanPoolData = (
     return {
       sousId: poolIds[index],
       startBlock: new BigNumber(startBlock).toJSON(),
-      endBlock: poolConfig.bonusEndBlock || new BigNumber(endBlock).toJSON(),
+      endBlock: poolConfig?.bonusEndBlock || new BigNumber(endBlock).toJSON(),
       totalStaked: totalStakedFormatted,
       stakingToken,
       rewardToken,
