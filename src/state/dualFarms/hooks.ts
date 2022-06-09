@@ -9,14 +9,14 @@ import { useFarmLpAprs, usePriceBananaBusd, useTokenPrices } from 'state/hooks'
 import { DualFarm, DualFarmsState, State } from 'state/types'
 import { fetchDualFarmsPublicDataAsync, fetchDualFarmUserDataAsync, updateFarmsConfig } from '.'
 
-export const useUpdateFarmsConfig = () => {
+export const useUpdateDualFarmsConfig = () => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(updateFarmsConfig())
   }, [dispatch])
 }
 
-export const useLiveFarmsConfig = () => {
+export const useLiveDualFarmsConfig = () => {
   const { data: farmsConfig }: DualFarmsState = useSelector((state: State) => state.dualFarms)
   return { dualFarmsConfig: farmsConfig }
 }
@@ -28,7 +28,7 @@ export const usePollDualFarms = () => {
   // Made a string because hooks will refresh bignumbers
   const bananaPrice = usePriceBananaBusd().toString()
   const farmLpAprs = useFarmLpAprs()
-  const { dualFarmsConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveDualFarmsConfig()
 
   useEffect(() => {
     const fetchFarms = () => {
@@ -46,7 +46,7 @@ export const useDualFarms = (account): DualFarm[] => {
   const { slowRefresh } = useRefresh()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
-  const { dualFarmsConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveDualFarmsConfig()
 
   useEffect(() => {
     if (account && (chainId === CHAIN_ID.MATIC || chainId === CHAIN_ID.MATIC_TESTNET)) {

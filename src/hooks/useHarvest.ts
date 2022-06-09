@@ -10,7 +10,7 @@ import { getContract } from 'utils'
 import { SousChef, JungleChef } from 'config/abi/types'
 import { updateDualFarmRewarderEarnings, updateDualFarmUserEarnings } from 'state/dualFarms'
 import { updateUserNfaStakingPendingReward, updateNfaStakingUserBalance } from 'state/nfaStakingPools'
-import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
+import { useLiveDualFarmsConfig } from 'state/dualFarms/hooks'
 import { useLiveJungleFarmsConfig } from 'state/jungleFarms/hooks'
 import { useMasterchef, useMiniChefContract, useSousChef, useNfaStakingChef, useJungleChef } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
@@ -160,7 +160,7 @@ export const useMiniChefHarvest = (farmPid: number) => {
   const dispatch = useDispatch()
   const { account, chainId } = useWeb3React()
   const miniChefContract = useMiniChefContract()
-  const { dualFarmsConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveDualFarmsConfig()
 
   const handleHarvest = useCallback(async () => {
     const txHash = await miniChefHarvest(miniChefContract, farmPid, account)

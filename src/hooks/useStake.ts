@@ -16,7 +16,7 @@ import {
   updateDualFarmUserStakedBalances,
   updateDualFarmUserTokenBalances,
 } from 'state/dualFarms'
-import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
+import { useLiveDualFarmsConfig } from 'state/dualFarms/hooks'
 import { useLivePoolsConfig, useNetworkChainId } from 'state/hooks'
 import {
   useJungleChef,
@@ -182,7 +182,7 @@ export const useDualFarmStake = (pid: number) => {
   // TODO switch to useActiveWeb3React. useWeb3React is legacy hook and useActiveWeb3React should be used going forward
   const { account, chainId } = useWeb3React()
   const miniChefContract = useMiniChefContract()
-  const { dualFarmsConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveDualFarmsConfig()
   const handleStake = useCallback(
     async (amount: string) => {
       const txHash = await miniChefStake(miniChefContract, pid, amount, account)

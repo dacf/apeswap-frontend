@@ -5,7 +5,7 @@ import masterChefABI from 'config/abi/masterchef.json'
 import miniChefABI from 'config/abi/miniApeV2.json'
 import { farmsConfig } from 'config/constants'
 import { CHAIN_ID } from 'config/constants/chains'
-import { useLiveFarmsConfig } from 'state/dualFarms/hooks'
+import { useLiveDualFarmsConfig } from 'state/dualFarms/hooks'
 import multicall from 'utils/multicall'
 import useRefresh from './useRefresh'
 import { useMasterChefAddress, useMiniChefAddress } from './useAddress'
@@ -18,7 +18,7 @@ const useFarmsWithBalance = () => {
   const multicallContract = useMulticallContract()
   const masterChefAddress = useMasterChefAddress()
   const miniChefAddress = useMiniChefAddress()
-  const { dualFarmsConfig } = useLiveFarmsConfig()
+  const { dualFarmsConfig } = useLiveDualFarmsConfig()
 
   useEffect(() => {
     const fetchBSCBalances = async () => {
