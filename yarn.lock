@@ -9,10 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@ape.swap/uikit@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@ape.swap/uikit/-/uikit-1.3.1.tgz#3c9927f1208dfe0a3350afe47ed9cc1e2f1f50bf"
-  integrity sha512-nm1JcMSAKn1pcbrU5Ik4eKgLXJMVrmC7xn+47+bDEtiCzyaVeEP6IQOXgfhM0gvZZfo4R4o5DbiFfzUVMlUJJw==
+"@ape.swap/uikit@1.3.5":
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/@ape.swap/uikit/-/uikit-1.3.5.tgz#6561cab03b31c1a173c0e29a58dda3215f8509fa"
+  integrity sha512-1U201NsOS8Vcx2R8D0+X1SDEALZwJbFrRrttyCUoGvAOdeYDJHAparAn8P7jZqlD9HXWtRZ/6i8c5SUye5ht6A==
   dependencies:
     "@emotion/react" "^11.7.1"
     "@emotion/styled" "^11.8.1"
@@ -56,10 +56,10 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@apeswapfinance/token-lists@1.0.284":
-  version "1.0.284"
-  resolved "https://npm.pkg.github.com/download/@apeswapfinance/token-lists/1.0.284/1cd0e7b1b01c36e19a314fd818b2c9e7d6e957d1863bb4bcf80809ca01b3692d#e56ecfe52673b50436e4f13da174612a7048b9de"
-  integrity sha512-sc9FFFRwOYvkZgmGTQeyBaUlnqrH0n6Rt6klJHyjIINyoGSKwo1LpwSbyMC2hjmLKRHP7irI9oBKap41gxt9WA==
+"@apeswapfinance/token-lists@1.0.287":
+  version "1.0.287"
+  resolved "https://npm.pkg.github.com/download/@apeswapfinance/token-lists/1.0.287/ce0b1477489a20cc847727ca510f1b2998718b6195f44ed092c09d83bac53b0b#e081915174a4b1e90f57ff411db0a3bf7ad28f5f"
+  integrity sha512-0+ZU6Q0FX7U2ZfjtL2I+4DZ1XkQKGMNYs1YHEGbuoxVczPI9RnZwFj02amRKi6xydyXZ2FQsNDBGFGaEu+V5Lg==
 
 "@apeswapfinance/uikit@0.11.3":
   version "0.11.3"
@@ -77,10 +77,10 @@
     theme-ui "^0.13.1"
     yalc "^1.0.0-pre.53"
 
-"@autonomylabs/limit-stop-orders@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@autonomylabs/limit-stop-orders/-/limit-stop-orders-0.0.5.tgz#a8d4ceba62f9811b9f8e845561723574445bf44f"
-  integrity sha512-ygA569WyiTmK3vmU5hSiyHF0pHt4VFKROCj9Yxi5RiLijE4Z5U3nWenJozMNlZuP4VzIFJWBO8ytmrPBVEKNPQ==
+"@autonomylabs/limit-stop-orders@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@autonomylabs/limit-stop-orders/-/limit-stop-orders-0.0.6.tgz#af00975fa67da15807fe4d999738b74e9c753f97"
+  integrity sha512-+SBGPi9CL719cB4+9ekmmeYl5AMP4sX0uFQaSKcdgAeOZSclu3t448Tzrgda2IHEXQ4+7d65JsCkWO85Pv8RFQ==
   dependencies:
     "@traderjoe-xyz/core" "^2.2.2"
     "@uniswap/sdk-core" "^3.0.1"

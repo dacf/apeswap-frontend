@@ -1,3 +1,4 @@
+/** @jsxImportSource theme-ui */
 import React from 'react'
 import styled from 'styled-components'
 import { Flex, useMatchBreakpoints, Tabs, Tab } from '@apeswapfinance/uikit'
@@ -97,7 +98,6 @@ const CurrencyInputHeader: React.FC<Props> = () => {
               fontSize: '15px',
               fontWeight: 700,
               marginRight: '25px',
-              padding: 10,
               display: isMobile ? 'none' : 'block',
               height: isMobile ? '36px ' : '40px',
             }}
