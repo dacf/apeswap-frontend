@@ -94,13 +94,11 @@ export interface PoolConfig {
   tokenName: string
   stakingToken: Token
   stakingLimit?: number
-  bonusEndBlock?: number
   rewardToken: Token
   contractAddress: Address
   poolCategory?: PoolCategory
   projectLink: string
   twitter?: string
-  tokenPerBlock: string
   sortOrder?: number
   harvest?: boolean
   reflect?: boolean
@@ -115,6 +113,13 @@ export interface PoolConfig {
   forAdmins?: boolean
   emergencyWithdraw?: boolean
   isEarnTokenLp?: boolean
+  tokenPerBlock: string
+  chainId: number
+  name: string
+  rewardPerBlock?: number
+  startBlock?: number
+  bonusEndBlock?: number
+  abi?: string
 }
 
 export interface NfaStakingPoolConfig {
