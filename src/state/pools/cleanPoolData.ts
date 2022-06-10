@@ -4,6 +4,25 @@ import { TokenPrices } from 'state/types'
 import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 
+const fetchPoolTokenStatsAndApr = (pool: PoolConfig, tokenPrices: TokenPrices[], totalStaked, chainId: number) => {
+  // Get values needed to calculate apr
+  const curPool = pool
+  const rewardToken = tokenPrices
+    ? tokenPrices.find((token) => pool?.rewardToken && token?.address[chainId] === pool?.rewardToken.address[chainId])
+    : pool.rewardToken
+  const stakingToken = tokenPrices
+    ? tokenPrices.find((token) => token?.address[chainId] === pool?.stakingToken.address[chainId])
+    : pool.stakingToken
+
+  // Calculate apr
+  const apr = getPoolApr(stakingToken?.price, rewardToken?.price, getBalanceNumber(totalStaked), curPool?.tokenPerBlock)
+  console.log('rewardToken->APR:::', rewardToken)
+  console.log('stakingToken->APR:::', stakingToken)
+  console.log('pool->APR:::', pool)
+  console.log('apr->APR:::', apr)
+  return [stakingToken, rewardToken, apr]
+}
+
 const cleanPoolData = (
   poolsConfig: PoolConfig[],
   poolIds: number[],
@@ -21,6 +40,9 @@ const cleanPoolData = (
       totalStakedFormatted,
       chainId,
     )
+    console.log('rewardToken->CPD:::', rewardToken)
+    console.log('stakingToken->CPD:::', stakingToken)
+    console.log('apr->CPD:::', apr)
     return {
       sousId: poolIds[index],
       startBlock: new BigNumber(startBlock).toJSON(),
@@ -32,24 +54,6 @@ const cleanPoolData = (
     }
   })
   return data
-}
-
-const fetchPoolTokenStatsAndApr = (pool: PoolConfig, tokenPrices: TokenPrices[], totalStaked, chainId: number) => {
-  // Get values needed to calculate apr
-  const curPool = pool
-  const rewardToken = tokenPrices
-    ? tokenPrices.find((token) => pool?.rewardToken && token?.address[chainId] === pool?.rewardToken.address[chainId])
-    : pool.rewardToken
-  const stakingToken = tokenPrices
-    ? tokenPrices.find((token) => token?.address[chainId] === pool?.stakingToken.address[chainId])
-    : pool.stakingToken
-
-  console.log('rewardToken->APR:::', rewardToken)
-  console.log('stakingToken->APR:::', stakingToken)
-  console.log('pool->APR:::', pool)
-  // Calculate apr
-  const apr = getPoolApr(stakingToken?.price, rewardToken?.price, getBalanceNumber(totalStaked), curPool?.tokenPerBlock)
-  return [stakingToken, rewardToken, apr]
 }
 
 export default cleanPoolData

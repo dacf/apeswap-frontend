@@ -18,6 +18,9 @@ const fetchPools = async (poolsConfig: PoolConfig[], chainId: number, tokenPrice
   const formattedVals = [null, null, ...vals]
   const chunkSize = formattedVals.length / poolsConfig.length
   const chunkedPools = chunk(formattedVals, chunkSize)
+  console.log('chunkedPools->fetchPools:::', chunkedPools)
+  console.log('poolsConfig->fetchPools:::', poolsConfig)
+  console.log('tokenPrices->fetchPools:::', tokenPrices)
   return cleanPoolData(poolsConfig, poolIds, chunkedPools, tokenPrices, chainId)
 }
 
