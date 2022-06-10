@@ -15,12 +15,10 @@ const fetchPools = async (poolsConfig: PoolConfig[], chainId: number, tokenPrice
   })
   // We do not want the block time for the banana earn banana pool so we append two null values to keep the chunks even
   const vals = await multicall(chainId, [...sousChefABI, ...bananaABI], poolCalls)
+  console.log('vals->fetchPools:::', vals)
   const formattedVals = [null, null, ...vals]
   const chunkSize = formattedVals.length / poolsConfig.length
   const chunkedPools = chunk(formattedVals, chunkSize)
-  console.log('chunkedPools->fetchPools:::', chunkedPools)
-  console.log('poolsConfig->fetchPools:::', poolsConfig)
-  console.log('tokenPrices->fetchPools:::', tokenPrices)
   return cleanPoolData(poolsConfig, poolIds, chunkedPools, tokenPrices, chainId)
 }
 
