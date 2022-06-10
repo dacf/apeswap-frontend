@@ -10,7 +10,7 @@ import partition from 'lodash/partition'
 import { useTranslation } from 'contexts/Localization'
 import { useBlock } from 'state/block/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { usePollPools, usePools, usePoolTags, useLivePoolsConfig, useUpdatePoolsConfig } from 'state/hooks'
+import { usePollPools, usePools, usePoolTags } from 'state/hooks'
 import ListViewLayout from 'components/layout/ListViewLayout'
 import Banner from 'components/Banner'
 import { Pool } from 'state/types'
@@ -20,9 +20,7 @@ import DisplayPools from './components/DisplayPools'
 const NUMBER_OF_POOLS_VISIBLE = 12
 
 const Pools: React.FC = () => {
-  useUpdatePoolsConfig()
   usePollPools()
-  const { poolsConfig } = useLivePoolsConfig()
   const { chainId } = useActiveWeb3React()
   const [stakedOnly, setStakedOnly] = useState(false)
   const [tokenOption, setTokenOption] = useState('allTokens')
@@ -32,7 +30,7 @@ const Pools: React.FC = () => {
   const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE)
   const { account } = useWeb3React()
   const { pathname } = useLocation()
-  const generalPools = usePools(account)
+  const allPools = usePools(account)
   const { poolTags } = usePoolTags(chainId)
   const { t } = useTranslation()
   const { currentBlock } = useBlock()
@@ -44,7 +42,6 @@ const Pools: React.FC = () => {
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
   }
-  const allPools = poolsConfig && generalPools
 
   useEffect(() => {
     const showMorePools = (entries) => {

@@ -13,7 +13,11 @@ import {
   useUpdateNetwork,
   useFetchLiveIfoStatus,
   useFetchLiveTags,
+  useUpdatePoolsConfig,
 } from 'state/hooks'
+import { useUpdateBillsConfig } from 'state/bills/hooks'
+import { useUpdateJungleFarmsConfig } from 'state/jungleFarms/hooks'
+import { useUpdateDualFarmsConfig } from 'state/dualFarms/hooks'
 import { usePollBlockNumber } from 'state/block/hooks'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
@@ -102,6 +106,10 @@ const App: React.FC = () => {
   useFetchProfile()
   useFetchLiveIfoStatus()
   useFetchLiveTags()
+  useUpdateBillsConfig()
+  useUpdatePoolsConfig()
+  useUpdateJungleFarmsConfig()
+  useUpdateDualFarmsConfig()
 
   const { account, chainId } = useActiveWeb3React()
   const [showScrollIcon, setShowScrollIcon] = useState(false)

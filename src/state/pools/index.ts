@@ -51,6 +51,7 @@ export const { setPoolsPublicData, setPoolsUserData, updatePoolsUserData, setPoo
 export const updatePoolsConfig = () => async (dispatch) => {
   try {
     const livePoolsConfig = await fetchPoolsConfigFromApi()
+    console.log('livePoolsConfig:::', livePoolsConfig)
     dispatch(setPoolsConfig(livePoolsConfig))
   } catch (error) {
     console.warn(error)

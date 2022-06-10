@@ -8,12 +8,7 @@ import partition from 'lodash/partition'
 import { useTranslation } from 'contexts/Localization'
 import { useBlock } from 'state/block/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
-import {
-  usePollJungleFarms,
-  useJungleFarms,
-  useUpdateJungleFarmsConfig,
-  useLiveJungleFarmsConfig,
-} from 'state/jungleFarms/hooks'
+import { usePollJungleFarms, useJungleFarms } from 'state/jungleFarms/hooks'
 import ListViewLayout from 'components/layout/ListViewLayout'
 import Banner from 'components/Banner'
 import { JungleFarm } from 'state/types'
@@ -24,9 +19,7 @@ import HarvestAll from './components/Actions/HarvestAll'
 const NUMBER_OF_FARMS_VISIBLE = 10
 
 const JungleFarms: React.FC = () => {
-  useUpdateJungleFarmsConfig()
   usePollJungleFarms()
-  const { jungleFarmsConfig } = useLiveJungleFarmsConfig()
   const [stakedOnly, setStakedOnly] = useState(false)
   const [observerIsSet, setObserverIsSet] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -34,7 +27,7 @@ const JungleFarms: React.FC = () => {
   const [numberOfFarmsVisible, setNumberOfFarmsVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
   const { account } = useWeb3React()
   const { pathname } = useLocation()
-  const generalFarms = useJungleFarms(account)
+  const allJungleFarms = useJungleFarms(account)
   const { t } = useTranslation()
   const { currentBlock } = useBlock()
   const { search } = window.location
@@ -45,7 +38,6 @@ const JungleFarms: React.FC = () => {
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
   }
-  const allJungleFarms = jungleFarmsConfig && generalFarms
 
   useEffect(() => {
     const showMoreJungleFarms = (entries) => {

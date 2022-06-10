@@ -1,6 +1,6 @@
 import { Flex } from '@apeswapfinance/uikit'
 import React, { useState } from 'react'
-import { usePollBills, useBills, usePollUserBills, useUpdateBillsConfig } from 'state/bills/hooks'
+import { usePollBills, useBills, usePollUserBills } from 'state/bills/hooks'
 import { Bills as BillType } from 'state/types'
 import ListViewLayout from 'components/layout/ListViewLayout'
 import Banner from 'components/Banner'
@@ -10,7 +10,6 @@ import UserBillViews from './components/UserBillViews'
 import BillMenu from './components/Menu'
 
 const Bills: React.FC = () => {
-  useUpdateBillsConfig()
   usePollBills()
   usePollUserBills()
   const { t } = useTranslation()

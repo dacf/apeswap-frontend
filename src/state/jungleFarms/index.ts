@@ -50,6 +50,7 @@ export const { setJungleFarmsPublicData, setJungleFarmsUserData, updateJungleFar
 export const updateJungleFarmsConfig = () => async (dispatch) => {
   try {
     const liveJungleFarmsConfig = await fetchJungleFarmConfigFromApi()
+    console.log('liveJungleFarmsConfig:::', liveJungleFarmsConfig)
     dispatch(setJungleFarmsConfig(liveJungleFarmsConfig))
   } catch (error) {
     console.warn(error)

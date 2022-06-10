@@ -53,8 +53,9 @@ export const { setDualFarmsPublicData, setDualFarmUserData, updateDualFarmUserDa
 // Thunks
 export const updateFarmsConfig = () => async (dispatch) => {
   try {
-    const liveFarmsConfig = await fetchFarmConfigFromApi()
-    dispatch(setFarmsConfig(liveFarmsConfig))
+    const liveDualFarmsConfig = await fetchFarmConfigFromApi()
+    console.log('liveDualFarmsConfig:::', liveDualFarmsConfig)
+    dispatch(setFarmsConfig(liveDualFarmsConfig))
   } catch (error) {
     console.warn(error)
   }
