@@ -54,7 +54,6 @@ export const { setDualFarmsPublicData, setDualFarmUserData, updateDualFarmUserDa
 export const updateFarmsConfig = () => async (dispatch) => {
   try {
     const liveDualFarmsConfig = await fetchFarmConfigFromApi()
-    console.log('liveDualFarmsConfig:::', liveDualFarmsConfig)
     dispatch(setFarmsConfig(liveDualFarmsConfig))
   } catch (error) {
     console.warn(error)

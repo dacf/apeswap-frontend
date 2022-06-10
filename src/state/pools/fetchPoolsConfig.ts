@@ -3,7 +3,6 @@ import { PoolConfig } from 'config/constants/types'
 import { YIELDS_BASE_URL } from 'hooks/api'
 
 // const { REACT_APP_YIELDS_BASE_URL } = process.env
-console.log('YIELDS_BASE_URL:::', YIELDS_BASE_URL)
 
 const fetchPoolsConfigFromApi = async () => {
   try {

@@ -79,7 +79,6 @@ export const {
 export const updateBillsConfig = () => async (dispatch) => {
   try {
     const liveBillsConfig = await fetchBillsConfigFromApi()
-    console.log('liveBillsConfig:::', liveBillsConfig)
     dispatch(setBillsConfig(liveBillsConfig))
   } catch (error) {
     console.warn(error)
