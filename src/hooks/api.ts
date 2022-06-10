@@ -4,6 +4,8 @@ import useRefresh from './useRefresh'
 export const baseUrl = 'https://api.apeswap.com/api/v1'
 
 export const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'https://ape-swap-api.herokuapp.com'
+export const YIELDS_BASE_URL =
+  'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-yields/chore/new-configs/config'
 
 export const baseUrlStrapi = 'https://apeswap-strapi.herokuapp.com'
 const EXCHANGE_SUBGRAPH_URL = 'https://graph.apeswap.finance/subgraphs/name/ape-swap/apeswap-subgraph'

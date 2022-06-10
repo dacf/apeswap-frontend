@@ -1,12 +1,13 @@
 import axios from 'axios'
 import { PoolConfig } from 'config/constants/types'
+import { YIELDS_BASE_URL } from 'hooks/api'
 
-const { REACT_APP_YIELDS_BASE_URL } = process.env
-console.log('REACT_APP_YIELDS_BASE_URL:::', REACT_APP_YIELDS_BASE_URL)
+// const { REACT_APP_YIELDS_BASE_URL } = process.env
+console.log('YIELDS_BASE_URL:::', YIELDS_BASE_URL)
 
 const fetchPoolsConfigFromApi = async () => {
   try {
-    const fetchPools = await axios.get<PoolConfig[]>(`${REACT_APP_YIELDS_BASE_URL}/pools.json`)
+    const fetchPools = await axios.get<PoolConfig[]>(`${YIELDS_BASE_URL}/pools.json`)
     return fetchPools.data
   } catch (error) {
     console.warn('fetchPoolsFromApiError::', error)

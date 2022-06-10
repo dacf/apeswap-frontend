@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { Flex } from '@apeswapfinance/uikit'
 import { useFarmTags, useFetchFarmLpAprs } from 'state/hooks'
-import { useDualFarms, usePollDualFarms } from 'state/dualFarms/hooks'
+import { useDualFarms, usePollDualFarms, useUpdateDualFarmsConfig, useLiveDualFarmsConfig } from 'state/dualFarms/hooks'
 import { DualFarm } from 'state/types'
 import { orderBy } from 'lodash'
 import ListViewLayout from 'components/layout/ListViewLayout'
@@ -21,7 +21,9 @@ const params = new URLSearchParams(search)
 const urlSearchedFarm = parseInt(params.get('pid'))
 
 const DualFarms: React.FC = () => {
+  useUpdateDualFarmsConfig()
   usePollDualFarms()
+  const { dualFarmsConfig } = useLiveDualFarmsConfig()
   const { account, chainId } = useActiveWeb3React()
   useFetchFarmLpAprs(chainId)
   const { farmTags } = useFarmTags(chainId)
@@ -29,12 +31,14 @@ const DualFarms: React.FC = () => {
   const { t } = useTranslation()
   const { pathname } = useLocation()
   const [observerIsSet, setObserverIsSet] = useState(false)
-  const farmsLP = useDualFarms(account)
+  const generalFarmsLP = useDualFarms(account)
   const [query, setQuery] = useState('')
   const [sortOption, setSortOption] = useState('all')
 
   const [stakedOnly, setStakedOnly] = useState(false)
   const isActive = !pathname.includes('history')
+
+  const farmsLP = dualFarmsConfig && generalFarmsLP
 
   const activeFarms = farmsLP.filter((farm) => farm.multiplier !== '0X')
   const inactiveFarms = farmsLP.filter((farm) => farm.multiplier === '0X')
