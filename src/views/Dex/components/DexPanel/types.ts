@@ -12,6 +12,7 @@ export interface DexPanelProps {
   onCurrencySelect: (field: any, currency: Currency) => void
   onUserInput: (field: any, val: string) => void
   handleMaxInput?: (field: any) => void
+  setTradeValueUsd?: (val: number) => void
   fieldType?: Field | MintField | BurnField
   showCommonBases?: boolean
   lpPair?: Pair

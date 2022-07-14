@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Flex } from '@ape.swap/uikit'
+import { Flex } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { escapeRegExp } from '../../utils'
 

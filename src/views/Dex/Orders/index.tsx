@@ -1,14 +1,15 @@
 /** @jsxImportSource theme-ui */
-import React, { useCallback, useMemo, useState } from 'react'
-import { useCurrency } from 'hooks/Tokens'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAllTokens, useCurrency } from 'hooks/Tokens'
 import { Field, SwapDelay } from 'state/swap/actions'
 import { Flex, Text, useModal } from '@ape.swap/uikit'
 import { Link } from '@apeswapfinance/uikit'
 import { computeTradePriceBreakdown } from 'utils/prices'
+import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
-import { CurrencyAmount, JSBI, Trade } from '@apeswapfinance/sdk'
+import { CurrencyAmount, JSBI, Token, Trade } from '@apeswapfinance/sdk'
 import { useExpertModeManager, useUserSlippageTolerance } from 'state/user/hooks'
-import { useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
+import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { useOrderCallback } from 'hooks/useOrderCallback'
 import maxAmountSpend from 'utils/maxAmountSpend'
@@ -22,8 +23,10 @@ import PriceInputPanel from './components/PriceInputPanel'
 import OrdersActions from './components/OrdersActions'
 import OrderHistoryPanel from './components/OrderHistoryPanel'
 import OrderTradeInfo from './components/OrderTradeInfo'
+import ImportTokenWarningModal from '../Swap/components/ImportTokenWarningModal'
 
 const Orders: React.FC = () => {
+  const loadedUrlParams = useDefaultsFromURLSearch()
   // modal and loading
   const [{ tradeToConfirm, swapErrorMessage, attemptingTxn, txHash }, setSwapState] = useState<{
     tradeToConfirm: Trade | undefined
@@ -37,14 +40,40 @@ const Orders: React.FC = () => {
     txHash: undefined,
   })
 
-  /**
-   * TODO: Add back tracking code.
-   * TODO: Make sure handle currency selection is okay
-   */
-
   const { t } = useTranslation()
 
   const [allowedSlippage] = useUserSlippageTolerance()
+
+  const history = useHistory()
+
+  // token warning stuff
+  const [loadedInputCurrency, loadedOutputCurrency] = [
+    useCurrency(loadedUrlParams?.inputCurrencyId),
+    useCurrency(loadedUrlParams?.outputCurrencyId),
+  ]
+  const urlLoadedTokens: Token[] = useMemo(
+    () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
+    [loadedInputCurrency, loadedOutputCurrency],
+  )
+
+  // dismiss warning if all imported tokens are in active lists
+  const defaultTokens = useAllTokens()
+  const importTokensNotInDefault =
+    urlLoadedTokens &&
+    urlLoadedTokens.filter((token: Token) => {
+      return !(token.address in defaultTokens)
+    })
+
+  const [onPresentImportTokenWarningModal] = useModal(
+    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => history.push('/orders')} />,
+  )
+
+  useEffect(() => {
+    if (importTokensNotInDefault.length > 0) {
+      onPresentImportTokenWarningModal()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [importTokensNotInDefault.length])
 
   // for expert mode
   const [isExpertMode] = useExpertModeManager()
@@ -57,11 +86,7 @@ const Orders: React.FC = () => {
 
   const [inputCurrency, outputCurrency] = [useCurrency(INPUT?.currencyId), useCurrency(OUTPUT?.currencyId)]
 
-  const {
-    wrapType,
-    execute: onWrap,
-    inputError: wrapInputError,
-  } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
+  const { wrapType, execute: onWrap } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const trade = showWrap ? undefined : v2Trade
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
@@ -167,17 +192,6 @@ const Orders: React.FC = () => {
     swapCallback()
       .then(async (hash) => {
         setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
-        //   track({
-        //     event: 'swap',
-        //     value: tradeValueUsd,
-        //     chain: chainId,
-        //     data: {
-        //       token1: trade?.inputAmount?.currency?.getSymbol(chainId),
-        //       token2: trade?.outputAmount?.currency?.getSymbol(chainId),
-        //       token1Amount: Number(trade?.inputAmount.toSignificant(6)),
-        //       token2Amount: Number(trade?.outputAmount.toSignificant(6)),
-        //     },
-        //   })
       })
       .catch((error) => {
         setSwapState({
@@ -188,20 +202,6 @@ const Orders: React.FC = () => {
         })
       })
   }, [priceImpactWithoutFee, swapCallback, tradeToConfirm, t])
-
-  // const handleCurrencySelection = useCallback(
-  //   (selectedCurrency: Currency, fieldType: Field) => {
-  //     onCurrencySelection(fieldType, selectedCurrency)
-  //     // updateParams('outputCurrency', outputCurrency.symbol !== 'ETH' ? outputCurrency.address : 'ETH')
-  //     // const showSwapWarning = shouldShowSwapWarning(outputCurrency)
-  //     // if (showSwapWarning) {
-  //     //   setSwapWarningCurrency(outputCurrency)
-  //     // } else {
-  //     //   setSwapWarningCurrency(null)
-  //     // }
-  //   },
-  //   [onCurrencySelection],
-  // )
 
   const [onPresentConfirmModal] = useModal(
     <OrderSwapModal

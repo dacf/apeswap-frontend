@@ -21,6 +21,7 @@ const DexPanel: React.FC<DexPanelProps> = ({
   onCurrencySelect,
   onUserInput,
   handleMaxInput,
+  setTradeValueUsd,
   otherCurrency,
   fieldType,
   panelText,
@@ -43,6 +44,16 @@ const DexPanel: React.FC<DexPanelProps> = ({
     setUsdVal(await getCurrencyUsdPrice(chainId, lpPair?.liquidityToken || currency, isRemoveLiquidity))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, currency, isRemoveLiquidity])
+
+  useMemo(async () => {
+    if (setTradeValueUsd) {
+      setTradeValueUsd(
+        isRemoveLiquidity
+          ? usdVal * parseFloat(currencyBalance) * (parseFloat(value) / 100)
+          : usdVal * parseFloat(value),
+      )
+    }
+  }, [usdVal, value, currencyBalance, isRemoveLiquidity, setTradeValueUsd])
 
   return (
     <Flex sx={styles.dexPanelContainer}>

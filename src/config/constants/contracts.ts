@@ -49,6 +49,10 @@ export default {
     56: '0x23396cF899Ca06c4472205fC903bDB4de249D6fC',
     97: '',
   },
+  usdt: {
+    56: '0x55d398326f99059ff775485246999027b3197955',
+    97: '',
+  },
   bananaProfile: {
     56: '0xDf4dBf6536201370F95e06A0F8a7a70fE40E388a',
     97: '0xb57ab339831cd5154ef2ed721ceba734aa9047bd',

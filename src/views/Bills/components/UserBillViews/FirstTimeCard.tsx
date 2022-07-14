@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Text } from '@apeswapfinance/uikit'
 import BillsDiagram from 'components/MarketingModalContent/Bills/BillsDiagram'
 import ReactPlayer from 'react-player'

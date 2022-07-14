@@ -23,6 +23,7 @@ const DexActions: React.FC<DexActionProps> = ({
   userHasSpecifiedInputOutput,
   routerType,
   disabled,
+  wrapInputError,
   onWrap,
   handleSwap,
   onPresentConfirmModal,
@@ -53,7 +54,7 @@ const DexActions: React.FC<DexActionProps> = ({
     }
     if (showWrap) {
       return (
-        <Button fullWidth onClick={onWrap}>
+        <Button fullWidth onClick={onWrap} disabled={Boolean(wrapInputError)}>
           {wrapType === WrapType.WRAP ? t('Wrap') : t('Unwrap')}
         </Button>
       )

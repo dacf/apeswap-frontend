@@ -1,13 +1,11 @@
-import { Currency, CurrencyAmount, Percent, Price, TokenAmount, Trade } from '@apeswapfinance/sdk'
-import { RouterTypes } from 'config/constants'
-import { WrapType } from 'hooks/useWrapCallback'
-import { Field } from 'state/swap/actions'
+import { Currency, CurrencyAmount, Percent, Price, TokenAmount } from '@apeswapfinance/sdk'
 
 export interface AddLiquidityActionsProps {
   currencies: { CURRENCY_A?: Currency; CURRENCY_B?: Currency }
   parsedAmounts: { CURRENCY_A?: CurrencyAmount; CURRENCY_B?: CurrencyAmount }
   error: string
   noLiquidity: boolean
+  tradeValueUsd: number
   price: Price
   poolTokenPercentage: Percent
   liquidityMinted: TokenAmount

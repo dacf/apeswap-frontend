@@ -2,27 +2,9 @@
 import React from 'react'
 import { ChainId, Currency, currencyEquals, ETHER, Token } from '@apeswapfinance/sdk'
 import { Flex, Text } from '@ape.swap/uikit'
-import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { SUGGESTED_BASES } from '../../config/constants'
-import { AutoColumn } from '../layout/Column'
-import { AutoRow } from '../layout/Row'
 import { CurrencyLogo } from '../Logo'
-
-const BaseWrapper = styled.div<{ disable?: boolean }>`
-  border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.colors.background)};
-  border-radius: 10px;
-  display: flex;
-  padding: 6px;
-  margin: 5px 5px 2px 5px;
-  :hover {
-    cursor: ${({ disable }) => !disable && 'pointer'};
-    background-color: ${({ theme, disable }) => !disable && theme.colors.background};
-  }
-
-  background-color: ${({ theme, disable }) => disable && theme.colors.background};
-  opacity: ${({ disable }) => disable && '0.4'};
-`
 
 const style = {
   wrapper: {

@@ -1,13 +1,15 @@
 /** @jsxImportSource theme-ui */
-import React, { useCallback, useState } from 'react'
-import { useCurrency } from 'hooks/Tokens'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAllTokens, useCurrency } from 'hooks/Tokens'
 import { Field, SwapDelay } from 'state/swap/actions'
 import { Flex, useModal } from '@ape.swap/uikit'
 import { useSwapCallback } from 'hooks/useSwapCallback'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { computeTradePriceBreakdown } from 'utils/prices'
+import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
-import { CurrencyAmount, JSBI, Trade } from '@apeswapfinance/sdk'
+import track from 'utils/track'
+import { CurrencyAmount, JSBI, Token, Trade } from '@apeswapfinance/sdk'
 import { useExpertModeManager, useUserRecentTransactions, useUserSlippageTolerance } from 'state/user/hooks'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
@@ -16,6 +18,7 @@ import { dexStyles } from '../styles'
 import DexPanel from '../components/DexPanel'
 import DexNav from '../components/DexNav'
 import ConfirmSwapModal from './components/ConfirmSwapModal'
+import ImportTokenWarningModal from './components/ImportTokenWarningModal'
 import SwapSwitchButton from './components/SwapSwitchButton'
 import DexActions from './components/DexActions'
 import DexTradeInfo from './components/DexTradeInfo'
@@ -38,12 +41,11 @@ const Swap: React.FC = () => {
     txHash: undefined,
   })
 
-  /**
-   * TODO: Add back tracking code.
-   * TODO: Make sure handle currency selection is okay
-   */
-
   const loadedUrlParams = useDefaultsFromURLSearch()
+
+  const history = useHistory()
+
+  const [tradeValueUsd, setTradeValueUsd] = useState(0)
 
   const { chainId } = useActiveWeb3React()
 
@@ -53,14 +55,42 @@ const Swap: React.FC = () => {
 
   const [recentTransactions] = useUserRecentTransactions()
 
+  // token warning stuff
+  const [loadedInputCurrency, loadedOutputCurrency] = [
+    useCurrency(loadedUrlParams?.inputCurrencyId),
+    useCurrency(loadedUrlParams?.outputCurrencyId),
+  ]
+  const urlLoadedTokens: Token[] = useMemo(
+    () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
+    [loadedInputCurrency, loadedOutputCurrency],
+  )
+
+  // dismiss warning if all imported tokens are in active lists
+  const defaultTokens = useAllTokens()
+  const importTokensNotInDefault =
+    urlLoadedTokens &&
+    urlLoadedTokens.filter((token: Token) => {
+      return !(token.address in defaultTokens)
+    })
+
+  const [onPresentImportTokenWarningModal] = useModal(
+    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => history.push('/swap/')} />,
+  )
+
+  useEffect(() => {
+    if (importTokensNotInDefault.length > 0) {
+      onPresentImportTokenWarningModal()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [importTokensNotInDefault.length])
+
   // for expert mode
   const [isExpertMode] = useExpertModeManager()
 
   const { INPUT, OUTPUT, independentField, typedValue, recipient, swapDelay, bestRoute } = useSwapState()
 
   // the callback to execute the swap
-  const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient, onSetSwapDelay } =
-    useSwapActionHandlers()
+  const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
   const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
 
   const [inputCurrency, outputCurrency] = [useCurrency(INPUT?.currencyId), useCurrency(OUTPUT?.currencyId)]
@@ -138,17 +168,17 @@ const Swap: React.FC = () => {
     swapCallback()
       .then(async (hash) => {
         setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
-        //   track({
-        //     event: 'swap',
-        //     value: tradeValueUsd,
-        //     chain: chainId,
-        //     data: {
-        //       token1: trade?.inputAmount?.currency?.getSymbol(chainId),
-        //       token2: trade?.outputAmount?.currency?.getSymbol(chainId),
-        //       token1Amount: Number(trade?.inputAmount.toSignificant(6)),
-        //       token2Amount: Number(trade?.outputAmount.toSignificant(6)),
-        //     },
-        //   })
+        track({
+          event: 'swap',
+          value: tradeValueUsd,
+          chain: chainId,
+          data: {
+            token1: trade?.inputAmount?.currency?.getSymbol(chainId),
+            token2: trade?.outputAmount?.currency?.getSymbol(chainId),
+            token1Amount: Number(trade?.inputAmount.toSignificant(6)),
+            token2Amount: Number(trade?.outputAmount.toSignificant(6)),
+          },
+        })
       })
       .catch((error) => {
         setSwapState({
@@ -158,21 +188,7 @@ const Swap: React.FC = () => {
           txHash: undefined,
         })
       })
-  }, [priceImpactWithoutFee, swapCallback, tradeToConfirm, t])
-
-  // const handleCurrencySelection = useCallback(
-  //   (selectedCurrency: Currency, fieldType: Field) => {
-  //     onCurrencySelection(fieldType, selectedCurrency)
-  //     // updateParams('outputCurrency', outputCurrency.symbol !== 'ETH' ? outputCurrency.address : 'ETH')
-  //     // const showSwapWarning = shouldShowSwapWarning(outputCurrency)
-  //     // if (showSwapWarning) {
-  //     //   setSwapWarningCurrency(outputCurrency)
-  //     // } else {
-  //     //   setSwapWarningCurrency(null)
-  //     // }
-  //   },
-  //   [onCurrencySelection],
-  // )
+  }, [priceImpactWithoutFee, swapCallback, tradeToConfirm, trade, tradeValueUsd, chainId, t])
 
   const [onPresentConfirmModal] = useModal(
     <ConfirmSwapModal
@@ -204,6 +220,7 @@ const Swap: React.FC = () => {
             panelText="From"
             currency={inputCurrency}
             otherCurrency={outputCurrency}
+            setTradeValueUsd={setTradeValueUsd}
             fieldType={Field.INPUT}
             onCurrencySelect={onCurrencySelection}
             onUserInput={onUserInput}
@@ -225,7 +242,9 @@ const Swap: React.FC = () => {
             isExpertMode={isExpertMode}
             onChangeRecipient={onChangeRecipient}
           />
-          {fetchingBestRoute ? (
+          {showWrap ? (
+            <></>
+          ) : fetchingBestRoute ? (
             <LoadingBestRoute />
           ) : (
             <DexTradeInfo
@@ -237,6 +256,7 @@ const Swap: React.FC = () => {
           )}
           <DexActions
             trade={trade}
+            wrapInputError={wrapInputError}
             swapInputError={swapInputError}
             isExpertMode={isExpertMode}
             showWrap={showWrap}

@@ -9,6 +9,7 @@ import { ServiceData } from 'state/types'
 import { useFetchHomepageServiceStats, useHomepageServiceStats } from 'state/hooks'
 import ServiceTokenDisplay from 'components/ServiceTokenDisplay'
 import { useTranslation } from 'contexts/Localization'
+import { getDotPos } from 'utils/getDotPos'
 import { ServiceWrapper, YieldCard, ColorWrap, Bubble } from './styles'
 import { defaultServiceData } from './defaultServiceData'
 
@@ -28,16 +29,13 @@ const Services: React.FC = () => {
     })
   const slideNewsNav = (index: number) => {
     setActiveSlide(index)
-    swiper.slideTo(defaultServiceData.length + index)
+    swiper.slideTo(displayData?.length + index)
     swiper.autoplay.start()
   }
 
   const handleSlide = (event: SwiperCore) => {
-    setActiveSlide(
-      event.activeIndex - defaultServiceData.length === defaultServiceData.length
-        ? 0
-        : event.activeIndex - defaultServiceData.length,
-    )
+    const slideNumber = getDotPos(event.activeIndex, displayData.length)
+    setActiveSlide(slideNumber)
   }
 
   useEffect(() => {
@@ -159,7 +157,7 @@ const Services: React.FC = () => {
                 onSwiper={setSwiper}
                 spaceBetween={20}
                 slidesPerView="auto"
-                loopedSlides={defaultServiceData.length}
+                loopedSlides={displayData?.length}
                 loop
                 centeredSlides
                 resizeObserver
@@ -233,7 +231,7 @@ const Services: React.FC = () => {
             alignContent="center"
             style={{ position: 'absolute', bottom: '35px', left: '0', width: '100%' }}
           >
-            {[...Array(defaultServiceData.length)].map((_, i) => {
+            {[...Array(displayData?.length)].map((_, i) => {
               return <Bubble isActive={i === activeSlide} onClick={() => slideNewsNav(i)} />
             })}
           </Flex>

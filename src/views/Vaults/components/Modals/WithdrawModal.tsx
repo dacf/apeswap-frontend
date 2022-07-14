@@ -34,7 +34,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={t('Unstake LP tokens')} onDismiss={onDismiss}>
+    <Modal title={tokenName === 'BANANA' ? t('Unstake BANANA') : t('Unstake LP tokens')} onDismiss={onDismiss}>
       <ModalInput
         onSelectMax={handleSelectMax}
         onChange={handleChange}

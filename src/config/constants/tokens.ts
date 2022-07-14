@@ -1207,6 +1207,34 @@ const tokens = {
     },
     decimals: 18,
   },
+  link: {
+    symbol: 'LINK',
+    address: {
+      56: '0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd',
+    },
+    decimals: 18,
+  },
+  aave: {
+    symbol: 'AAVE',
+    address: {
+      56: '0xfb6115445bff7b52feb98650c87f44907e58f802',
+    },
+    decimals: 18,
+  },
+  radar: {
+    symbol: 'RADAR',
+    address: {
+      56: '0x489580eB70a50515296eF31E8179fF3e77E24965',
+    },
+    decimals: 18,
+  },
+  h2on: {
+    symbol: 'H2ON',
+    address: {
+      56: '0xE0E81c29A68bFDd7c48072fD94e7c58F1f0146C1',
+    },
+    decimals: 18,
+  },
 
   // Test LPs
 
@@ -1488,6 +1516,46 @@ const tokens = {
     symbol: 'ADA-ETH',
     address: {
       56: '0x61FE209E404166a53Cc627d0ae30A65606315dA7',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  linkBnb: {
+    symbol: 'LINK-BNB',
+    address: {
+      56: '0x092ADA3818DB7FBb8e0A2124Ff218C5125C1CcE6',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  aaveBnb: {
+    symbol: 'AAVE-BNB',
+    address: {
+      56: '0xf13e007e181A8F57eD3a4D4CcE0A9ff9E7241CEf',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  froyoBnb: {
+    symbol: 'FROYO-BNB',
+    address: {
+      56: '0x58ceF3eeDB9A4adc6B5a2Ee5c85Aea07D72787f0',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  anmlBnb: {
+    symbol: 'ANML-BNB',
+    address: {
+      56: '0x0aB82Ec81c80F75B02A117fbA9B414c17379ae8C',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  radarBnb: {
+    symbol: 'RADAR-BNB',
+    address: {
+      56: '0xe6fF591f818664865eCab584B1fe679DbB4904dB',
     },
     decimals: 18,
     lpToken: true,

@@ -44,6 +44,7 @@ export enum QuoteToken {
   'TWT' = 'TWT',
   'UST' = 'UST',
   'ETH' = 'ETH',
+  'USDT' = 'USDT',
 }
 
 export enum PoolCategory {

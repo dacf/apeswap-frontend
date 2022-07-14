@@ -121,7 +121,6 @@ export function useApproveCallbackFromTrade(
     [trade, allowedSlippage],
   )
 
-  // COMEBACK TO THIS
   return useApproveCallback(
     amountToApprove,
     parseAddress(

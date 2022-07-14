@@ -3,13 +3,13 @@ import { Flex, Text } from '@ape.swap/uikit'
 import { CurrencyAmount, Pair, Percent, TokenAmount } from '@apeswapfinance/sdk'
 import { CurrencyLogo } from 'components/Logo'
 import { useTranslation } from 'contexts/Localization'
+import useTotalSupply from 'hooks/useTotalSupply'
 import React from 'react'
 import { Field } from 'state/burn/actions'
 import { styles } from './styles'
 
 const PoolInfo: React.FC<{
   pair: Pair
-  poolTokenPercentage?: Percent
   parsedAmounts: {
     LIQUIDITY_PERCENT: Percent
     LIQUIDITY?: TokenAmount
@@ -17,8 +17,10 @@ const PoolInfo: React.FC<{
     CURRENCY_B?: CurrencyAmount
   }
   chainId?: number
-}> = ({ pair, poolTokenPercentage, parsedAmounts, chainId }) => {
+}> = ({ pair, parsedAmounts, chainId }) => {
   const { t } = useTranslation()
+  const totalPoolTokens = useTotalSupply(pair?.liquidityToken)
+  const lpAmount = parsedAmounts[Field.LIQUIDITY]?.divide(totalPoolTokens || '0')?.multiply('100')
   return (
     <Flex sx={{ ...styles.poolInfoContainer }}>
       <Flex sx={{ justifyContent: 'space-between' }}>
@@ -34,7 +36,7 @@ const PoolInfo: React.FC<{
           {t('Share of Pool')}
         </Text>
         <Text size="12px" weight={700}>
-          {poolTokenPercentage ? `${poolTokenPercentage.toFixed(6)}%` : '-'}
+          {lpAmount ? `${lpAmount.toSignificant(2)}%` : '-'}
         </Text>
       </Flex>
       <Flex sx={{ justifyContent: 'space-between' }}>

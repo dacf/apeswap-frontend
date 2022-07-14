@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import { AutoRenewIcon, BlockIcon, Flex, Text, CheckmarkCircleIcon, LinkExternal, Svg } from '@ape.swap/uikit'
+import { AutoRenewIcon, BlockIcon, Flex, Text, CheckmarkCircleIcon, Svg } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { orderBy } from 'lodash'
@@ -9,6 +9,7 @@ import { clearAllTransactions } from 'state/transactions/actions'
 import { isTransactionRecent, useAllTransactions } from 'state/transactions/hooks'
 import { TransactionDetails } from 'state/transactions/reducer'
 import { Grid } from 'theme-ui'
+import { getEtherscanLink } from 'utils'
 import { dexStyles, textUnderlineHover } from 'views/Dex/styles'
 
 const renderIcon = (tx: TransactionDetails) => {
@@ -46,7 +47,7 @@ const RecentTransactions: React.FC = () => {
               <Text size="12px" weight={600}>
                 {tx.summary ?? tx.hash}
               </Text>
-              <a href={tx.hash} target="_blank" rel="noopener noreferrer">
+              <a href={getEtherscanLink(tx.hash, 'transaction', chainId)} target="_blank" rel="noopener noreferrer">
                 <Svg icon="external" width="12px" />
               </a>
             </Grid>
@@ -60,7 +61,7 @@ const RecentTransactions: React.FC = () => {
       {sortedTransactions.length > 0 && (
         <Flex sx={{ alignItems: 'center', justifyContent: 'center', width: '100%', marginTop: '10px' }}>
           <Text
-            size="14px"
+            size="12px"
             weight={700}
             sx={{ position: 'relative', cursor: 'pointer', ...textUnderlineHover }}
             onClick={handleClearAll}

@@ -83,19 +83,20 @@ const wallchainResponseIsValid = (
   const { functionName, functionParams } = decodeWallchainFunctionData(dataResponse.transactionArgs.data)
 
   // TODO: Can validate additional params based on args passed
-  if (!functionParams) {
-    // Function did not decode based on method name passed.
-    return false
-  }
+  // if (!functionParams) {
+  //   // Function did not decode based on method name passed.
+  //   return false
+  // }
 
   // TODO: This is where we can send an alert that the arbitrage is not working
-  return (
-    functionParams?.to.toLowerCase() === account.toLowerCase() &&
-    functionName === methodName &&
+  const isValid =
+    // functionParams?.to.toLowerCase() === account.toLowerCase() &&
+    // functionName === methodName &&
     dataResponse.transactionArgs.destination.toLowerCase() === contractAddress.toLowerCase() &&
     dataResponse.transactionArgs.value.toLowerCase() === value.toLowerCase() &&
     dataResponse.transactionArgs.sender.toLowerCase() === account.toLowerCase()
-  )
+
+  return isValid
 }
 
 /**
@@ -121,13 +122,16 @@ export default function callWallchainAPI(
 ): Promise<any> {
   onSetSwapDelay(SwapDelay.LOADING_ROUTE)
   const encodedData = contract.interface.encodeFunctionData(methodName, args)
-  // If the initial call fails APE router will be the default router
+  // Allowing transactions to be checked even if no user is connected
+  const activeAccount = account || '0x0000000000000000000000000000000000000000'
+
+  // If the intiial call fails APE router will be the default router
   return fetch(`${WALLCHAIN_PARAMS[chainId].apiUrl}?key=${WALLCHAIN_PARAMS[chainId].apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       value,
-      sender: account,
+      sender: activeAccount,
       data: encodedData,
       destination: contract.address,
     }),
@@ -144,7 +148,7 @@ export default function callWallchainAPI(
     .then((responseJson) => {
       if (responseJson) {
         const dataResponse: DataResponse = responseJson
-        if (wallchainResponseIsValid(dataResponse, methodName, args, value, account, contract.address)) {
+        if (wallchainResponseIsValid(dataResponse, methodName, args, value, activeAccount, contract.address)) {
           onBestRoute({ routerType: RouterTypes.BONUS, bonusRouter: dataResponse })
           onSetSwapDelay(SwapDelay.VALID)
         } else {
@@ -156,7 +160,7 @@ export default function callWallchainAPI(
       return null
     })
     .catch((error) => {
-      onBestRoute(null)
+      onBestRoute({ routerType: RouterTypes.APE })
       onSetSwapDelay(SwapDelay.VALID)
       console.error('Wallchain Error', error)
     })

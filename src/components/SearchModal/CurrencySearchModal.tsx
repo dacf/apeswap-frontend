@@ -2,9 +2,8 @@
 import React, { useCallback, useState } from 'react'
 import { Currency, Token } from '@apeswapfinance/sdk'
 import styled from '@emotion/styled'
-import { Button, Flex, Text } from '@ape.swap/uikit'
+import { Flex, Text } from '@ape.swap/uikit'
 import { ModalProps, ModalFooter, Modal } from '@apeswapfinance/uikit'
-import useIsMobile from 'hooks/useIsMobile'
 import { TokenList } from '@uniswap/token-lists'
 import { useTranslation } from 'contexts/Localization'
 import CurrencySearch from './CurrencySearch'
@@ -46,7 +45,6 @@ export default function CurrencySearchModal({
     },
     [onDismiss, onCurrencySelect],
   )
-  const isMobile = useIsMobile()
   // used for import token flow
   const [importToken, setImportToken] = useState<Token | undefined>()
 

@@ -79,7 +79,7 @@ const PriceInputPanel: React.FC<PriceInputPanelProps> = ({
           </span>{' '}
           {t('will be swapped for')}{' '}
           <span sx={{ fontWeight: 700 }}>
-            {value || '0'} {outputCurrency?.getSymbol(chainId)}
+            {(parseFloat(value) * parseFloat(inputValue)).toString() || '0'} {outputCurrency?.getSymbol(chainId)}
           </span>{' '}
         </Text>
       </Flex>

@@ -1,6 +1,7 @@
 import contracts from './contracts'
 import { FarmConfig, QuoteToken } from './types'
 
+// Next PID should be: 209
 const farms: FarmConfig[] = [
   {
     pid: 0,
@@ -54,6 +55,40 @@ const farms: FarmConfig[] = [
   },
 
   // Optional: Place latest farm here
+  {
+    pid: 207,
+    image: 'RADAR.png',
+    lpSymbol: 'RADAR-BNB',
+    lpAddresses: {
+      97: '0xed89477d619c7e73f752d5fc7be60308ceb63663',
+      56: '0xe6fF591f818664865eCab584B1fe679DbB4904dB',
+    },
+    tokenSymbol: 'RADAR',
+    tokenAddresses: {
+      97: '0x4Fb99590cA95fc3255D9fA66a1cA46c43C34b09a',
+      56: '0x489580eB70a50515296eF31E8179fF3e77E24965',
+    },
+    quoteTokenSymbol: QuoteToken.BNB,
+    quoteTokenAdresses: contracts.wbnb,
+    projectLink: 'https://dappradar.com/',
+  },
+  {
+    pid: 208,
+    image: 'H2ON.svg',
+    lpSymbol: 'H2ON-USDT',
+    lpAddresses: {
+      97: '0xed89477d619c7e73f752d5fc7be60308ceb63663',
+      56: '0x7eb5c98f368e42f8d560d3f561f159eb4c2f4974',
+    },
+    tokenSymbol: 'H2ON',
+    tokenAddresses: {
+      97: '0x4Fb99590cA95fc3255D9fA66a1cA46c43C34b09a',
+      56: '0xe0e81c29a68bfdd7c48072fd94e7c58f1f0146c1',
+    },
+    quoteTokenSymbol: QuoteToken.USDT,
+    quoteTokenAdresses: contracts.usdt,
+    projectLink: 'https://h2o-securities.com/',
+  },
   {
     pid: 199,
     image: 'CPO.svg',

@@ -86,7 +86,7 @@ const HarvestAction: React.FC<HarvestActionsProps> = ({ sousId, earnTokenSymbol,
           mr={isMobile ? '0px' : '10px'}
           style={{ minWidth: isMobile && '100px', width: isMobile && '115px', padding: '0px' }}
         >
-          {t('Compound')}
+          {t('APE HARDER')}
         </StyledButton>
       )}
       <StyledButton

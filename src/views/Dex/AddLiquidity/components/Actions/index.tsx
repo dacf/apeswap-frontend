@@ -15,6 +15,7 @@ import { Field } from 'state/mint/actions'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useIsExpertMode, useUserSlippageTolerance } from 'state/user/hooks'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from 'utils'
+import track from 'utils/track'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import AddLiquidityModal from '../AddLiquidityModal'
 import { styles } from './styles'
@@ -27,6 +28,7 @@ const AddLiquidityActions: React.FC<AddLiquidityActionsProps> = ({
   noLiquidity,
   liquidityMinted,
   poolTokenPercentage,
+  tradeValueUsd,
   price,
 }) => {
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
@@ -128,19 +130,18 @@ const AddLiquidityActions: React.FC<AddLiquidityActionsProps> = ({
           })
 
           setTxHash(response.hash)
-
-          //   track({
-          //     event: 'liquidity',
-          //     chain: chainId,
-          //     value: addValueUsd,
-          //     data: {
-          //       token1: currencies[Field.CURRENCY_A]?.getSymbol(chainId),
-          //       token2: currencies[Field.CURRENCY_B]?.getSymbol(chainId),
-          //       token1Amount: parsedAmounts[Field.CURRENCY_A]?.toSignificant(3),
-          //       token2Amount: parsedAmounts[Field.CURRENCY_B]?.toSignificant(3),
-          //       cat: 'add',
-          //     },
-          //   })
+          track({
+            event: 'liquidity',
+            chain: chainId,
+            value: tradeValueUsd * 2,
+            data: {
+              token1: currencies[Field.CURRENCY_A]?.getSymbol(chainId),
+              token2: currencies[Field.CURRENCY_B]?.getSymbol(chainId),
+              token1Amount: parsedAmounts[Field.CURRENCY_A]?.toSignificant(3),
+              token2Amount: parsedAmounts[Field.CURRENCY_B]?.toSignificant(3),
+              cat: 'add',
+            },
+          })
         }),
       )
       .catch((err) => {
@@ -170,9 +171,6 @@ const AddLiquidityActions: React.FC<AddLiquidityActionsProps> = ({
       attemptingTxn={attemptingTxn}
       onDismiss={handleDismissConfirmation}
       onAdd={onAdd}
-      // customOnDismiss={handleDismissConfirmation}
-      // pendingText={pendingText}
-      // currencyToAdd={pair?.liquidityToken}
     />,
     true,
     true,

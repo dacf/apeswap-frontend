@@ -1,6 +1,5 @@
 import { Button, Flex } from '@apeswapfinance/uikit'
 import { Tag } from '@ape.swap/uikit'
-import UnlockButton from 'components/UnlockButton'
 import styled from 'styled-components'
 
 export const StyledButton = styled(Button)`

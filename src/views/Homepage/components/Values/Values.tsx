@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import useSwiper from 'hooks/useSwiper'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { useTranslation } from 'contexts/Localization'
+import { getDotPos } from 'utils/getDotPos'
 import { Bubble, ValueCard, ValueImage, ValuesWrapper, ValueText } from './styles'
 import { defaultValues } from './defaultValues'
 
@@ -22,14 +23,13 @@ const Values: React.FC = () => {
 
   const slideVal = (index: number) => {
     setActiveSlide(index)
-    swiper.slideTo(defaultValues.length + index)
+    swiper.slideTo(defaultValues(t).length + index)
     swiper.autoplay.start()
   }
 
   const handleSlide = (event: SwiperCore) => {
-    setActiveSlide(
-      event.activeIndex - defaultValues.length === defaultValues.length ? 0 : event.activeIndex - defaultValues.length,
-    )
+    const slideNumber = getDotPos(event.activeIndex, defaultValues(t).length)
+    setActiveSlide(slideNumber)
   }
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Values: React.FC = () => {
           {swiperFlag ? (
             <Swiper
               id="valuesSwiper"
-              initialSlide={defaultValues.length}
+              initialSlide={defaultValues(t).length}
               autoplay={{
                 delay: SLIDE_DELAY,
                 disableOnInteraction: false,
@@ -56,7 +56,7 @@ const Values: React.FC = () => {
               onSwiper={setSwiper}
               spaceBetween={30}
               slidesPerView="auto"
-              loopedSlides={defaultValues.length}
+              loopedSlides={defaultValues(t).length}
               centeredSlides
               onSlideChange={handleSlide}
             >
@@ -101,7 +101,7 @@ const Values: React.FC = () => {
           alignContent="center"
           style={{ position: 'absolute', bottom: '35px', left: '0', width: '100%' }}
         >
-          {[...Array(defaultValues.length)].map((_, i) => {
+          {[...Array(defaultValues(t).length)].map((_, i) => {
             return <Bubble isActive={i === activeSlide} onClick={() => slideVal(i)} />
           })}
         </Flex>

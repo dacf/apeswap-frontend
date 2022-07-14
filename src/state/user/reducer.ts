@@ -96,7 +96,7 @@ function pairKey(token0Address: string, token1Address: string) {
 export const initialState: UserState = {
   userExpertMode: false,
   userSingleHopOnly: false,
-  userRecentTransactions: true,
+  userRecentTransactions: false,
   userSlippageTolerance: INITIAL_ALLOWED_SLIPPAGE,
   userDeadline: DEFAULT_DEADLINE_FROM_NOW,
   userAutonomyPrepay: false,

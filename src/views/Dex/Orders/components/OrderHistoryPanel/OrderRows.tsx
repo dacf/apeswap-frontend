@@ -36,7 +36,6 @@ const OrderRows: React.FC<{ orders: Order[] }> = ({ orders }) => {
       <div sx={{ background: 'white3', borderRadius: '0px 0px 10px 10px' }}>
         {orders?.length !== 0 ? (
           orders.map((order, i) => {
-            console.log(order)
             const inputToken = allTokens[getAddress(order.inputToken)]
             const outputToken = allTokens[getAddress(order.outputToken)]
             const inputAmount = formatUnits(order.inputAmount, inputToken?.decimals)
@@ -98,7 +97,7 @@ const OrderRows: React.FC<{ orders: Order[] }> = ({ orders }) => {
                     <Flex sx={{ alignItems: 'center' }}>
                       <CurrencyLogo currency={inputToken} size="12px" />
                       <Text size="10px" weight={400} ml="3px" sx={{ lineHeight: '15px' }}>
-                        {inputToken.getSymbol(chainId)}
+                        {inputToken?.getSymbol(chainId)}
                       </Text>
                     </Flex>
                   </Flex>
@@ -109,7 +108,7 @@ const OrderRows: React.FC<{ orders: Order[] }> = ({ orders }) => {
                     <Flex sx={{ alignItems: 'center' }}>
                       <CurrencyLogo currency={outputToken} size="12px" />
                       <Text size="10px" weight={400} ml="3px" sx={{ lineHeight: '15px' }}>
-                        {outputToken.getSymbol(chainId)}
+                        {outputToken?.getSymbol(chainId)}
                       </Text>
                     </Flex>
                   </Flex>
@@ -119,7 +118,7 @@ const OrderRows: React.FC<{ orders: Order[] }> = ({ orders }) => {
                     </Text>
                     <Flex sx={{ alignItems: 'center' }}>
                       <Text size="10px" weight={400} sx={{ lineHeight: '15px', wordBreak: 'break-all' }}>
-                        {outputToken.getSymbol(chainId)} / {inputToken.getSymbol(chainId)}
+                        {outputToken?.getSymbol(chainId)} / {inputToken?.getSymbol(chainId)}
                       </Text>
                     </Flex>
                   </Flex>
@@ -135,7 +134,7 @@ const OrderRows: React.FC<{ orders: Order[] }> = ({ orders }) => {
                     )}
                   </Flex>
                 </Grid>
-                {i !== orders?.length - 1 && <Divider sx={{ background: 'text' }} />}
+                {i !== orders?.length - 1 && <Divider sx={{ background: 'text', opacity: 0.1 }} />}
               </>
             )
           })

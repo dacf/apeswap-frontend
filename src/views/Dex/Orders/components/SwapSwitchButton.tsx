@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import { Flex, Svg, SyncAltIcon } from '@ape.swap/uikit'
+import { Flex, Svg } from '@ape.swap/uikit'
 import React from 'react'
 import { styles } from './styles'
 

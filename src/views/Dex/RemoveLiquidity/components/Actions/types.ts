@@ -1,7 +1,4 @@
-import { Currency, CurrencyAmount, Pair, Percent, Price, TokenAmount, Trade } from '@apeswapfinance/sdk'
-import { RouterTypes } from 'config/constants'
-import { WrapType } from 'hooks/useWrapCallback'
-import { Field } from 'state/swap/actions'
+import { CurrencyAmount, Pair, Percent, TokenAmount } from '@apeswapfinance/sdk'
 
 export interface RemoveLiquidityActionProps {
   pair: Pair
@@ -12,5 +9,5 @@ export interface RemoveLiquidityActionProps {
     CURRENCY_B?: CurrencyAmount
   }
   error: string
-  poolTokenPercentage: Percent
+  tradeValueUsd: number
 }

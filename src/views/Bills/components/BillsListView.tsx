@@ -8,6 +8,7 @@ import { ExtendedListViewProps } from 'components/ListView/types'
 import ListViewContent from 'components/ListViewContent'
 import getTimePeriods from 'utils/getTimePeriods'
 import { useTranslation } from 'contexts/Localization'
+import BigNumber from 'bignumber.js'
 import { Container } from './styles'
 import BillModal from './Modals'
 
@@ -17,8 +18,15 @@ const BillsListView: React.FC<{ bills: Bills[] }> = ({ bills }) => {
   const { isXl, isLg, isXxl } = useMatchBreakpoints()
   const isMobile = !isLg && !isXl && !isXxl
   const billsListView = bills.map((bill) => {
-    const { token, quoteToken, earnToken } = bill
+    const { token, quoteToken, earnToken, maxTotalPayOut, totalPayoutGiven, earnTokenPrice } = bill
     const vestingTime = getTimePeriods(parseInt(bill.vestingTime), true)
+    const available = new BigNumber(maxTotalPayOut)
+      ?.minus(new BigNumber(totalPayoutGiven))
+      ?.div(new BigNumber(10).pow(18))
+
+    const threshold = new BigNumber(5).div(earnTokenPrice)
+    const disabled = available.lte(threshold)
+
     return {
       tokens: { token1: token.symbol, token2: quoteToken.symbol, token3: earnToken.symbol },
       stakeLp: true,
@@ -73,10 +81,10 @@ const BillsListView: React.FC<{ bills: Bills[] }> = ({ bills }) => {
               {account ? (
                 <BillModal
                   bill={bill}
-                  buttonText={t('BUY')}
+                  buttonText={disabled ? t('SOLD OUT') : t('BUY')}
                   id={bill.index}
                   buyFlag
-                  disabled={!bill.discount || bill.discount.includes('NaN')}
+                  disabled={!bill.discount || bill.discount.includes('NaN') || disabled}
                 />
               ) : (
                 <UnlockButton />
@@ -91,10 +99,10 @@ const BillsListView: React.FC<{ bills: Bills[] }> = ({ bills }) => {
           {account ? (
             <BillModal
               bill={bill}
-              buttonText={t('BUY')}
+              buttonText={disabled ? t('SOLD OUT') : t('BUY')}
               id={bill.index}
               buyFlag
-              disabled={!bill.discount || bill.discount.includes('NaN')}
+              disabled={!bill.discount || bill.discount.includes('NaN') || disabled}
             />
           ) : (
             <UnlockButton />

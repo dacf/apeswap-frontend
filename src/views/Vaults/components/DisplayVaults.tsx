@@ -1,5 +1,6 @@
 /** @jsxImportSource theme-ui */
-import { Text, useModal } from '@ape.swap/uikit'
+import { Text } from '@ape.swap/uikit'
+import { useModal } from '@apeswapfinance/uikit'
 import BigNumber from 'bignumber.js'
 import ListView from 'components/ListView'
 import { ExtendedListViewProps } from 'components/ListView/types'
@@ -58,7 +59,7 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
   }
 
   const vaultsListView = vaults.map((vault) => {
-    const totalDollarAmountStaked = parseFloat(vault?.totalStaked) * vault?.stakeTokenPrice
+    const totalDollarAmountStaked = Math.round(parseFloat(vault?.totalStaked) * vault?.stakeTokenPrice * 100) / 100
     const liquidityUrl = `https://apeswap.finance/swap/`
     const userAllowance = vault?.userData?.allowance
     const userEarnings = getBalanceNumber(new BigNumber(vault?.userData?.pendingRewards) || new BigNumber(0))

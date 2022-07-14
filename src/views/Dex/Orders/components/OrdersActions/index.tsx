@@ -1,7 +1,6 @@
 /** @jsxImportSource theme-ui */
 import { Button, Flex, Text } from '@ape.swap/uikit'
 import UnlockButton from 'components/UnlockButton'
-import { RouterTypes } from 'config/constants'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallbackFromTrade } from 'hooks/useApproveCallback'
@@ -35,7 +34,7 @@ const OrdersActions: React.FC<OrdersActionProps> = ({
   const [allowedSlippage] = useUserSlippageTolerance()
 
   // check whether the user has approved the router on the input token
-  const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, false, routerType)
+  const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, true, routerType)
 
   // warnings on slippage
   const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
@@ -73,9 +72,7 @@ const OrdersActions: React.FC<OrdersActionProps> = ({
           disabled={approval !== ApprovalState.NOT_APPROVED || disabled}
           load={approval === ApprovalState.PENDING}
         >
-          {approval === ApprovalState.PENDING
-            ? t('Approving')
-            : t('Approve %route% Router', { route: routerType === RouterTypes.BONUS ? RouterTypes.BONUS : 'APESWAP' })}
+          {approval === ApprovalState.PENDING ? t('Approving') : t('Approve Order')}
         </Button>
       )
     }

@@ -66,15 +66,16 @@ export function useSwapCallArguments(
   bestRoute?: RouterTypeParams, // The best route that will be used to facilitate the trade
 ): SwapCall[] {
   const { account, chainId, library } = useActiveWeb3React()
-
+  // Allowing transactions to be encoded even if no user is connected
+  const activeAccount = account || '0x0000000000000000000000000000000000000000'
   const { address: recipientAddress } = useENS(recipientAddressOrName)
-  const recipient = recipientAddressOrName === null ? account : recipientAddress
+  const recipient = recipientAddressOrName === null ? activeAccount : recipientAddress
   const deadline = useTransactionDeadline()
 
   return useMemo(() => {
-    if (!trade || !recipient || !library || !account || !chainId || !deadline) return []
+    if (!trade || !recipient || !library || !chainId || !activeAccount || !deadline) return []
 
-    const contract: Contract | null = getRouterContract(chainId, library, account, bestRoute?.routerType)
+    const contract: Contract | null = getRouterContract(chainId, library, activeAccount, bestRoute?.routerType)
     if (!contract) {
       return []
     }
@@ -115,7 +116,7 @@ export function useSwapCallArguments(
       if (trade.tradeType === TradeType.EXACT_INPUT) {
         swapMethods.push(
           Router.swapCallParameters(trade, {
-            feeOnTransfer: false,
+            feeOnTransfer: true,
             allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
             recipient,
             deadline: deadline.toNumber(),
@@ -125,7 +126,7 @@ export function useSwapCallArguments(
     }
 
     return swapMethods.map((parameters) => ({ parameters, contract }))
-  }, [account, allowedSlippage, chainId, deadline, library, recipient, bestRoute, trade])
+  }, [activeAccount, allowedSlippage, chainId, deadline, library, recipient, bestRoute, trade])
 }
 
 // returns a function that will execute a swap, if the parameters are all valid
@@ -184,7 +185,6 @@ export function useSwapCallback(
                     return { call, error: new Error(t('Unexpected issue with estimating the gas. Please try again.')) }
                   })
                   .catch((callError) => {
-                    console.log('Made it here')
                     console.error('Call threw error', call, callError)
                     const reason: string = callError.reason || callError.data?.message || callError.message
                     const errorMessage = t(
@@ -198,8 +198,6 @@ export function useSwapCallback(
               })
           }),
         )
-
-        console.info(estimatedCalls)
 
         // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
         const successfulEstimation = estimatedCalls.find(

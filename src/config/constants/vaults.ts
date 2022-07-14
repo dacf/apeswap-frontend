@@ -56,6 +56,7 @@ const vaults: VaultConfig[] = [
       },
       rewardToken: tokens.banana,
     },
+    inactive: true,
   },
 
   // BANANA - BUSD Vault config
@@ -85,6 +86,7 @@ const vaults: VaultConfig[] = [
       },
       rewardToken: tokens.banana,
     },
+    inactive: true,
   },
 
   // BANANA - BNB vault config
@@ -556,6 +558,126 @@ const vaults: VaultConfig[] = [
     masterchef: {
       pid: {
         [CHAIN_ID.BSC]: 18,
+      },
+      address: {
+        [CHAIN_ID.BSC]: '0x5c8D727b265DBAfaba67E050f2f739cAeEB4A6F9',
+      },
+      rewardsPerBlock: {
+        [CHAIN_ID.BSC]: 'cakePerBlock',
+      },
+      rewardToken: tokens.banana,
+    },
+  },
+
+  // LINK - BNB vault config
+
+  {
+    id: 19,
+    pid: 16,
+    availableChains: [CHAIN_ID.BSC],
+    type: 'MAX',
+    version: 'V2',
+    stratAddress: {
+      [CHAIN_ID.BSC]: '0x1282d55fe7e8cc0eb1895476e2666dd59d7a4171',
+    },
+    stakeToken: tokens.linkBnb,
+    token: tokens.link,
+    quoteToken: tokens.wbnb,
+    rewardToken: tokens.banana,
+    platform: 'ApeSwap',
+    masterchef: {
+      pid: {
+        [CHAIN_ID.BSC]: 36,
+      },
+      address: {
+        [CHAIN_ID.BSC]: '0x5c8D727b265DBAfaba67E050f2f739cAeEB4A6F9',
+      },
+      rewardsPerBlock: {
+        [CHAIN_ID.BSC]: 'cakePerBlock',
+      },
+      rewardToken: tokens.banana,
+    },
+  },
+
+  // AAVE - BNB vault config
+
+  {
+    id: 20,
+    pid: 17,
+    availableChains: [CHAIN_ID.BSC],
+    type: 'MAX',
+    version: 'V2',
+    stratAddress: {
+      [CHAIN_ID.BSC]: '0x28b8fe88897d507b051b1d16c35d163b27a79e23',
+    },
+    stakeToken: tokens.aaveBnb,
+    token: tokens.aave,
+    quoteToken: tokens.wbnb,
+    rewardToken: tokens.banana,
+    platform: 'ApeSwap',
+    masterchef: {
+      pid: {
+        [CHAIN_ID.BSC]: 46,
+      },
+      address: {
+        [CHAIN_ID.BSC]: '0x5c8D727b265DBAfaba67E050f2f739cAeEB4A6F9',
+      },
+      rewardsPerBlock: {
+        [CHAIN_ID.BSC]: 'cakePerBlock',
+      },
+      rewardToken: tokens.banana,
+    },
+  },
+
+  // FROYO - BNB vault config
+
+  {
+    id: 21,
+    pid: 18,
+    availableChains: [CHAIN_ID.BSC],
+    type: 'MAX',
+    version: 'V2',
+    stratAddress: {
+      [CHAIN_ID.BSC]: '0x49a8a2772ccf69ba8bb250ab511f4b662ef64ff5',
+    },
+    stakeToken: tokens.froyoBnb,
+    token: tokens.froyo,
+    quoteToken: tokens.wbnb,
+    rewardToken: tokens.banana,
+    platform: 'ApeSwap',
+    masterchef: {
+      pid: {
+        [CHAIN_ID.BSC]: 200,
+      },
+      address: {
+        [CHAIN_ID.BSC]: '0x5c8D727b265DBAfaba67E050f2f739cAeEB4A6F9',
+      },
+      rewardsPerBlock: {
+        [CHAIN_ID.BSC]: 'cakePerBlock',
+      },
+      rewardToken: tokens.banana,
+    },
+  },
+
+  // ANML - BNB vault config
+
+  {
+    id: 22,
+    pid: 19,
+    availableChains: [CHAIN_ID.BSC],
+    type: 'MAX',
+    version: 'V2',
+    stratAddress: {
+      [CHAIN_ID.BSC]: '0x5354dc56d8e0fcbb33ae384f07f98b1388107250',
+    },
+    stakeToken: tokens.anmlBnb,
+    token: tokens.anml,
+    quoteToken: tokens.wbnb,
+    rewardToken: tokens.banana,
+    platform: 'ApeSwap',
+    masterchef: {
+      pid: {
+        [CHAIN_ID.BSC]: 192,
       },
       address: {
         [CHAIN_ID.BSC]: '0x5c8D727b265DBAfaba67E050f2f739cAeEB4A6F9',

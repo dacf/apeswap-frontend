@@ -135,7 +135,6 @@ export default function OrderHistoryPanel() {
 
   useEffect(() => {
     if (data) {
-      const orderStatus: OrderStatus[] = ['open', 'executed', 'cancelled']
       setOrders(
         data.filter((order) =>
           activeTab ? order.status === 'open' : order.status === 'executed' || order.status === 'cancelled',

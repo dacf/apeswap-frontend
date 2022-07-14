@@ -23,18 +23,18 @@ const Buy: React.FC<BuyProps> = ({
   onValueChange,
   onBillId,
   onTransactionSubmited,
+  value,
+  lpPrice,
 }) => {
   const formatUserLpValue = getFullDisplayBalance(new BigNumber(userLpValue))
-  const [amount, setAmount] = useState('')
   const { chainId, account } = useActiveWeb3React()
-  const { onBuyBill } = useBuyBill(billAddress, amount)
+  const { onBuyBill } = useBuyBill(billAddress, value, lpPrice)
   const dispatch = useAppDispatch()
   const [pendingTrx, setPendingTrx] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
 
   const handleInput = (val: string) => {
-    setAmount(val)
     onValueChange(val)
   }
 
@@ -106,7 +106,7 @@ const Buy: React.FC<BuyProps> = ({
         <MaxButton size="sm" onClick={() => handleInput(formatUserLpValue)}>
           {t('Max')}
         </MaxButton>
-        <StyledInput onChange={(e) => handleInput(e.target.value)} value={amount} />
+        <StyledInput onChange={(e) => handleInput(e.target.value)} value={value} />
         <Text fontSize="12px" style={{ position: 'absolute', bottom: 6, left: 10, zIndex: 1, opacity: 0.8 }}>
           {t('Balance')}:
         </Text>
@@ -117,7 +117,7 @@ const Buy: React.FC<BuyProps> = ({
       <BuyButton
         onClick={handleBuy}
         endIcon={pendingTrx && <AutoRenewIcon spin color="currentColor" />}
-        disabled={disabled || parseFloat(formatUserLpValue) < parseFloat(amount) || pendingTrx}
+        disabled={disabled || parseFloat(formatUserLpValue) < parseFloat(value) || pendingTrx}
       >
         {t('Buy')}
       </BuyButton>

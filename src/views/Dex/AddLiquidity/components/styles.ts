@@ -1,4 +1,3 @@
-import { borderRadius } from 'polished'
 import { ThemeUIStyleObject } from 'theme-ui'
 
 export const styles: Record<string, ThemeUIStyleObject> = {

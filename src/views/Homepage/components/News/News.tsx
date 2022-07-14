@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Box } from 'theme-ui'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import useSwiper from 'hooks/useSwiper'
@@ -9,6 +11,7 @@ import { Flex, Skeleton } from '@apeswapfinance/uikit'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useFetchHomepageNews, useHomepageNews } from 'state/hooks'
 import track from 'utils/track'
+import { getDotPos } from 'utils/getDotPos'
 import { Bubble, NewsCard, NewsWrapper, SkeletonWrapper } from './styles'
 
 const SLIDE_DELAY = 5000
@@ -16,6 +19,7 @@ const SLIDE_DELAY = 5000
 SwiperCore.use([Autoplay])
 
 const News: React.FC = () => {
+  const history = useHistory()
   const { chainId } = useActiveWeb3React()
   const [loadImages, setLoadImages] = useState(false)
   useFetchHomepageNews(loadImages)
@@ -37,7 +41,8 @@ const News: React.FC = () => {
   }
 
   const handleSlide = (event: SwiperCore) => {
-    setActiveSlide(event.activeIndex - newsLength === newsLength ? 0 : event.activeIndex - newsLength)
+    const slideNumber = getDotPos(event.activeIndex, newsLength)
+    setActiveSlide(slideNumber)
   }
 
   useEffect(() => {
@@ -56,6 +61,8 @@ const News: React.FC = () => {
       },
     })
   }
+
+  const clickNews = (newsUrl, isModal) => (isModal ? history.push({ search: newsUrl }) : window.open(newsUrl, '_blank'))
 
   return (
     <>
@@ -89,7 +96,7 @@ const News: React.FC = () => {
                 {filterNews?.map((news, index) => {
                   return (
                     <SwiperSlide style={{ maxWidth: '266px', minWidth: '266px' }} key={news.id}>
-                      <a href={news?.CardLink} target="_blank" rel="noopener noreferrer">
+                      <Box onClick={() => clickNews(news?.CardLink, news?.isModal)}>
                         <NewsCard
                           index={activeSlide}
                           image={news?.cardImageUrl?.url}
@@ -97,7 +104,7 @@ const News: React.FC = () => {
                           listLength={newsLength}
                           onClick={() => trackBannersClick(index + 1, news?.CardLink, chainId)}
                         />
-                      </a>
+                      </Box>
                     </SwiperSlide>
                   )
                 })}

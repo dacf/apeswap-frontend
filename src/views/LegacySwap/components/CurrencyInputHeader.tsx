@@ -2,7 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Flex, useMatchBreakpoints, Tabs, Tab } from '@apeswapfinance/uikit'
-import { RunFiatButton, Button } from '@ape.swap/uikit'
+import { Button } from '@ape.swap/uikit'
 import GlobalSettings from 'components/Menu/GlobalSettings'
 import { CHAIN_ID } from 'config/constants/chains'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

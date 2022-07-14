@@ -1,5 +1,5 @@
 import React from 'react'
-import { Bills, Pool, Vault } from 'state/types'
+import { Vault } from 'state/types'
 
 export interface ListViewProps {
   onHandleQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void

@@ -91,7 +91,7 @@ const DexTradeInfo: React.FC<{
             </Flex>
             <Flex sx={{ justifyContent: 'space-between', margin: '10px 0px' }}>
               <Text size="12px" sx={dexStyles.textWrap} mr="10px">
-                {t('Minimum recieved')}
+                {t('Minimum received')}
               </Text>
               <Text size="12px" sx={dexStyles.textWrap}>
                 {slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4)}{' '}

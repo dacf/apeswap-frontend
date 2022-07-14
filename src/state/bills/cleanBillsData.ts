@@ -20,6 +20,7 @@ const cleanBillsData = (billIds: number[], chunkedBills: any[], tokenPrices: Tok
       totalPrincipalBilled,
       billNft,
       terms,
+      maxTotalPayout,
     ] = chunk
     const [controlVariable, vestingTerm, minimumPrice, maxPayout, maxDebt] = terms
     const priceUsd = getBalanceNumber(trueBillPrice) * lpPrice
@@ -37,6 +38,7 @@ const cleanBillsData = (billIds: number[], chunkedBills: any[], tokenPrices: Tok
       debtRatio: debtRatio.toString(),
       totalDebt: totalDebt.toString(),
       totalPayoutGiven: totalPayoutGiven.toString(),
+      maxTotalPayOut: maxTotalPayout.toString(),
       totalPrincipalBilled: totalPrincipalBilled.toString(),
       controlVariable: controlVariable.toString(),
       minimumPrice: minimumPrice.toString(),

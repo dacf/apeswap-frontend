@@ -6,6 +6,8 @@ import { FarmsBodies } from 'components/MarketingModalContent/Farms/'
 import { PoolsBodies } from 'components/MarketingModalContent/Pools/'
 import { BillsBodies } from 'components/MarketingModalContent/Bills/'
 import { useTranslation } from 'contexts/Localization'
+import SwiperProvider from 'contexts/SwiperProvider'
+import QuestModal from '../MarketingModalContent/Quests/QuestModal'
 
 const MarketingModalCheck = () => {
   const location = useLocation()
@@ -16,6 +18,7 @@ const MarketingModalCheck = () => {
   const poolsRoute = location.search.includes('modal=2')
   const lendingRoute = location.search.includes('modal=3')
   const billsRoute = location.search.includes('modal=bills')
+  const questRoute = location.search.includes('modal=tutorial')
 
   const { LendingBody1, LendingBody2, LendingBody3, LendingBody4, LendingBody5 } = LendingBodies
   const { FarmsBody1, FarmsBody2, FarmsBody3, FarmsBody4 } = FarmsBodies
@@ -72,6 +75,10 @@ const MarketingModalCheck = () => {
     >
       {bills}
     </MarketingModal>
+  ) : questRoute ? (
+    <SwiperProvider>
+      <QuestModal onDismiss={onDismiss} />
+    </SwiperProvider>
   ) : null
 }
 

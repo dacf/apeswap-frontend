@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import { Flex, Text } from '@ape.swap/uikit'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -33,10 +33,7 @@ function AddLiquidity({
   const dispatch = useAppDispatch()
   const { INPUT, OUTPUT } = useSwapState()
   const { t } = useTranslation()
-
-  /**
-   *
-   */
+  const [tradeValueUsd, setTradeValueUsd] = useState(0)
 
   // Set either param currency or swap currency
   currencyIdA = currencyIdA || INPUT.currencyId
@@ -150,6 +147,7 @@ function AddLiquidity({
             panelText="Token 1"
             currency={currencyA}
             otherCurrency={currencyB}
+            setTradeValueUsd={setTradeValueUsd}
             fieldType={Field.CURRENCY_A}
             onCurrencySelect={handleCurrencySelect}
             onUserInput={onUserInput}
@@ -178,6 +176,7 @@ function AddLiquidity({
           />
           <AddLiquidityActions
             currencies={currencies}
+            tradeValueUsd={tradeValueUsd}
             error={error}
             parsedAmounts={parsedAmounts}
             noLiquidity={noLiquidity}

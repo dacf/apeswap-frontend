@@ -1,4 +1,3 @@
-import { transform } from 'lodash'
 import { ThemeUIStyleObject } from 'theme-ui'
 
 export const swapStyles: Record<string, ThemeUIStyleObject> = {

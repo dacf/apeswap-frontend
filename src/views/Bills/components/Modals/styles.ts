@@ -149,13 +149,21 @@ export const BillFooterContentContainer = styled(Flex)`
   }
 `
 
-export const BillValueTextWrapper = styled(Flex)`
-  align-items: center;
-  justify-content: center;
+export const BillValueContainer = styled('div')`
+  display: flex;
   width: 100%;
-  height: 20px;
   padding-top: 20px;
+  flex-wrap: wrap;
   @media screen and (min-width: 1180px) {
-    padding-right: 70px;
+    padding-right: 40px;
+  }
+`
+
+export const TextWrapper = styled('div')`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  @media screen and (min-width: 1180px) {
+    width: 50%;
   }
 `

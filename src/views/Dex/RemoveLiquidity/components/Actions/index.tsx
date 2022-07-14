@@ -15,6 +15,7 @@ import { Field } from 'state/burn/actions'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useIsExpertMode, useUserSlippageTolerance } from 'state/user/hooks'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from 'utils'
+import track from 'utils/track'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import RemoveLiquidityModal from '../RemoveLiquidityModal'
 import { styles } from './styles'
@@ -24,7 +25,7 @@ const RemoveLiquidityActions: React.FC<RemoveLiquidityActionProps> = ({
   pair,
   error,
   parsedAmounts,
-  poolTokenPercentage,
+  tradeValueUsd,
 }) => {
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const [txHash, setTxHash] = useState<string>('')
@@ -199,19 +200,18 @@ const RemoveLiquidityActions: React.FC<RemoveLiquidityActionProps> = ({
           })
 
           setTxHash(response.hash)
-
-          // track({
-          //   event: 'liquidity',
-          //   chain: chainId,
-          //   value: removeValueUsd,
-          //   data: {
-          //     token1: currencyA?.getSymbol(chainId),
-          //     token2: currencyB?.getSymbol(chainId),
-          //     token1Amount: parsedAmounts[Field.CURRENCY_A]?.toSignificant(3),
-          //     token2Amount: parsedAmounts[Field.CURRENCY_B]?.toSignificant(3),
-          //     cat: 'remove',
-          //   },
-          // })
+          track({
+            event: 'liquidity',
+            chain: chainId,
+            value: tradeValueUsd,
+            data: {
+              token1: currencyA?.getSymbol(chainId),
+              token2: currencyB?.getSymbol(chainId),
+              token1Amount: parsedAmounts[Field.CURRENCY_A]?.toSignificant(3),
+              token2Amount: parsedAmounts[Field.CURRENCY_B]?.toSignificant(3),
+              cat: 'remove',
+            },
+          })
         })
         .catch((err: Error) => {
           setAttemptingTxn(false)
@@ -231,7 +231,6 @@ const RemoveLiquidityActions: React.FC<RemoveLiquidityActionProps> = ({
       title={t('Confirm Remove Liquidity')}
       pair={pair}
       parsedAmounts={parsedAmounts}
-      poolTokenPercentage={poolTokenPercentage}
       txHash={txHash}
       attemptingTxn={attemptingTxn}
       onDismiss={handleDismissConfirmation}
