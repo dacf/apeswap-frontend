@@ -39,6 +39,15 @@ interface RouterFunctionParams {
   masterInput: BytesLike
 }
 
+/**
+ * This function brute forces the return data based on a set of 6 possible functions.
+ * If the function name passed is incorrect, it will be caught and the next one will be
+ * attempted.
+ *
+ * @param routerContract ApeRouterManager contract
+ * @param data Return data from Wallchain API
+ * @returns
+ */
 export function decodeRouterFunctionData(
   routerContract: ApeRouterManager,
   data: string,
@@ -79,9 +88,8 @@ const wallchainResponseIsValid = (
   contractAddress: string,
 ) => {
   if (!dataResponse.pathFound) {
-    // Opportunity was not found -> response should be ignored -> valid.
+    // NOTE: Not considered a validation error, just no opportunities exist
     return false
-    // NOTE: not considered a validation error, just no opportunities exist
   }
   const apeRouterManager = new Contract(constants.AddressZero, ApeRouterManagerABI) as ApeRouterManager
   const { functionName, functionParams } = decodeRouterFunctionData(apeRouterManager, dataResponse.transactionArgs.data)
@@ -104,7 +112,7 @@ const wallchainResponseIsValid = (
     )
   }
 
-  // NOTE: Args are passed in an array and differs by 1 length depending on it the function is payable or not
+  // NOTE: Args are passed in an array and differs by 1 length depending on if the function is payable or not
   // We are able to find the arg of choice by working backwards from the length
   const ARGS_LENGTH = args.length
   const ARGS_PATH_INDEX = ARGS_LENGTH - 3

@@ -41,8 +41,6 @@ export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
   [ConnectorNames.BSC]: bscConnector,
   [ConnectorNames.Walletlink]: walletlink,
   [ConnectorNames.Torus]: torus,
-  // FIXME: Unstoppable connector undefined
-  [ConnectorNames.Unstoppable]: undefined,
 }
 
 export const getLibrary = (provider: any): Web3Provider => {
