@@ -1,7 +1,11 @@
 import { RouterTypes } from 'config/constants'
 import { WALLCHAIN_PARAMS } from 'config/constants/chains'
-import { BigNumberish, BytesLike, Contract } from 'ethers'
-import { SwapDelay, RouterTypeParams, DataResponse } from 'state/swap/actions'
+import { BigNumberish, BytesLike, Contract, constants } from 'ethers'
+import { SwapDelay, RouterTypeParams } from 'state/swap/actions'
+/**
+ * The ApeRouterManager ABI is important for decoding the return data from the Wallchain API.
+ * If there is trouble decoding the data, check for a new ABI.
+ */
 import { ApeRouterManager } from '../config/abi/types/ApeRouterManager'
 import ApeRouterManagerABI from '../config/abi/apeRouterManager.json'
 
@@ -21,7 +25,7 @@ export const ALLOWED_BONUS_ROUTER_FUNCTIONS = <const>[
   'swapExactTokensForETH',
   'swapETHForExactTokens',
 ]
-export type BONUS_ROUTER_FUNCTION_TYPE = typeof ALLOWED_BONUS_ROUTER_FUNCTIONS[number]
+export type ALLOWED_BONUS_ROUTER_FUNCTIONS_TYPE = typeof ALLOWED_BONUS_ROUTER_FUNCTIONS[number]
 
 interface RouterFunctionParams {
   amountInMax?: BigNumberish
@@ -35,25 +39,23 @@ interface RouterFunctionParams {
   masterInput: BytesLike
 }
 
-export function decodeWallchainFunctionData(data: string): {
-  functionName: BONUS_ROUTER_FUNCTION_TYPE | undefined
+export function decodeRouterFunctionData(
+  routerContract: ApeRouterManager,
+  data: string,
+): {
+  functionName: ALLOWED_BONUS_ROUTER_FUNCTIONS_TYPE | undefined
   functionParams: RouterFunctionParams | undefined
 } {
-  const apeRouterManager = new Contract(
-    '0x0000000000000000000000000000000000000000',
-    ApeRouterManagerABI,
-  ) as ApeRouterManager
-
   let functionName
   let functionParams
   // eslint-disable-next-line no-restricted-syntax
   for (const allowedFunctionName of ALLOWED_BONUS_ROUTER_FUNCTIONS) {
     try {
-      functionParams = apeRouterManager.interface.decodeFunctionData(allowedFunctionName, data)
+      functionParams = routerContract.interface.decodeFunctionData(allowedFunctionName, data)
       functionName = allowedFunctionName
       break
     } catch (e) {
-      //
+      // Expecting errors when brute forcing function names
     }
   }
   return { functionName, functionParams }
@@ -68,8 +70,9 @@ export function decodeWallchainFunctionData(data: string): {
  * @returns
  */
 const wallchainResponseIsValid = (
-  dataResponse: DataResponse,
-  methodName: BONUS_ROUTER_FUNCTION_TYPE,
+  dataResponse: WallchainDataResponse,
+  chainId: number,
+  methodName: ALLOWED_BONUS_ROUTER_FUNCTIONS_TYPE,
   args: (string | string[])[],
   value: string,
   account: string,
@@ -78,25 +81,76 @@ const wallchainResponseIsValid = (
   if (!dataResponse.pathFound) {
     // Opportunity was not found -> response should be ignored -> valid.
     return false
+    // NOTE: not considered a validation error, just no opportunities exist
+  }
+  const apeRouterManager = new Contract(constants.AddressZero, ApeRouterManagerABI) as ApeRouterManager
+  const { functionName, functionParams } = decodeRouterFunctionData(apeRouterManager, dataResponse.transactionArgs.data)
+
+  // NOTE: Can validate additional params based on args passed
+  const validationErrors = []
+  if (!functionName || !functionParams) {
+    validationErrors.push(`error decoding functionName/functionParams`)
+  } else if (functionName !== methodName) {
+    validationErrors.push(
+      `functionName passed to API differs from functionName returned from API: ${methodName} vs ${functionName} returned`,
+    )
   }
 
-  const { functionName, functionParams } = decodeWallchainFunctionData(dataResponse.transactionArgs.data)
+  // NOTE: Args are passed in an array and differs by 1 length depending on it the function is payable or not
+  // We are able to find the arg of choice by working backwards from the length
+  const ARGS_LENGTH = 5
+  const ARGS_PATH_INDEX = ARGS_LENGTH - 3
+  if (functionParams.path.toString() !== args[ARGS_PATH_INDEX].toString()) {
+    validationErrors.push(
+      `functionParams.path ${functionParams.path} does not equal args[${ARGS_PATH_INDEX}] ${args[ARGS_PATH_INDEX]}`,
+    )
+  }
 
-  // TODO: Can validate additional params based on args passed
-  // if (!functionParams) {
-  //   // Function did not decode based on method name passed.
-  //   return false
-  // }
+  if (functionParams.to.toLowerCase() !== account.toLowerCase()) {
+    validationErrors.push(`functionParams.to ${functionParams.to} does not equal account ${account}`)
+  }
 
-  // TODO: This is where we can send an alert that the arbitrage is not working
-  const isValid =
-    // functionParams?.to.toLowerCase() === account.toLowerCase() &&
-    // functionName === methodName &&
-    dataResponse.transactionArgs.destination.toLowerCase() === contractAddress.toLowerCase() &&
-    dataResponse.transactionArgs.value.toLowerCase() === value.toLowerCase() &&
-    dataResponse.transactionArgs.sender.toLowerCase() === account.toLowerCase()
+  if (dataResponse.transactionArgs.sender.toLowerCase() !== account.toLowerCase()) {
+    validationErrors.push(
+      `transactionArgs.sender ${dataResponse.transactionArgs.sender} does not equal account ${account}`,
+    )
+  }
 
-  return isValid
+  if (dataResponse.transactionArgs.destination.toLowerCase() !== contractAddress.toLowerCase()) {
+    validationErrors.push(
+      `transactionArgs.destination ${dataResponse.transactionArgs.destination} does not equal contractAddress ${contractAddress}`,
+    )
+  }
+
+  if (dataResponse.transactionArgs.value.toLowerCase() !== value.toLowerCase()) {
+    validationErrors.push(`transactionArgs.value ${dataResponse.transactionArgs.value} does not equal value ${value}`)
+  }
+
+  if (validationErrors.length) {
+    recordTransactionError(validationErrors, dataResponse, chainId)
+    return false
+  }
+  return true
+}
+
+export type WallchainDataResponse = {
+  pathFound: boolean
+  summary?: {
+    searchSummary?: {
+      expectedKickbackProfit?: number
+      expectedProfit?: number
+      expectedUsdProfit?: number
+      firstTokenAddress?: string
+      firstTokenAmount?: number
+    }
+  }
+  transactionArgs: {
+    data: string
+    destination: string
+    sender: string
+    value: string
+    masterInput: string
+  }
 }
 
 /**
@@ -111,7 +165,7 @@ const wallchainResponseIsValid = (
  * @param onSetSwapDelay Callback function to set the swap delay state
  */
 export default function callWallchainAPI(
-  methodName: BONUS_ROUTER_FUNCTION_TYPE,
+  methodName: ALLOWED_BONUS_ROUTER_FUNCTIONS_TYPE,
   args: (string | string[])[],
   value: string,
   chainId: number,
@@ -125,7 +179,7 @@ export default function callWallchainAPI(
   // Allowing transactions to be checked even if no user is connected
   const activeAccount = account || '0x0000000000000000000000000000000000000000'
 
-  // If the intiial call fails APE router will be the default router
+  // If the initial call fails APE router will be the default router
   return fetch(`${WALLCHAIN_PARAMS[chainId].apiUrl}?key=${WALLCHAIN_PARAMS[chainId].apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -147,8 +201,8 @@ export default function callWallchainAPI(
     })
     .then((responseJson) => {
       if (responseJson) {
-        const dataResponse: DataResponse = responseJson
-        if (wallchainResponseIsValid(dataResponse, methodName, args, value, activeAccount, contract.address)) {
+        const dataResponse: WallchainDataResponse = responseJson
+        if (wallchainResponseIsValid(dataResponse, chainId, methodName, args, value, account, contract.address)) {
           onBestRoute({ routerType: RouterTypes.BONUS, bonusRouter: dataResponse })
           onSetSwapDelay(SwapDelay.VALID)
         } else {
@@ -164,4 +218,34 @@ export default function callWallchainAPI(
       onSetSwapDelay(SwapDelay.VALID)
       console.error('Wallchain Error', error)
     })
+}
+
+const recordTransactionError = (
+  errorMessage: string | string[],
+  dataResponse: WallchainDataResponse,
+  chainId: number,
+) => {
+  const errorOutputBody: { input: any } = {
+    input: {
+      errorMessage,
+      firstTokenAddress: dataResponse.summary?.searchSummary?.firstTokenAddress || '',
+      expectedProfit: dataResponse.summary?.searchSummary?.expectedProfit || 0,
+      expectedUsdProfit: dataResponse.summary?.searchSummary?.expectedUsdProfit || 0,
+      firstTokenAmount: dataResponse.summary?.searchSummary?.firstTokenAmount || 0,
+      chainId,
+      sender: dataResponse.transactionArgs.sender,
+    },
+  }
+  // TODO: Enable strapi logging
+  console.dir({ errorOutputBody })
+  return undefined
+
+  // TODO: Enable: Can set in central config file
+  return fetch('https://apeswap-strapi.herokuapp.com/arb-errors', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(errorOutputBody),
+  }).catch((error) => {
+    console.error('Wallchain Txn Summary Recording Error', error)
+  })
 }

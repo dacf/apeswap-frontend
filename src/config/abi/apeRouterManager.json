@@ -2,9 +2,9 @@
   {
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "_routers",
-        "type": "address[]"
+        "internalType": "address",
+        "name": "dexRouterAddress",
+        "type": "address"
       },
       {
         "internalType": "address",
@@ -12,71 +12,13 @@
         "type": "address"
       },
       {
-        "internalType": "contract IWChainMaster",
-        "name": "_wchainMaster",
+        "internalType": "address",
+        "name": "wchainMasterAddress",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "message",
-        "type": "string"
-      }
-    ],
-    "name": "EventMessage",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "WETH",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_backupRouter",
-        "type": "address"
-      }
-    ],
-    "name": "addBackupRouter",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -93,12 +35,12 @@
   },
   {
     "inputs": [],
-    "name": "exchangeProfitShare",
+    "name": "dexRouter",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IUniswapV2Router02",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -106,10 +48,10 @@
   },
   {
     "inputs": [],
-    "name": "owner",
+    "name": "wchainMaster",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IWChainMaster",
         "name": "",
         "type": "address"
       }
@@ -118,157 +60,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_backupRouter",
-        "type": "address"
-      }
-    ],
-    "name": "removeBackupRouter",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "routers",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_dexAgent",
-        "type": "address"
-      }
-    ],
-    "name": "setDexAgent",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_exchangeProfitShare",
-        "type": "uint256"
-      }
-    ],
-    "name": "setShare",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amountOut",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      },
-      {
-        "internalType": "contract IUniswapV2Router02",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "masterInput",
-        "type": "bytes"
-      }
-    ],
-    "name": "swapETHForExactTokens",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
-    ],
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amountOutMin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      },
-      {
-        "internalType": "contract IUniswapV2Router02",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "masterInput",
-        "type": "bytes"
-      }
-    ],
-    "name": "swapExactETHForTokens",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "function"
+    "type": "receive"
   },
   {
     "inputs": [
@@ -296,60 +89,6 @@
         "internalType": "uint256",
         "name": "deadline",
         "type": "uint256"
-      },
-      {
-        "internalType": "contract IUniswapV2Router02",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "masterInput",
-        "type": "bytes"
-      }
-    ],
-    "name": "swapExactTokensForETH",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amountIn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amountOutMin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      },
-      {
-        "internalType": "contract IUniswapV2Router02",
-        "name": "router",
-        "type": "address"
       },
       {
         "internalType": "bytes",
@@ -396,17 +135,12 @@
         "type": "uint256"
       },
       {
-        "internalType": "contract IUniswapV2Router02",
-        "name": "router",
-        "type": "address"
-      },
-      {
         "internalType": "bytes",
         "name": "masterInput",
         "type": "bytes"
       }
     ],
-    "name": "swapTokensForExactETH",
+    "name": "swapTokensForExactTokens",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -415,6 +149,45 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "masterInput",
+        "type": "bytes"
+      }
+    ],
+    "name": "swapExactETHForTokens",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -445,17 +218,12 @@
         "type": "uint256"
       },
       {
-        "internalType": "contract IUniswapV2Router02",
-        "name": "router",
-        "type": "address"
-      },
-      {
         "internalType": "bytes",
         "name": "masterInput",
         "type": "bytes"
       }
     ],
-    "name": "swapTokensForExactTokens",
+    "name": "swapTokensForExactETH",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -469,38 +237,84 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      },
+      {
         "internalType": "address",
-        "name": "newOwner",
+        "name": "to",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "masterInput",
+        "type": "bytes"
       }
     ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "upgradeMaster",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "wchainMaster",
+    "name": "swapExactTokensForETH",
     "outputs": [
       {
-        "internalType": "contract IWChainMaster",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "masterInput",
+        "type": "bytes"
+      }
+    ],
+    "name": "swapETHForExactTokens",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
+    ],
     "stateMutability": "payable",
-    "type": "receive"
+    "type": "function"
   }
 ]

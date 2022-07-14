@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
 import { RouterTypes } from 'config/constants'
+import { WallchainDataResponse } from 'utils/wallchainService'
 
 export enum Field {
   INPUT = 'INPUT',
@@ -13,32 +14,9 @@ export enum SwapDelay {
   LOADING_ROUTE = 'LOADING_ROUTE',
   VALID = 'VALID',
 }
-
-type SearchSummary = {
-  expectedProfit?: number
-  expectedUsdProfit?: number
-  firstTokenAddress?: string
-  firstTokenAmount?: number
-  expectedKickbackProfit?: number
-}
-
-type TransactionArgs = {
-  data: string
-  destination: string
-  sender: string
-  value: string
-  masterInput: string
-}
-
-export type DataResponse = {
-  pathFound: boolean
-  summary?: { searchSummary?: SearchSummary }
-  transactionArgs: TransactionArgs
-}
-
 export interface RouterTypeParams {
   routerType: RouterTypes
-  bonusRouter?: DataResponse
+  bonusRouter?: WallchainDataResponse
 }
 
 export const selectCurrency = createAction<{ field: Field; currencyId: string }>('swap/selectCurrency')
