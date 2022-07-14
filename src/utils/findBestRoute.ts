@@ -1,10 +1,11 @@
+import { SwapCall } from 'hooks/useSwapCallback'
 import { SwapDelay, RouterTypeParams } from 'state/swap/actions'
 import callWallchainAPI from 'utils/wallchainService'
 
 // This file will be more involved with V2 launch.
 export const findBestRoute = (
   swapDelay: SwapDelay,
-  swapCalls: any,
+  swapCalls: SwapCall[],
   account: string,
   chainId: number,
   onSetSwapDelay: (swapDelay: SwapDelay) => void,
@@ -19,7 +20,7 @@ export const findBestRoute = (
       contract,
       parameters: { methodName, args, value },
     } = swapCalls[0]
-    callWallchainAPI(methodName, args, value, chainId, account, contract, onBestRoute, onSetSwapDelay)
+    callWallchainAPI(methodName as any, args, value, chainId, account, contract, onBestRoute, onSetSwapDelay)
   }
   return false
 }
