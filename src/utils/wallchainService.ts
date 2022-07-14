@@ -91,14 +91,22 @@ const wallchainResponseIsValid = (
   if (!functionName || !functionParams) {
     validationErrors.push(`error decoding functionName/functionParams`)
   } else if (functionName !== methodName) {
-    validationErrors.push(
-      `functionName passed to API differs from functionName returned from API: ${methodName} vs ${functionName} returned`,
+    /**
+     *  // TODO: 2022.07.14 Wallchain API returns a different function name when swapping tokens into BNB:
+     *  "functionName passed to bonus-router API differs from functionName returned from API: swapExactTokensForETH vs swapExactTokensForTokens returned"
+     *  this validation would prevent most likely half of the trade volume, but should be reconciled with Wallchain.
+     */
+    // validationErrors.push(
+    //   `functionName passed to bonus-router API differs from functionName returned from API: ${methodName} vs ${functionName} returned`,
+    // )
+    console.log(
+      `functionName passed to bonus-router API differs from functionName returned from API: ${methodName} vs ${functionName} returned`,
     )
   }
 
   // NOTE: Args are passed in an array and differs by 1 length depending on it the function is payable or not
   // We are able to find the arg of choice by working backwards from the length
-  const ARGS_LENGTH = 5
+  const ARGS_LENGTH = args.length
   const ARGS_PATH_INDEX = ARGS_LENGTH - 3
   if (functionParams.path.toString() !== args[ARGS_PATH_INDEX].toString()) {
     validationErrors.push(
@@ -236,11 +244,11 @@ const recordTransactionError = (
       sender: dataResponse.transactionArgs.sender,
     },
   }
-  // TODO: Enable strapi logging
+  // TODO: Enable Strapi logging after review?
   console.dir({ errorOutputBody })
   return undefined
 
-  // TODO: Enable: Can set in central config file
+  // TODO: If this is used, it can be brought into a central config.
   return fetch('https://apeswap-strapi.herokuapp.com/arb-errors', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
