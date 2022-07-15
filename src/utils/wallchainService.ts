@@ -99,15 +99,7 @@ const wallchainResponseIsValid = (
   if (!functionName || !functionParams) {
     validationErrors.push(`error decoding functionName/functionParams`)
   } else if (functionName !== methodName) {
-    /**
-     *  // TODO: 2022.07.14 Wallchain API returns a different function name when swapping tokens into BNB:
-     *  "functionName passed to bonus-router API differs from functionName returned from API: swapExactTokensForETH vs swapExactTokensForTokens returned"
-     *  this validation would prevent most likely half of the trade volume, but should be reconciled with Wallchain.
-     */
-    // validationErrors.push(
-    //   `functionName passed to bonus-router API differs from functionName returned from API: ${methodName} vs ${functionName} returned`,
-    // )
-    console.log(
+    validationErrors.push(
       `functionName passed to bonus-router API differs from functionName returned from API: ${methodName} vs ${functionName} returned`,
     )
   }
