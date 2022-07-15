@@ -55,8 +55,8 @@ const BillsListView: React.FC<{ bills: Bills[] }> = ({ bills }) => {
           />
           <ListViewContent
             title={t('Discount')}
-            valueColor={parseFloat(bill?.discount) < 0 ? '#DF4141' : null}
-            value={`${bill?.discount}%`}
+            valueColor={disabled ? null : parseFloat(bill?.discount) < 0 ? '#DF4141' : '#38A611'}
+            value={disabled ? 'N/A' : `${bill?.discount}%`}
             width={isMobile ? 90 : 140}
             height={52.5}
             toolTip={

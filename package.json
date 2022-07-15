@@ -31,7 +31,7 @@
   "dependencies": {
     "@ape.swap/uikit": "^1.3.14",
     "@apeswapfinance/sdk": "^3.0.0",
-    "@apeswapfinance/token-lists": "1.0.295",
+    "@apeswapfinance/token-lists": "1.0.296",
     "@apeswapfinance/uikit": "0.11.3",
     "@autonomylabs/limit-stop-orders": "0.0.6",
     "@binance-chain/bsc-connector": "^1.0.0",

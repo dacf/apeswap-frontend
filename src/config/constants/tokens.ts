@@ -1235,6 +1235,13 @@ const tokens = {
     },
     decimals: 18,
   },
+  pxp: {
+    symbol: 'PXP',
+    address: {
+      56: '0x93c27727e72EC7510a06ea450366C1418c4Ce547',
+    },
+    decimals: 18,
+  },
 
   // Test LPs
 
@@ -1556,6 +1563,14 @@ const tokens = {
     symbol: 'RADAR-BNB',
     address: {
       56: '0xe6fF591f818664865eCab584B1fe679DbB4904dB',
+    },
+    decimals: 18,
+    lpToken: true,
+  },
+  pxpBnb: {
+    symbol: 'PXP-BNB',
+    address: {
+      56: '0xF4a7480948F11A0205D616258DCf43E9DaAE0586',
     },
     decimals: 18,
     lpToken: true,
