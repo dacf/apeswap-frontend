@@ -139,7 +139,8 @@ const Farms: React.FC = () => {
           <Banner
             banner="banana-farms"
             link="https://apeswap.gitbook.io/apeswap-finance/product-and-features/stake/farms"
-            title={t('Banana Farms')}
+            title={t('Insight Dashboard')}
+            titleColor="primaryBright"
             listViewBreak
             maxWidth={1130}
           />
