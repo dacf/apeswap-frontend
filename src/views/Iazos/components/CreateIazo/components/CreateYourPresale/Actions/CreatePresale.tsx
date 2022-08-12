@@ -136,7 +136,7 @@ const CreatePresale: React.FC<CreatePresaleProps> = ({ presaleData, disabled, cr
                   history.push('/ss-iao')
                   toastSuccess(t('Your SS-IAO was successfully created!'))
                 } else {
-                  toastError(t('Your SS-IAO encountered an error. Please contact the ApeSwap team for help.'))
+                  toastError(t('SS-IAO Error: Please contact the ApeSwap team for assistance.'))
                 }
               })
             })

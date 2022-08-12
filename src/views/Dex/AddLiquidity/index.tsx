@@ -74,21 +74,21 @@ function AddLiquidity({
       const newCurrencyId = currencyId(currency)
       if (field === Field.CURRENCY_A) {
         if (newCurrencyId === currencyIdB) {
-          history.push(`/add/${currencyIdB}/${currencyIdA}`)
+          history.push(`/add-liquidity/${currencyIdB}/${currencyIdA}`)
         } else if (currencyIdB) {
-          history.push(`/add/${newCurrencyId}/${currencyIdB}`)
+          history.push(`/add-liquidity/${newCurrencyId}/${currencyIdB}`)
         } else {
-          history.push(`/add/${newCurrencyId}`)
+          history.push(`/add-liquidity/${newCurrencyId}`)
         }
       } else if (field === Field.CURRENCY_B) {
         if (newCurrencyId === currencyIdA) {
           if (currencyIdB) {
-            history.push(`/add/${currencyIdB}/${newCurrencyId}`)
+            history.push(`/add-liquidity/${currencyIdB}/${newCurrencyId}`)
           } else {
-            history.push(`/add/${newCurrencyId}`)
+            history.push(`/add-liquidity/${newCurrencyId}`)
           }
         } else {
-          history.push(`/add/${currencyIdA || 'ETH'}/${newCurrencyId}`)
+          history.push(`/add-liquidity/${currencyIdA || 'ETH'}/${newCurrencyId}`)
         }
       }
     },

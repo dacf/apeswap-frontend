@@ -10,7 +10,7 @@ import { Farm, Tag } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import ApyButton from 'components/ApyCalculator/ApyButton'
+import CalcButton from 'components/RoiCalculator/CalcButton'
 import { useTranslation } from 'contexts/Localization'
 import useIsMobile from 'hooks/useIsMobile'
 import { Field, selectCurrency } from 'state/swap/actions'
@@ -56,10 +56,6 @@ const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] 
 
   const farmsListView = farms.map((farm) => {
     const [token1, token2] = farm.lpSymbol.split('-')
-
-    const liquidityUrl = `https://apeswap.finance/add/${
-      farm.quoteTokenSymbol === 'BNB' ? 'ETH' : farm.quoteTokenAdresses[chainId]
-    }/${farm.tokenAddresses[chainId]}`
     const userAllowance = farm?.userData?.allowance
     const userEarnings = getBalanceNumber(farm?.userData?.earnings || new BigNumber(0))?.toFixed(2)
     const userEarningsUsd = `$${(
@@ -127,12 +123,17 @@ const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] 
             toolTipPlacement="bottomLeft"
             toolTipTransform="translate(8%, 0%)"
             aprCalculator={
-              <ApyButton
-                lpLabel={farm.lpSymbol}
+              <CalcButton
+                label={farm.lpSymbol}
                 rewardTokenName="BANANA"
                 rewardTokenPrice={farm.bananaPrice}
-                apy={parseFloat(farm?.apr) / 100 + parseFloat(farm?.lpApr) / 100}
-                addLiquidityUrl={liquidityUrl}
+                apr={parseFloat(farm?.apr)}
+                lpApr={parseFloat(farm?.lpApr)}
+                apy={parseFloat(farm?.apy)}
+                lpAddress={farm.lpAddresses[chainId]}
+                isLp
+                tokenAddress={farm.tokenAddresses[chainId]}
+                quoteTokenAddress={farm.quoteTokenSymbol === 'BNB' ? 'ETH' : farm.quoteTokenAdresses[chainId]}
               />
             }
           />

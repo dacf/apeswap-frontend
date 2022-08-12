@@ -22,7 +22,7 @@ const useTopup = () => {
     if (account) paymentParams.selectedAddress = account
     try {
       // const paymentStatus = await torus.initiateTopup('moonpay', paymentParams)
-      toastSuccess('Succesful topup')
+      toastSuccess('Successful topup')
       track({
         event: 'topup',
         chain: chainId,

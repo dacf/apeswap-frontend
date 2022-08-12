@@ -47,7 +47,7 @@ const PairCreation: React.FC<PairCreationProps> = ({ onChange }) => {
             setLoadingTokenData(false)
           })
           .catch((error) => {
-            toastError(t('Something went wrong'))
+            toastError(t('LP Creation Error: Please try again.'))
             setTokenApproved(false)
             setLoadingTokenData(false)
             console.error(error)

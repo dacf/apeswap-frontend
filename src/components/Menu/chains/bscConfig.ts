@@ -16,12 +16,12 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
       },
       {
         label: t('Orders'),
-        href: '/orders',
+        href: '/limit-orders',
         isNew: false,
       },
       {
         label: t('Liquidity'),
-        href: '/add',
+        href: '/add-liquidity',
         isNew: false,
       },
       {
@@ -48,12 +48,12 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
       },
       {
         label: t('BANANA Maximizers'),
-        href: '/vaults',
+        href: '/maximizers',
         isNew: false,
       },
       {
         label: t('BANANA Farms'),
-        href: '/farms',
+        href: '/banana-farms',
         isNew: false,
       },
       {

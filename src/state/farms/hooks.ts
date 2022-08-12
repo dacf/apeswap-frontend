@@ -15,6 +15,7 @@ export const usePollFarms = () => {
   const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const { lpTokenPrices } = useLpTokenPrices()
+  const { slowRefresh } = useRefresh()
   // Made a string because hooks will refresh bignumbers
   const bananaPrice = useBananaPrice()
   const farmLpAprs = useFarmLpAprs()
@@ -24,7 +25,7 @@ export const usePollFarms = () => {
       dispatch(fetchFarmsPublicDataAsync(chainId, lpTokenPrices, new BigNumber(bananaPrice), farmLpAprs))
     }
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, [dispatch, chainId, lpTokenPrices?.length, bananaPrice, farmLpAprs?.lpAprs?.length])
+  }, [dispatch, chainId, lpTokenPrices?.length, farmLpAprs?.lpAprs?.length, slowRefresh])
 }
 export const useFarms = (account): Farm[] => {
   const { slowRefresh } = useRefresh()

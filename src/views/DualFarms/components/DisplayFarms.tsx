@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Text, LinkExternal, Svg } from '@apeswapfinance/uikit'
+import { Flex, Text, LinkExternal, Svg, useModal } from '@apeswapfinance/uikit'
 import { TagVariants } from '@ape.swap/uikit'
 import { Box } from 'theme-ui'
 import ListView from 'components/ListView'
@@ -9,14 +9,17 @@ import { DualFarm, Tag } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import ApyButton from 'components/ApyCalculator/ApyButton'
 import { useTranslation } from 'contexts/Localization'
+import CalcButton from 'components/RoiCalculator/CalcButton'
 import CardActions from './CardActions'
 import { Container, FarmButton, NextArrow, ServiceTokenDisplayContainer, StyledTag } from './styles'
 import HarvestAction from './CardActions/HarvestAction'
 import { ActionContainer } from './CardActions/styles'
 import useIsMobile from '../../../hooks/useIsMobile'
 import ServiceTokenDisplay from '../../../components/ServiceTokenDisplay'
+import { LiquidityModal } from 'components/LiquidityWidget'
+import { Field, selectCurrency } from 'state/swap/actions'
+import { useAppDispatch } from 'state'
 
 const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags: Tag[] }> = ({
   farms,
@@ -26,13 +29,37 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
   const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
   const isMobile = useIsMobile()
+  const dispatch = useAppDispatch()
+
+  // TODO: clean up this code
+  // Hack to get the close modal function from the provider
+  // Need to export ModalContext from uikit to clean up the code
+  const [, closeModal] = useModal(<></>)
+  const [onPresentAddLiquidityWidgetModal] = useModal(
+    <LiquidityModal handleClose={closeModal} />,
+    true,
+    true,
+    'liquidityWidgetModal',
+  )
+
+  const showLiquidity = (token, quoteToken) => {
+    dispatch(
+      selectCurrency({
+        field: Field.INPUT,
+        currencyId: token,
+      }),
+    )
+    dispatch(
+      selectCurrency({
+        field: Field.OUTPUT,
+        currencyId: quoteToken,
+      }),
+    )
+    onPresentAddLiquidityWidgetModal()
+  }
 
   const farmsListView = farms.map((farm, i) => {
     const polygonScanUrl = `https://polygonscan.com/address/${farm.stakeTokenAddress}`
-
-    const liquidityUrl = `https://apeswap.finance/add/${
-      farm?.stakeTokens?.token0?.symbol === 'MATIC' ? 'ETH' : farm?.stakeTokens?.token0?.address[chainId]
-    }/${farm?.stakeTokens?.token1?.address[chainId]}`
     const userAllowance = farm?.userData?.allowance
     const userEarningsMiniChef = getBalanceNumber(farm?.userData?.miniChefEarnings || new BigNumber(0)).toFixed(2)
     const userEarningsRewarder = getBalanceNumber(farm?.userData?.rewarderEarnings || new BigNumber(0)).toFixed(2)
@@ -140,12 +167,20 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
             toolTipPlacement={i === farms.length - 1 && i !== 0 ? 'topLeft' : 'bottomLeft'}
             toolTipTransform={i === farms.length - 1 && i !== 0 ? 'translate(-8%, 0%)' : 'translate(8%, 0%)'}
             aprCalculator={
-              <ApyButton
-                lpLabel={`${farm?.stakeTokens?.token1?.symbol}-${farm?.stakeTokens?.token0?.symbol}`}
+              <CalcButton
+                label={`${farm?.stakeTokens?.token1?.symbol}-${farm?.stakeTokens?.token0?.symbol}`}
                 rewardTokenName="BANANA"
                 rewardTokenPrice={farm.rewardToken0Price}
-                apy={farm?.apr / 100 + parseFloat(farm?.lpApr) / 100}
-                addLiquidityUrl={liquidityUrl}
+                apr={farm?.apr}
+                lpApr={parseFloat(farm?.lpApr)}
+                apy={parseFloat(farm?.apy)}
+                lpAddress={farm.stakeTokenAddress}
+                isLp
+                tokenAddress={farm?.stakeTokens?.token1?.address[chainId]}
+                quoteTokenAddress={
+                  farm?.stakeTokens?.token0?.symbol === 'MATIC' ? 'ETH' : farm?.stakeTokens?.token0?.address[chainId]
+                }
+                lpPrice={farm.stakeTokenPrice}
               />
             }
           />
@@ -195,9 +230,16 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
                 ml={10}
               />
             )}
-            <a href={liquidityUrl} target="_blank" rel="noopener noreferrer">
-              <FarmButton>{t('GET LP')}</FarmButton>
-            </a>
+            <FarmButton
+              onClick={() =>
+                showLiquidity(
+                  farm?.stakeTokens?.token1?.address[chainId],
+                  farm?.stakeTokens?.token0?.symbol === 'MATIC' ? 'ETH' : farm?.stakeTokens?.token0?.address[chainId],
+                )
+              }
+            >
+              {t('GET LP')}
+            </FarmButton>
             {!isMobile && (
               <ListViewContent
                 title={t('Available LP')}

@@ -55,12 +55,12 @@ const TokenInput: React.FC<TextInputProps> = ({
   const onValidate = (e) => {
     const val = parseFloat(e.currentTarget.value)
     if (val < min) {
-      toastError(`${t('Value must be greater than')} ${min}`)
+      toastError(`${t('Error: Value must be greater than')} ${min}`)
       setBackgroundColorForInput('rgb(255,0,0, .3)')
       return val
     }
     if (val > max) {
-      toastError(`${t('Value must be less than')} ${max}`)
+      toastError(`${t('Error: Value must be less than')} ${max}`)
       setBackgroundColorForInput('rgb(255,0,0, .3)')
       return val
     }

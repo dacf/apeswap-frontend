@@ -17,7 +17,7 @@ const MyPositions: React.FC = () => {
         ...textUnderlineHover,
       }}
       as={Link}
-      to="/pool"
+      to="/liquidity"
     >
       <Svg icon="caret" direction="left" width="7px" />
       <Text size="12px" ml="5px">

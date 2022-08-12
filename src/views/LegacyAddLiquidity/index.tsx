@@ -322,11 +322,11 @@ export default function AddLiquidity({
     (currencyA_: Currency) => {
       const newCurrencyIdA = currencyId(currencyA_)
       if (newCurrencyIdA === loadCurrencyIdB) {
-        history.push(`/add/${loadCurrencyIdB}/${loadCurrencyIdA}`)
+        history.push(`/add-liquidity/${loadCurrencyIdB}/${loadCurrencyIdA}`)
       } else if (loadCurrencyIdB) {
-        history.push(`/add/${newCurrencyIdA}/${loadCurrencyIdB}`)
+        history.push(`/add-liquidity/${newCurrencyIdA}/${loadCurrencyIdB}`)
       } else {
-        history.push(`/add/${newCurrencyIdA}`)
+        history.push(`/add-liquidity/${newCurrencyIdA}`)
       }
     },
     [loadCurrencyIdB, history, loadCurrencyIdA],
@@ -336,12 +336,12 @@ export default function AddLiquidity({
       const newCurrencyIdB = currencyId(currencyB_)
       if (loadCurrencyIdA === newCurrencyIdB) {
         if (loadCurrencyIdB) {
-          history.push(`/add/${loadCurrencyIdB}/${newCurrencyIdB}`)
+          history.push(`/add-liquidity/${loadCurrencyIdB}/${newCurrencyIdB}`)
         } else {
-          history.push(`/add/${newCurrencyIdB}`)
+          history.push(`/add-liquidity/${newCurrencyIdB}`)
         }
       } else {
-        history.push(`/add/${loadCurrencyIdA || 'ETH'}/${newCurrencyIdB}`)
+        history.push(`/add-liquidity/${loadCurrencyIdA || 'ETH'}/${newCurrencyIdB}`)
       }
     },
     [loadCurrencyIdA, history, loadCurrencyIdB],

@@ -7,14 +7,20 @@
     { "source": "/yield", "destination": "/farms", "permanent": true },
     { "source": "/yields", "destination": "/farms", "permanent": true },
     { "source": "/apezone", "destination": "/gnana" },
-    { "source": "/stat", "destination": "/stats", "permanent": true },
+    { "source": "/stat", "destination": "/apestats", "permanent": true },
     { "source": "/vault", "destination": "/vaults", "permanent": true },
-    { "source": "/apestats", "destination": "/stats", "permanent": true },
+    { "source": "/vaults", "destination": "/maximizers", "permanent": true },
     { "source": "/logos", "destination": "https://apeswap.click/logos", "permanent": true },
     { "source": "/admin", "destination": "/admin-pools", "permanent": true },
     { "source": "/admin-pool", "destination": "/admin-pools", "permanent": true },
     { "source": "/staff-pools", "destination": "/admin-pools", "permanent": true },
     { "source": "/info", "destination": "https://info.apeswap.finance/", "permanent": true },
-    { "source": "/lending", "destination": "https://lending.apeswap.finance/", "permanent": true }
+    { "source": "/lending", "destination": "https://lending.apeswap.finance/", "permanent": true },
+    { "source": "/stats", "destination": "/apestats", "permanent": true },
+    { "source": "/junglefarms", "destination": "/jungle-farms", "permanent": true },
+    { "source": "/pool", "destination": "/liquidity", "permanent": true },
+    { "source": "/add", "destination": "/add-liquidity", "permanent": true },
+    { "source": "/orders", "destination": "/limit-orders", "permanent": true },
+    { "source": "/treasurybills", "destination": "/treasury-bills", "permanent": true }
   ]
 }

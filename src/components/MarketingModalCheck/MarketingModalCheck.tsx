@@ -9,6 +9,7 @@ import { useTranslation } from 'contexts/Localization'
 import SwiperProvider from 'contexts/SwiperProvider'
 import MoonPayModal from 'views/Topup/MoonpayModal'
 import QuestModal from '../MarketingModalContent/Quests/QuestModal'
+import GnanaModal from 'components/GnanaModal'
 
 const MarketingModalCheck = () => {
   const location = useLocation()
@@ -21,6 +22,7 @@ const MarketingModalCheck = () => {
   const billsRoute = location.search.includes('modal=bills')
   const questRoute = location.search.includes('modal=tutorial')
   const moonpayRoute = location.search.includes('modal=moonpay')
+  const getGnanaRoute = location.search.includes('modal=gnana')
 
   const { LendingBody1, LendingBody2, LendingBody3, LendingBody4, LendingBody5 } = LendingBodies
   const { FarmsBody1, FarmsBody2, FarmsBody3, FarmsBody4 } = FarmsBodies
@@ -99,6 +101,8 @@ const MarketingModalCheck = () => {
     </SwiperProvider>
   ) : moonpayRoute ? (
     <MoonPayModal onDismiss={onDismiss} />
+  ) : getGnanaRoute ? (
+    <GnanaModal onDismiss={onDismiss} />
   ) : null
 }
 

@@ -101,7 +101,7 @@ function ImportList({ listURL, list, onImport }: ImportProps) {
               {t('Want to see your crypto project listed? ')}
               <br />
               <a
-                href="https://apeswap.click/partners"
+                href="https://apeswap.click/partnership"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: 'underline' }}
@@ -125,7 +125,7 @@ function ImportList({ listURL, list, onImport }: ImportProps) {
               <br />
               <br />
               <a
-                href="https://apeswap.click/partners"
+                href="https://apeswap.click/partnership"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: 'underline' }}

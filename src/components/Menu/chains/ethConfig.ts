@@ -16,7 +16,7 @@ const maticConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
       },
       {
         label: t('Liquidity'),
-        href: '/add',
+        href: '/add-liquidity',
         isNew: false,
       },
       {

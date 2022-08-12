@@ -65,7 +65,7 @@ const Orders: React.FC = () => {
     })
 
   const [onPresentImportTokenWarningModal] = useModal(
-    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => history.push('/orders')} />,
+    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => history.push('/limit-orders')} />,
   )
 
   useEffect(() => {

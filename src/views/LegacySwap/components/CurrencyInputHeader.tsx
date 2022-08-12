@@ -64,7 +64,7 @@ const CurrencyInputHeader: React.FC<Props> = () => {
             <Tab
               index={1}
               label={t('ORDERS')}
-              onClick={() => history.push('/orders')}
+              onClick={() => history.push('/limit-orders')}
               size={isMobile ? 'xsm' : 'md'}
               variant="centered"
               activeTab={getActiveTab()}

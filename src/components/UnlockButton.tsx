@@ -25,7 +25,7 @@ const UnlockButton = (props) => {
         }}
         {...props}
       >
-        {t('UNLOCK WALLET')}
+        {t('Connect Wallet')}
       </Button>
     )
   }
@@ -43,7 +43,7 @@ const UnlockButton = (props) => {
         }}
         {...props}
       >
-        {t('UNLOCK WALLET')}
+        {t('Connect Wallet')}
       </Button>
     )
   }
@@ -58,7 +58,7 @@ const UnlockButton = (props) => {
       sx={{ fontSize: '16px', padding: '0 24px', height: '44px', fontWeight: 600 }}
       {...props}
     >
-      {t('UNLOCK WALLET')}
+      {t('Connect Wallet')}
     </Button>
   )
 }
