@@ -133,11 +133,6 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     darkIcon: 'MoreDarkImage',
     items: [
       {
-        label: t('Dashboard'),
-        href: 'protocol-dashboard',
-        isNew: true,
-      },
-      {
         label: t('Documentation'),
         href: 'https://apeswap.gitbook.io/apeswap-finance/',
         isNew: false,
