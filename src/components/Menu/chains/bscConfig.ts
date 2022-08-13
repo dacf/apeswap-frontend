@@ -128,7 +128,7 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     isNew: false,
   },
   {
-    label: t('More'),
+    label: t('Explore'),
     lightIcon: 'MoreLightImage',
     darkIcon: 'MoreDarkImage',
     items: [
