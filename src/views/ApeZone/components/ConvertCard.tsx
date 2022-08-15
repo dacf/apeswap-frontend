@@ -34,7 +34,7 @@ interface ConvertCardType {
 }
 
 const ConvertCard: React.FC<ConvertCardType> = ({ fromToken, toToken }) => {
-  const MAX_BUY = 50
+  const MAX_BUY = 5000
   const [val, setVal] = useState('1')
   const [unlimited, setUnlimited] = useState(false)
   const gnanaVal = parseFloat(val) * 0.7

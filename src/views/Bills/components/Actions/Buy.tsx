@@ -59,7 +59,7 @@ const Buy: React.FC<BuyProps> = ({
       })
       .catch((e) => {
         console.error(e)
-        toastError(e?.data?.message || t('Something went wrong please try again'))
+        toastError(e?.data?.message || t('Error: Please try again.'))
         setPendingTrx(false)
         onTransactionSubmited(false)
       })

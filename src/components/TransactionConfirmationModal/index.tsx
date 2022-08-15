@@ -136,11 +136,10 @@ export function TransactionErrorContent({ message, onDismiss }: { message: strin
         <Text color="error" style={{ textAlign: 'center', width: '85%' }}>
           {message}
         </Text>
+        <Flex justifyContent="center" pt="24px">
+          <Button onClick={onDismiss}>{t('Dismiss')}</Button>
+        </Flex>
       </AutoColumn>
-
-      <Flex justifyContent="center" pt="24px">
-        <Button onClick={onDismiss}>{t('Dismiss')}</Button>
-      </Flex>
     </Wrapper>
   )
 }

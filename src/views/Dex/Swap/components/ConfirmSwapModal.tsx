@@ -93,14 +93,21 @@ const ConfirmSwapModal: React.FC<ModalProps & ConfirmSwapModalProps> = ({
   const confirmationContent = useCallback(
     () =>
       swapErrorMessage ? (
-        <TransactionErrorContent onDismiss={onDismiss} message={swapErrorMessage} />
+        <TransactionErrorContent
+          onDismiss={onDismiss}
+          message={
+            swapErrorMessage.includes('INSUFFICIENT_OUTPUT_AMOUNT')
+              ? t('Slippage Error: Please check your slippage & try again!')
+              : swapErrorMessage
+          }
+        />
       ) : (
         <Flex sx={{ flexDirection: 'column' }}>
           {modalHeader()}
           {modalBottom()}
         </Flex>
       ),
-    [onDismiss, modalBottom, modalHeader, swapErrorMessage],
+    [onDismiss, modalBottom, modalHeader, t, swapErrorMessage],
   )
 
   return (

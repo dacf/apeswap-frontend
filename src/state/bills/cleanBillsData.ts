@@ -1,6 +1,7 @@
 import { BillsConfig } from 'config/constants/types'
 import { TokenPrices } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { getFirstNonZeroDigits } from 'utils/roundNumber'
 
 const cleanBillsData = (
   billIds: number[],
@@ -31,10 +32,11 @@ const cleanBillsData = (
     const [controlVariable, vestingTerm, minimumPrice, maxPayout, maxDebt] = terms
     const priceUsd = getBalanceNumber(trueBillPrice) * lpPrice
     const discount = ((earnTokenPrice - priceUsd) / earnTokenPrice) * 100
+    const formatedPrice = priceUsd ? getFirstNonZeroDigits(priceUsd) : undefined
     return {
       ...billConfig,
       price: trueBillPrice.toString(),
-      priceUsd: priceUsd?.toFixed(3),
+      priceUsd: formatedPrice,
       vestingTime: vestingTerm.toString(),
       discount: discount.toFixed(2),
       trueBillPrice: trueBillPrice.toString(),

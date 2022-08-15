@@ -42,6 +42,7 @@ import { setVaultsLoad } from './vaults'
 import { fetchIazo, fetchIazos, fetchSettings } from './iazos'
 import { fetchUserNetwork } from './network'
 import { fetchAllNfas } from './nfas'
+import { useFetchTokenPrices } from './tokenPrices/hooks'
 
 // Network
 
@@ -261,6 +262,7 @@ export const useAuctions = () => {
 }
 
 export const useFetchIazoSettings = () => {
+  useFetchTokenPrices()
   const dispatch = useAppDispatch()
   const chainId = useNetworkChainId()
   const { slowRefresh } = useRefresh()

@@ -21,6 +21,7 @@ import {
 } from './styles'
 import Actions from '../Actions'
 import UserBillModalView from './UserBillModalView'
+import { getFirstNonZeroDigits } from 'utils/roundNumber'
 
 interface BillModalProps {
   onDismiss: () => void
@@ -56,7 +57,7 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill }) => {
 
   const available = new BigNumber(maxTotalPayOut)
     ?.minus(new BigNumber(totalPayoutGiven))
-    ?.div(new BigNumber(10).pow(18))
+    ?.div(new BigNumber(10).pow(earnToken.decimals))
   // threshold equals to 2 usd in earned tokens (banana or jungle token)
   const threshold = new BigNumber(2).div(earnTokenPrice)
   const safeAvailable = available.minus(threshold)
@@ -115,13 +116,13 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill }) => {
                 <Flex style={{ width: '250px' }}>
                   <TopDescriptionText>
                     {earnToken.symbol} {t('Market Price')}{' '}
-                    <span style={{ textDecoration: 'line-through' }}>${earnTokenPrice?.toFixed(3)}</span>
+                    <span style={{ textDecoration: 'line-through' }}>${getFirstNonZeroDigits(earnTokenPrice)}</span>
                   </TopDescriptionText>
                 </Flex>
                 <Flex alignItems="center">
                   <ServiceTokenDisplay token1={earnToken.symbol} />
                   <StyledHeadingText ml="10px" bold>
-                    ${discountEarnTokenPrice.toFixed(3)} ({discount}% Discount)
+                    ${getFirstNonZeroDigits(discountEarnTokenPrice)} ({discount}% Discount)
                   </StyledHeadingText>
                 </Flex>
               </Flex>

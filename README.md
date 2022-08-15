@@ -4,7 +4,7 @@ The `apeswap-frontend` repo is the primary frontend repository for [ApeSwap.Fina
 
 ## Contributions
 
-If you want to contribute to this repo, please refer to the [contributing guidelines](./CONTRIBUTING.md) of this project or jump directly over to the [Github Issues](https://github.com/ApeSwapFinance/apeswap-frontend/issues) page to explore issues, tasks, and grants to pick up and get started with today. Some even have financial bounties and incentives for your contributions!
+If you want to contribute to this repo, please refer to the [contributing guidelines](./CONTRIBUTING.md).
 
 ## Getting Started
 

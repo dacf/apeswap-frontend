@@ -1,15 +1,15 @@
 /** @jsxImportSource theme-ui */
 import React from 'react'
-import { IconButton, Text, Flex, TagVariants } from '@ape.swap/uikit'
+import { IconButton, Text, Flex, TagVariants, Button } from '@ape.swap/uikit'
 import { Box } from 'theme-ui'
 import BigNumber from 'bignumber.js'
 import ListView from 'components/ListView'
 import { ExtendedListViewProps } from 'components/ListView/types'
 import ListViewContent from 'components/ListViewContent'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import ApyButton from 'components/ApyCalculator/ApyButton'
+import CalcButton from 'components/RoiCalculator/CalcButton'
 import useIsMobile from 'hooks/useIsMobile'
 import { Pool, Tag } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -18,7 +18,7 @@ import { useTranslation } from 'contexts/Localization'
 import Actions from './Actions'
 import HarvestAction from './Actions/HarvestAction'
 import InfoContent from '../InfoContent'
-import { Container, StyledButton, ActionContainer, StyledTag } from './styles'
+import { StyledTag, poolStyles } from './styles'
 
 const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }> = ({ pools, openId, poolTags }) => {
   const { chainId } = useActiveWeb3React()
@@ -26,6 +26,7 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
   const { pathname } = useLocation()
   const { t } = useTranslation()
   const isActive = !pathname.includes('history')
+  const history = useHistory()
 
   const poolsListView = pools.map((pool) => {
     const token1 = pool?.stakingToken?.symbol
@@ -49,6 +50,11 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
 
     const pTag = poolTags?.find((tag) => tag.pid === pool.sousId)
     const tagColor = pTag?.color as TagVariants
+
+    const openLiquidityUrl = () =>
+      pool?.stakingToken?.symbol === 'GNANA'
+        ? history.push({ search: '?modal=gnana' })
+        : window.open(liquidityUrl, '_blank')
 
     // Token symbol logic is here temporarily for nfty
     return {
@@ -95,12 +101,12 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
             toolTipPlacement="bottomLeft"
             toolTipTransform="translate(10%, 0%)"
             aprCalculator={
-              <ApyButton
-                lpLabel={pool?.stakingToken?.symbol}
+              <CalcButton
+                label={pool?.stakingToken?.symbol}
                 rewardTokenName={pool?.rewardToken?.symbol}
                 rewardTokenPrice={pool?.rewardToken?.price}
-                apy={pool?.apr / 100}
-                addLiquidityUrl={liquidityUrl}
+                apr={pool?.apr}
+                tokenAddress={pool.stakingToken.address[chainId]}
               />
             }
           />
@@ -118,7 +124,7 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
       ),
       expandedContent: (
         <>
-          <ActionContainer>
+          <Flex sx={poolStyles.actionContainer}>
             {isMobile && (
               <ListViewContent
                 title={`${t('Available')} ${pool?.stakingToken?.symbol}`}
@@ -131,11 +137,9 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
                 ml={10}
               />
             )}
-            <a href={liquidityUrl} target="_blank" rel="noopener noreferrer">
-              <StyledButton sx={{ width: '150px' }}>
-                {t('GET')} {pool?.stakingToken?.symbol}
-              </StyledButton>
-            </a>
+            <Button variant="primary" sx={poolStyles.styledBtn} onClick={openLiquidityUrl}>
+              {t('GET')} {pool?.stakingToken?.symbol}
+            </Button>
             {!isMobile && (
               <ListViewContent
                 title={`${t('Available')} ${pool?.stakingToken?.symbol}`}
@@ -148,7 +152,7 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
                 ml={10}
               />
             )}
-          </ActionContainer>
+          </Flex>
           {!isMobile && <NextArrow />}
           <Actions
             allowance={userAllowance?.toString()}
@@ -171,9 +175,9 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
     } as ExtendedListViewProps
   })
   return (
-    <Container>
+    <Flex sx={poolStyles.container}>
       <ListView listViews={poolsListView} />
-    </Container>
+    </Flex>
   )
 }
 

@@ -30,7 +30,7 @@ const Approve: React.FC<ApproveProps> = ({ lpToken, billAddress, billIndex }) =>
       })
       .catch((e) => {
         console.error(e)
-        toastError(e?.data?.message || t('Something went wrong please try again'))
+        toastError(e?.data?.message || t('Error: Please try again.'))
         setPendingTrx(false)
       })
     dispatch(updateUserAllowance(chainId, billIndex, account))
