@@ -23,16 +23,5 @@
     { "source": "/add", "destination": "/add-liquidity", "permanent": true },
     { "source": "/orders", "destination": "/limit-orders", "permanent": true },
     { "source": "/treasurybills", "destination": "/treasury-bills", "permanent": true }
-  ],
-  "headers": [
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "query",
-          "key": "x-vercel-ip-city"
-        }
-      ]
-    }
   ]
 }
