@@ -1,7 +1,6 @@
 import { Flex, Text } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import IPData from 'ipdata'
 import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 
@@ -97,27 +96,16 @@ export default function Blocklist({ children }: { children: ReactNode }) {
   // Fetch country code to check if the region is allowed
   useEffect(() => {
     const fetchLocation = async () => {
-      const req = new XMLHttpRequest()
-      console.log(window.document.location)
-      req.open('GET', window.document.location.origin, false)
-      req.send(null)
-      const headers = req.getAllResponseHeaders().toLowerCase()
-      console.log(headers)
-      const resp = {}
-      // await axios.get(
-      //   'https://api.ipdata.co/?api-key=2ae8dd70c7ee22dc97e6aa1231760686d982567301ee5127ad050577',
-      // )
-      // console.log(await ipdata.lookup('', 'city'))
-      // console.log('here')
-      // const { country_code: countryCode, country_name: countryName } = resp?.data
-      // setGeoLocation({ countryCode, countryName })
-      // localStorage.setItem(
-      //   'geo',
-      //   JSON.stringify({
-      //     countryCode,
-      //     countryName,
-      //   }),
-      // )
+      const resp = await axios.get('https://geolocation-db.com/json/')
+      const { country_code: countryCode, country_name: countryName } = resp?.data
+      setGeoLocation({ countryCode, countryName })
+      localStorage.setItem(
+        'geo',
+        JSON.stringify({
+          countryCode,
+          countryName,
+        }),
+      )
     }
     !geoLocation.countryCode && fetchLocation()
   }, [geoLocation.countryCode])
