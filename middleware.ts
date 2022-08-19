@@ -1,6 +1,6 @@
 export const config = {
   // Only run the middleware on the home route
-  matcher: '*',
+  matcher: '/*',
 }
 
 export default function middleware(request) {
