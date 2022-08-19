@@ -2,22 +2,22 @@
   "headers": [
     {
       "source": "/(.*)",
-      "has": [
+      "headers": [
         {
-          "type": "query",
-          "key": "x-vercel-id"
+          "key": "x-vercel-id",
+          "value": "true"
         },
         {
-          "type": "query",
-          "key": "x-real-ip"
+          "key": "x-real-ip",
+          "value": "true"
         },
         {
-          "type": "query",
-          "key": "x-vercel-ip-country"
+          "key": "x-vercel-ip-country",
+          "value": "true"
         },
         {
-          "type": "query",
-          "key": "x-vercel-ip-city"
+          "key": "x-vercel-ip-city",
+          "value": "true"
         }
       ]
     }
