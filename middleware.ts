@@ -1,5 +1,6 @@
 export const config = {
-  matcher: '/',
+  // Only run the middleware on the home route
+  matcher: '*',
 }
 
 export default function middleware(request) {
@@ -10,13 +11,14 @@ export default function middleware(request) {
   let country = request.headers.get('x-vercel-ip-country') || ''
 
   country = country.toLowerCase()
-  if (country !== 'es') {
-    country = 'us'
+  if (country === 'us' || country === 'mx') {
+    url.pathname = `/${country}.html`
   }
 
   // Update url pathname
-  url.searchParams.set('country', country)
-  console.log(url)
-  console.log(country)
-  console.log(request)
+  url.pathname = `/${country}.html`
+
+  // Return a new redirect response
+
+  return Response.redirect(url)
 }
