@@ -1,5 +1,4 @@
 export const config = {
-  // Only run the middleware on the home route
   matcher: '/',
 }
 
@@ -16,11 +15,8 @@ export default function middleware(request) {
   }
 
   // Update url pathname
-  url.pathname = `/${country}.html`
-
-  // Return a new redirect response
-
+  url.searchParams.set('country', country)
+  console.log(url)
   console.log(country)
-  console.log('here')
-  return Response.redirect(url)
+  console.log(request)
 }
