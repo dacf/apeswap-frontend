@@ -24,16 +24,17 @@
     { "source": "/orders", "destination": "/limit-orders", "permanent": true },
     { "source": "/treasurybills", "destination": "/treasury-bills", "permanent": true }
   ],
-
-  "headers": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "query",
-          "key": "x-vercel-ip-city"
-        }
-      ]
-    }
-  ]
+  "static": {
+    "headers": [
+      {
+        "source": "/:path*",
+        "has": [
+          {
+            "type": "query",
+            "key": "x-vercel-ip-city"
+          }
+        ]
+      }
+    ]
+  }
 }
