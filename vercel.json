@@ -24,5 +24,8 @@
     { "source": "/orders", "destination": "/limit-orders", "permanent": true },
     { "source": "/treasurybills", "destination": "/treasury-bills", "permanent": true }
   ],
-  "headers": [{ "key": "x-vercel-ip-city" }, { "key": "x-real-ip" }, { "key": "x-vercel-ip-country" }]
+  "headers": {
+    "source": "/(.*)",
+    "headers": [{ "key": "x-vercel-ip-city" }, { "key": "x-real-ip" }, { "key": "x-vercel-ip-country" }]
+  }
 }
