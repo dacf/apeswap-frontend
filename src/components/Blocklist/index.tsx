@@ -83,15 +83,12 @@ const BLOCKED_ADDRESSES: string[] = [
 
 export default function Blocklist({ children }: { children: ReactNode }) {
   const { t } = useTranslation()
-  const ipdata = new IPData('2ae8dd70c7ee22dc97e6aa1231760686d982567301ee5127ad050577')
   const localGeo: { countryCode: string; countryName: string } = JSON.parse(localStorage.getItem('geo'))
   const [geoLocation, setGeoLocation] = useState<{ countryCode: string; countryName: string }>({
     countryCode: localGeo?.countryCode,
     countryName: localGeo?.countryName,
   })
   const { account } = useActiveWeb3React()
-
-  console.log(window)
 
   // Fetch country code to check if the region is allowed
   useEffect(() => {
