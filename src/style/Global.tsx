@@ -6,6 +6,13 @@ declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
   export interface DefaultTheme extends ApeSwapTheme {}
 }
+let isIframe = false
+
+try {
+  isIframe = window.self !== window.top
+} catch (e) {
+  console.error(e)
+}
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -13,6 +20,8 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     background-color: ${({ theme }) => theme.colors.background};
+    width: ${isIframe ? 'fit-content' : 'auto'};
+    height: ${isIframe ? 'fit-content' : 'auto'};
     img {
       height: auto;
       max-width: 100%;

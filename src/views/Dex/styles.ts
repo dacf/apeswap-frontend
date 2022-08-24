@@ -1,5 +1,13 @@
 import { ThemeUIStyleObject } from 'theme-ui'
 
+let isIframe = false
+
+try {
+  isIframe = window.self !== window.top
+} catch (e) {
+  console.error(e)
+}
+
 export const buttonHover = {
   '&:not([disabled])': { borderColor: '#FFDA00', background: '#FFDA00' },
   '&:disabled': {},
@@ -30,11 +38,11 @@ export const dexStyles: Record<string, ThemeUIStyleObject> = {
   pageContainer: {
     justifyContent: 'center',
     height: 'fit-content',
-    minHeight: '100vh',
-    padding: '75px 0px',
+    minHeight: isIframe ? 'auto' : '100vh',
+    padding: isIframe ? '0px' : '75px 0px',
   },
   dexContainer: {
-    width: 'auto',
+    width: 'fit-content',
     maxWidth: '420px',
     height: 'fit-content',
     background: 'white2',
