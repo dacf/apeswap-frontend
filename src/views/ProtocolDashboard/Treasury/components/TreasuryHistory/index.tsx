@@ -5,9 +5,9 @@ import { Line } from 'react-chartjs-2'
 import { styles } from './styles'
 import useTheme from 'hooks/useTheme'
 import CountUp from 'react-countup'
-import placeholderTreasuryGraphData from './placeholderTreasuryGraphData.json'
+// import placeholderTreasuryGraphData from './placeholderTreasuryGraphData.json'
 import { useTranslation } from 'contexts/Localization'
-// import { useFetchTreasuryHistory } from 'state/protocolDashboard/hooks'
+import { useFetchTreasuryHistory } from 'state/protocolDashboard/hooks'
 import { TreasuryHistoryInterface } from 'state/protocolDashboard/types'
 
 const setData = (treasuryHistory: TreasuryHistoryInterface[]) => {
@@ -35,8 +35,7 @@ const setData = (treasuryHistory: TreasuryHistoryInterface[]) => {
 }
 
 const TreasuryHistory: React.FC = () => {
-  // Placeholder until data gets sorted out
-  const treasuryHistory = placeholderTreasuryGraphData // useFetchTreasuryHistory()
+  const treasuryHistory = useFetchTreasuryHistory()
   const { theme } = useTheme()
   const data = useMemo(() => setData(treasuryHistory), [treasuryHistory])
   const totalPol = treasuryHistory?.[treasuryHistory?.length - 1]?.polValue
