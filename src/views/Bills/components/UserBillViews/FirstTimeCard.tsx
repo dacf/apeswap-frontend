@@ -18,7 +18,7 @@ const FirstTimeCard: React.FC = () => {
           height="100%"
           width="100%"
           playsInline
-          webkit-playsinline
+          webkit-playsinline={true}
         />
       </BillGifContainer>
       <DescriptionContainer>
