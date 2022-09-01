@@ -63,7 +63,16 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill, billId })
           ) : (
             <Flex alignItems="center" justifyContent="center">
               <BillsImage>
-                <ReactPlayer playing muted loop url="videos/bills-video.mp4" height="100%" width="100%" playsInline />
+                <ReactPlayer
+                  playing
+                  muted
+                  loop
+                  url="videos/bills-video.mp4"
+                  height="100%"
+                  width="100%"
+                  playsInline
+                  webkit-playsinline
+                />
               </BillsImage>
             </Flex>
           )}
