@@ -14,7 +14,7 @@ export const styles: Record<string, ThemeUIStyleObject> = {
     flexDirection: 'column',
     top: '20%',
     left: '5%',
-    width: '45%',
+    width: '75%',
   },
   // Style for the banner text
   titleText: {
@@ -28,7 +28,7 @@ export const styles: Record<string, ThemeUIStyleObject> = {
   },
   // Style for learn more text
   learnText: {
-    mt: '5%',
+    mt: '1%',
     fontSize: 'calc(6px + 1.5vw)',
     textTransform: 'capitalize',
     padding: 0,
