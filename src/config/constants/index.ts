@@ -1,4 +1,4 @@
-import { JSBI, Percent, Token, ChainId, WETH } from '@apeswapfinance/sdk'
+import { JSBI, Percent, Token, ChainId, WETH } from '@ape.swap/sdk'
 
 export enum RouterTypes {
   APE = 'APE',
@@ -156,3 +156,7 @@ export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN: Percent = new Percent(JSBI.Bi
 export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(1500), BIPS_BASE) // 15%
 
 export { default as ifosConfig } from './ifo'
+
+// DEFAULT MODAL CONSTANTS
+export const SHOW_DEFAULT_MODAL_KEY = 'SHOW_DEFAULT_MODAL'
+export const SET_DEFAULT_MODAL_KEY = 'SET_DEFAULT_MODAL'

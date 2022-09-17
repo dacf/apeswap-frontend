@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Token, TokenAmount } from '@apeswapfinance/sdk'
+import { Token, TokenAmount } from '@ape.swap/sdk'
 import { useSingleCallResult } from 'lib/hooks/multicall'
 import { useTokenContract } from './useContract'
 

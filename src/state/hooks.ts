@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react'
-import { ChainId } from '@apeswapfinance/sdk'
+import { useEffect, useMemo, useState } from 'react'
+import { ChainId } from '@ape.swap/sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Toast, toastTypes } from '@apeswapfinance/uikit'
 import { useSelector } from 'react-redux'
@@ -42,6 +42,9 @@ import { setVaultsLoad } from './vaults'
 import { fetchIazo, fetchIazos, fetchSettings } from './iazos'
 import { fetchUserNetwork } from './network'
 import { fetchAllNfas } from './nfas'
+import { useFetchTokenPrices } from './tokenPrices/hooks'
+import { useBabContract, useRaffleContract } from 'hooks/useContract'
+import { useWeb3React } from '@web3-react/core'
 
 // Network
 
@@ -261,6 +264,7 @@ export const useAuctions = () => {
 }
 
 export const useFetchIazoSettings = () => {
+  useFetchTokenPrices()
   const dispatch = useAppDispatch()
   const chainId = useNetworkChainId()
   const { slowRefresh } = useRefresh()
@@ -270,6 +274,7 @@ export const useFetchIazoSettings = () => {
 }
 
 export const useFetchIazos = () => {
+  useFetchTokenPrices()
   const dispatch = useAppDispatch()
   const chainId = useNetworkChainId()
   const { slowRefresh } = useRefresh()
@@ -279,6 +284,7 @@ export const useFetchIazos = () => {
 }
 
 export const useFetchIazo = (address: string) => {
+  useFetchTokenPrices()
   const dispatch = useAppDispatch()
   const chainId = useNetworkChainId()
   const { fastRefresh } = useRefresh()
@@ -310,6 +316,68 @@ export const useFetchNfas = (nafFlag = true) => {
       dispatch(fetchAllNfas())
     }
   }, [dispatch, nafFlag, chainId])
+}
+
+export const useFetchBabToken = () => {
+  const [loading, setIsLoading] = useState(true)
+  const [tokenId, setTokenId] = useState(undefined)
+  const [holdsBab, setHoldsBab] = useState(false)
+
+  const { account } = useWeb3React()
+  const babContract = useBabContract()
+
+  useEffect(() => {
+    setIsLoading(true)
+    setHoldsBab(false)
+    const fetchBabId = async () => {
+      try {
+        const balance = await babContract.balanceOf(account)
+        if (balance > 0) {
+          setHoldsBab(true)
+          const tokenId = await babContract.tokenIdOf(account)
+          setTokenId(tokenId)
+        }
+      } catch (e) {
+        console.warn('Something went wrong fetching BAB balance')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    if (account) fetchBabId()
+    else setIsLoading(false)
+  }, [babContract, account])
+  return { tokenId, loading, holdsBab }
+}
+
+export const useClaimRaffle = () => {
+  const [claiming, setIsClaiming] = useState(false)
+  const [hasClaimed, setHasClaimed] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { account } = useWeb3React()
+
+  const raffleContract = useRaffleContract()
+  const claim = async (tokenId: number) => {
+    setIsClaiming(true)
+    await raffleContract.mint(tokenId)
+    setIsClaiming(false)
+    setHasClaimed(true)
+  }
+
+  useEffect(() => {
+    const fetchClaimed = async () => {
+      try {
+        setIsLoading(true)
+        const balance = await raffleContract.balanceOf(account)
+        setHasClaimed(balance > 0)
+      } catch {
+        console.warn('Something went wrong fetching Raffle balance')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    if (account) fetchClaimed()
+  }, [account, raffleContract])
+  return { claiming, claim, hasClaimed, isLoading }
 }
 
 export const useNfas = () => {

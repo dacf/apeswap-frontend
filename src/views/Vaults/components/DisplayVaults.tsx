@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import { Text, useModal } from '@ape.swap/uikit'
+import { Svg, Text, useModal } from '@ape.swap/uikit'
 import BigNumber from 'bignumber.js'
 import ListView from 'components/ListView'
 import { ExtendedListViewProps } from 'components/ListView/types'
@@ -15,12 +15,13 @@ import { useTranslation } from 'contexts/Localization'
 import { Vault } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { NextArrow } from 'views/Farms/components/styles'
-import { LiquidityModal } from 'components/LiquidityWidget'
 import { Container, StyledButton, ActionContainer, StyledTag } from './styles'
 import { vaultTokenDisplay } from '../helpers'
 import Actions from './Actions'
 import HarvestAction from './Actions/HarvestAction'
 import InfoContent from './InfoContent'
+import DualLiquidityModal from 'components/DualAddLiquidity/DualLiquidityModal'
+import { selectOutputCurrency } from '../../../state/zap/actions'
 
 const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults, openId }) => {
   const { chainId } = useActiveWeb3React()
@@ -30,18 +31,9 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
   const isActive = !pathname.includes('history')
   const { t } = useTranslation()
 
-  // TODO: clean up this code
-  // Hack to get the close modal function from the provider
-  // Need to export ModalContext from uikit to clean up the code
-  const [, closeModal] = useModal(<></>)
-  const [onPresentAddLiquidityWidgetModal] = useModal(
-    <LiquidityModal handleClose={closeModal} />,
-    true,
-    true,
-    'liquidityWidgetModal',
-  )
+  const [onPresentAddLiquidityWidgetModal] = useModal(<DualLiquidityModal />, true, true, 'dualLiquidityModal')
 
-  const showLiquidity = (token, quoteToken) => {
+  const showLiquidity = (token, quoteToken, vault) => {
     dispatch(
       selectCurrency({
         field: Field.INPUT,
@@ -52,6 +44,12 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
       selectCurrency({
         field: Field.OUTPUT,
         currencyId: quoteToken,
+      }),
+    )
+    dispatch(
+      selectOutputCurrency({
+        currency1: vault.token.address[chainId],
+        currency2: vault.quoteToken.address[chainId],
       }),
     )
     onPresentAddLiquidityWidgetModal()
@@ -159,10 +157,11 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
                   showLiquidity(
                     vault.token.symbol === 'BNB' ? 'ETH' : vault.token.address[chainId],
                     vault.quoteToken.symbol === 'BNB' ? 'ETH' : vault.quoteToken.address[chainId],
+                    vault,
                   )
                 }
               >
-                GET LP
+                {t('GET LP')} <Svg icon="ZapIcon" color="primaryBright" />
               </StyledButton>
             ) : (
               <a href={liquidityUrl} target="_blank" rel="noopener noreferrer">

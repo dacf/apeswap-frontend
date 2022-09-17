@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import sousChef from 'config/abi/sousChef.json'
 import { useWeb3React } from '@web3-react/core'
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import { useDispatch } from 'react-redux'
 import { soushHarvest, harvest, nfaStakeHarvest, miniChefHarvest, jungleHarvest } from 'utils/callHelpers'
 import { usePools } from 'state/pools/hooks'

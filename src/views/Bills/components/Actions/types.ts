@@ -4,6 +4,7 @@ export interface BuyProps {
   userLpValue: string
   token: Token
   quoteToken: Token
+  lpToken: Token
   billAddress: string
   disabled?: boolean
   onValueChange: (val: string) => void

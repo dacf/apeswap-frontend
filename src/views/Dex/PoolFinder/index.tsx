@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useCallback, useEffect, useState } from 'react'
-import { Currency, ETHER, JSBI, TokenAmount } from '@apeswapfinance/sdk'
+import { Currency, ETHER, JSBI, TokenAmount } from '@ape.swap/sdk'
 import { Text, useModal, Flex, Svg } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { AutoColumn, ColumnCenter } from '../../../components/layout/Column'

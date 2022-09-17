@@ -1,6 +1,6 @@
-import { SmartRouter } from '@apeswapfinance/sdk'
+import { SmartRouter } from '@ape.swap/sdk'
 import { RouterTypes } from 'config/constants'
-import { WALLCHAIN_PARAMS } from 'config/constants/chains'
+import { BONUS_CUTOFF_AMOUNT, WALLCHAIN_PARAMS } from 'config/constants/chains'
 import { Contract } from 'ethers'
 import { SwapDelay, RouterTypeParams, DataResponse } from 'state/swap/actions'
 
@@ -9,9 +9,13 @@ const wallchainResponseIsValid = (
   value: string,
   account: string,
   contractAddress: string,
+  chainId: number,
 ) => {
   if (!dataResonse.pathFound) {
     // Opportunity was not found -> response should be ignored -> valid.
+    return false
+  }
+  if (BONUS_CUTOFF_AMOUNT[chainId] > dataResonse?.summary.searchSummary.expectedUsdProfit * 0.3) {
     return false
   }
   return (
@@ -77,7 +81,7 @@ export default function callWallchainAPI(
     .then((responseJson) => {
       if (responseJson) {
         const dataResonse: DataResponse = responseJson
-        if (wallchainResponseIsValid(dataResonse, value, activeAccount, contract.address)) {
+        if (wallchainResponseIsValid(dataResonse, value, activeAccount, contract.address, chainId)) {
           onBestRoute({ routerType: RouterTypes.BONUS, smartRouter, bonusRouter: dataResonse })
           onSetSwapDelay(SwapDelay.SWAP_REFRESH)
         } else {

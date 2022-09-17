@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import { Flex, Text } from '@ape.swap/uikit'
-import { Currency, Price } from '@apeswapfinance/sdk'
+import { Currency, Price } from '@ape.swap/sdk'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React, { useState } from 'react'

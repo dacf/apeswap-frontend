@@ -1,4 +1,4 @@
-import { SmartRouter } from '@apeswapfinance/sdk'
+import { SmartRouter } from '@ape.swap/sdk'
 import { RouterTypes } from 'config/constants'
 import { createStore, Store } from 'redux'
 import { Field, selectCurrency, SwapDelay } from './actions'

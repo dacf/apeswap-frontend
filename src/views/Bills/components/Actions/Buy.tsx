@@ -1,6 +1,6 @@
+/** @jsxImportSource theme-ui */
 import React, { useState } from 'react'
-import { AutoRenewIcon, Flex, Text, useModal } from '@apeswapfinance/uikit'
-import { LiquidityModal } from 'components/LiquidityWidget'
+import { AutoRenewIcon, Flex, Text } from '@apeswapfinance/uikit'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useBuyBill from 'views/Bills/hooks/useBuyBill'
@@ -13,11 +13,15 @@ import { Field, selectCurrency } from 'state/swap/actions'
 import { useTranslation } from 'contexts/Localization'
 import { BuyProps } from './types'
 import { BuyButton, GetLPButton, MaxButton, StyledInput } from './styles'
+import DualLiquidityModal from 'components/DualAddLiquidity/DualLiquidityModal'
+import { Svg, useModal, Text as StyledText } from '@ape.swap/uikit'
+import { selectOutputCurrency } from 'state/zap/actions'
 
 const Buy: React.FC<BuyProps> = ({
   userLpValue,
   token,
   quoteToken,
+  lpToken,
   billAddress,
   disabled,
   onValueChange,
@@ -68,16 +72,7 @@ const Buy: React.FC<BuyProps> = ({
     setPendingTrx(false)
   }
 
-  // TODO: clean up this code
-  // Hack to get the close modal function from the provider
-  // Need to export ModalContext from uikit to clean up the code
-  const [, closeModal] = useModal(<></>)
-  const [onPresentAddLiquidityWidgetModal] = useModal(
-    <LiquidityModal handleClose={closeModal} />,
-    true,
-    true,
-    'liquidityWidgetModal',
-  )
+  const [onPresentAddLiquidityModal] = useModal(<DualLiquidityModal />, true, true, 'liquidityWidgetModal')
 
   const showLiquidity = () => {
     dispatch(
@@ -92,13 +87,20 @@ const Buy: React.FC<BuyProps> = ({
         currencyId: quoteToken.symbol === 'BNB' ? 'ETH' : quoteToken.address[chainId],
       }),
     )
-    onPresentAddLiquidityWidgetModal()
+    dispatch(
+      selectOutputCurrency({
+        currency1: token.address[chainId],
+        currency2: quoteToken.address[chainId],
+      }),
+    )
+    onPresentAddLiquidityModal()
   }
 
   return (
     <>
       <GetLPButton variant="secondary" onClick={showLiquidity}>
-        {t('Get LP')}
+        <StyledText sx={{ marginRight: '5px' }}>{t('Get LP')}</StyledText>
+        <Svg icon="ZapIcon" color="yellow" />
       </GetLPButton>
       <Flex style={{ position: 'relative' }}>
         <Text fontSize="12px" style={{ position: 'absolute', top: 14, left: 10, zIndex: 1 }} bold>

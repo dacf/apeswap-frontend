@@ -8,7 +8,9 @@ import {
   BONUS_ROUTER_ADDRESS,
   SMART_ROUTER_ADDRESS,
   SmartRouter,
-} from '@apeswapfinance/sdk'
+  ZAP_ADDRESS,
+  Token,
+} from '@ape.swap/sdk'
 import { AUTONOMY_MIDROUTER_ADDRESS } from '@autonomylabs/limit-stop-orders'
 import { useCallback, useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -21,6 +23,7 @@ import { calculateGasMargin } from '../utils'
 import { useTokenContract } from './useContract'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { parseAddress, parseSmartAddress } from './useAddress'
+import { MergedZap } from 'state/zap/actions'
 
 export enum ApprovalState {
   UNKNOWN,
@@ -128,7 +131,6 @@ export function useApproveCallbackFromTrade(
     () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
     [trade, allowedSlippage],
   )
-
   return useApproveCallback(
     amountToApprove,
     useAutonomy
@@ -137,4 +139,15 @@ export function useApproveCallbackFromTrade(
       ? parseAddress(BONUS_ROUTER_ADDRESS, chainId)
       : parseSmartAddress(SMART_ROUTER_ADDRESS, chainId, smartRouter || SmartRouter.APE),
   )
+}
+
+// wraps useApproveCallback in the context of a swap
+export function useApproveCallbackFromZap(zap?: MergedZap) {
+  const { chainId } = useActiveWeb3React()
+
+  const inAmount = zap.currencyIn.currency
+    ? new TokenAmount(zap.currencyIn.currency as Token, zap.currencyIn?.inputAmount)
+    : undefined
+
+  return useApproveCallback(inAmount as CurrencyAmount, parseAddress(ZAP_ADDRESS, chainId))
 }

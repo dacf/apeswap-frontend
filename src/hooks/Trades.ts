@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { isTradeBetter } from 'utils/trades'
-import { Currency, CurrencyAmount, Token, Trade, Pair, SmartRouter } from '@apeswapfinance/sdk'
+import { Currency, CurrencyAmount, Token, Trade, Pair, SmartRouter } from '@ape.swap/sdk'
 import flatMap from 'lodash/flatMap'
 import { useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -135,7 +135,7 @@ export function useTradeExactIn(
               maxHops: 1,
               maxNumResults: 1,
             })[0] ?? null
-          if (isTradeBetter(bestTradeSoFar, currentSingleHopTrade)) {
+          if (isTradeBetter(bestTradeSoFar, currentSingleHopTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
             // if current trade is best yet, save it
             bestTradeSoFar = currentSingleHopTrade
           }
@@ -215,7 +215,7 @@ export function useTradeExactOut(
               maxHops: 1,
               maxNumResults: 1,
             })[0] ?? null
-          if (isTradeBetter(bestTradeSoFar, currentSingleHopTrade)) {
+          if (isTradeBetter(bestTradeSoFar, currentSingleHopTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
             // if current trade is best yet, save it
             bestTradeSoFar = currentSingleHopTrade
           }

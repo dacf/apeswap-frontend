@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useMemo } from 'react'
-import { Trade, TradeType } from '@apeswapfinance/sdk'
+import { Trade, TradeType } from '@ape.swap/sdk'
 import { Text, ErrorIcon, Button, Flex, Svg } from '@ape.swap/uikit'
 import { computeLegacyPriceBreakdown, warningSeverity } from 'utils/prices'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

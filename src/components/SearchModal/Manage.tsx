@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useState } from 'react'
-import { Token } from '@apeswapfinance/sdk'
+import { Token } from '@ape.swap/sdk'
 import { Flex, Svg, Text, Toggle } from '@ape.swap/uikit'
 import { TokenList } from '@uniswap/token-lists'
 import { textUnderlineHover } from 'views/Dex/styles'

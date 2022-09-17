@@ -1,13 +1,14 @@
 /** @jsxImportSource theme-ui */
 import React, { useContext, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
-import { Button, Heading, IconButton, Modal, Text } from '@ape.swap/uikit'
+import { Button, Checkbox, Heading, IconButton, Modal, Text } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { ThemeContext } from 'contexts/ThemeContext'
 import { Bubble, showApe, styles, subtitle } from './styles'
 import { QuestSlides } from './slides'
+import { SwiperProps } from './types'
 
-const CardView: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
+const CardView: React.FC<SwiperProps> = ({ onDismiss, setDefaultNoShow, hideDefault, alreadySet }) => {
   const { t } = useTranslation()
   const { isDark } = useContext(ThemeContext)
   const [activeSlide, setActiveSlide] = useState(0)
@@ -65,6 +66,17 @@ const CardView: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
             <Button fullWidth onClick={handleNext} sx={styles.button}>
               {activeSlide + 1 === QuestSlides.length ? t("I'm ready") : t('Next')}
             </Button>
+          </Flex>
+          <Flex sx={styles.defaultNoShow}>
+            <Flex sx={styles.checkboxCon}>
+              <Checkbox
+                id="checkbox"
+                checked={alreadySet || hideDefault}
+                sx={{ backgroundColor: 'white2' }}
+                onChange={setDefaultNoShow}
+              />
+            </Flex>
+            <Text sx={styles.checkboxText}>{t('Don’t show this again')}</Text>
           </Flex>
         </Flex>
       </Flex>

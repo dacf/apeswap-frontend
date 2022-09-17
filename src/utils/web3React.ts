@@ -8,7 +8,7 @@ import getRpcUrl from 'utils/getRpcUrl'
 import { Web3Provider } from '@ethersproject/providers'
 import { UAuthConnector } from '@uauth/web3-react'
 import UAuth from '@uauth/js'
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 
 const POLLING_INTERVAL = 15000
 

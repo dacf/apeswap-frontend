@@ -79,7 +79,7 @@ const News: React.FC = () => {
               <Swiper
                 id="newsSwiper"
                 autoplay={{
-                  delay: SLIDE_DELAY,
+                  delay: filterNews?.length === 5 ? 10000000 : SLIDE_DELAY,
                   disableOnInteraction: false,
                 }}
                 loop

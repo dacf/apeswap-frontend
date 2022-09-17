@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useRef, RefObject, useCallback, useState, useMemo } from 'react'
-import { Token } from '@apeswapfinance/sdk'
+import { Token } from '@ape.swap/sdk'
 import { Text, Button, CloseIcon, LinkExternal, Link, Flex, Input } from '@ape.swap/uikit'
 import { RowBetween, RowFixed } from 'components/layout/Row'
 import { useToken } from 'hooks/Tokens'

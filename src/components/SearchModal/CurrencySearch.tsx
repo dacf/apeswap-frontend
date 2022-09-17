@@ -1,7 +1,7 @@
 /** @jsxImportSource theme-ui */
 /* eslint-disable no-restricted-syntax */
 import React, { KeyboardEvent, useCallback, useMemo, useRef, useState } from 'react'
-import { Currency, ETHER, Token } from '@apeswapfinance/sdk'
+import { Currency, ETHER, Token } from '@ape.swap/sdk'
 import { Text, Flex, Input } from '@ape.swap/uikit'
 import { FixedSizeList } from 'react-window'
 import styled from '@emotion/styled'
@@ -17,6 +17,7 @@ import CurrencyList from './CurrencyList'
 import { createFilterToken, useSortedTokensByQuery } from './filtering'
 import useTokenComparator from './sorting'
 import ImportRow from './ImportRow'
+import { useZapInputList } from '../../state/zap/hooks'
 
 interface CurrencySearchProps {
   selectedCurrency?: Currency | null
@@ -25,6 +26,7 @@ interface CurrencySearchProps {
   showCommonBases?: boolean
   showImportView: () => void
   setImportToken: (token: Token) => void
+  isZapInput?: boolean
 }
 
 function useSearchInactiveTokenLists(search: string | undefined, minResults = 10): WrappedTokenInfo[] {
@@ -81,6 +83,7 @@ function CurrencySearch({
   showCommonBases,
   showImportView,
   setImportToken,
+  isZapInput,
 }: CurrencySearchProps) {
   const { chainId } = useActiveWeb3React()
 
@@ -94,6 +97,24 @@ function CurrencySearch({
 
   const allTokens = useAllTokens()
 
+  const rawZapInputList = useZapInputList()
+
+  const zapInputList = useMemo(() => {
+    const addresses = []
+    if (rawZapInputList) {
+      const listByChain = rawZapInputList[chainId]
+      for (const res of Object.values(listByChain)) {
+        if (res.address[chainId]) {
+          addresses.push(res.address[chainId].toLowerCase())
+        }
+      }
+    }
+    const filteredZapInputTokens = Object.entries(allTokens).filter((token) =>
+      addresses.includes(token[0].toLowerCase()),
+    )
+    return Object.fromEntries(filteredZapInputTokens)
+  }, [allTokens, chainId, rawZapInputList])
+
   // if they input an address, use it
   const searchToken = useToken(debouncedQuery)
   const searchTokenIsAdded = useIsUserAddedToken(searchToken)
@@ -101,13 +122,14 @@ function CurrencySearch({
 
   const showETH: boolean = useMemo(() => {
     const s = debouncedQuery.toLowerCase().trim()
-    return s === '' || s === 'e' || s === 'et' || s === 'eth'
+    return s.includes('') || s.includes('e') || s.includes('et') || s.includes('eth')
   }, [debouncedQuery])
 
   const filteredTokens: Token[] = useMemo(() => {
     const filterToken = createFilterToken(debouncedQuery)
+    if (isZapInput) return Object.values(zapInputList).filter(filterToken)
     return Object.values(allTokens).filter(filterToken)
-  }, [allTokens, debouncedQuery])
+  }, [allTokens, debouncedQuery, isZapInput, zapInputList])
 
   const filteredQueryTokens = useSortedTokensByQuery(filteredTokens, debouncedQuery)
 
@@ -163,7 +185,7 @@ function CurrencySearch({
       )
     }
 
-    return filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
+    return filteredSortedTokens?.length > 0 || (filteredInactiveTokens?.length > 0 && !isZapInput) ? (
       <CurrencyList
         height={335}
         showETH={showETH}
@@ -178,6 +200,7 @@ function CurrencySearch({
         fixedListRef={fixedList}
         showImportView={showImportView}
         setImportToken={setImportToken}
+        isZapInput={isZapInput}
       />
     ) : (
       <Column style={{ padding: '20px', height: '100%' }}>
@@ -199,6 +222,7 @@ function CurrencySearch({
     showETH,
     showImportView,
     t,
+    isZapInput,
   ])
 
   return (

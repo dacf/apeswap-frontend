@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Token } from '@apeswapfinance/sdk'
+import { Token } from '@ape.swap/sdk'
 import { TokenInfo } from '@uniswap/token-lists'
 
 import { isAddress } from '../../utils'

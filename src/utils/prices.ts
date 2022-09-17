@@ -1,4 +1,4 @@
-import { CurrencyAmount, Fraction, JSBI, Percent, Price, SmartRouter, TokenAmount, Trade } from '@apeswapfinance/sdk'
+import { CurrencyAmount, Fraction, JSBI, Percent, Price, SmartRouter, TokenAmount, Trade, Zap } from '@ape.swap/sdk'
 import { SMART_LP_FEES } from 'config/constants/chains'
 import {
   BLOCKED_PRICE_IMPACT_NON_EXPERT,
@@ -21,7 +21,7 @@ const getInputFractionAfterFee = (chainId: number, smartRouter: SmartRouter) => 
 export function computeTradePriceBreakdown(
   chainId?: number,
   smartRouter?: SmartRouter,
-  trade?: Trade | null,
+  trade?: Trade | Zap | null,
 ): {
   priceImpactWithoutFee: Percent | undefined
   realizedLPFee: CurrencyAmount | undefined | null

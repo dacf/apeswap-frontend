@@ -9,7 +9,7 @@ import {
   Trade,
   TradeType,
   SMART_ROUTER_ADDRESS,
-} from '@apeswapfinance/sdk'
+} from '@ape.swap/sdk'
 import { useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import truncateHash from 'utils/truncateHash'
@@ -235,8 +235,8 @@ export function useSwapCallback(
           .then((response: any) => {
             const inputSymbol = trade.inputAmount.currency.getSymbol(chainId)
             const outputSymbol = trade.outputAmount.currency.getSymbol(chainId)
-            const inputAmount = trade.inputAmount.toSignificant(3)
-            const outputAmount = trade.outputAmount.toSignificant(3)
+            const inputAmount = trade.inputAmount.toSignificant(5)
+            const outputAmount = trade.outputAmount.toSignificant(5)
 
             const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
             const withRecipient =

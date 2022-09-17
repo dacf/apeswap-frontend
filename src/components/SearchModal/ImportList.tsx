@@ -64,7 +64,7 @@ function ImportList({ listURL, list, onImport }: ImportProps) {
 
   return (
     <Flex sx={{ flexDirection: 'column', padding: '10px' }}>
-      <Flex sx={{ flexDirection: 'row' }}>
+      <Flex sx={{ flexDirection: 'row', justifyContent: 'center' }}>
         {(list.logoURI || extendedLogo) && (
           <ListLogo
             logoURI={extendedLogo || list.logoURI}
@@ -89,7 +89,7 @@ function ImportList({ listURL, list, onImport }: ImportProps) {
           )}
         </Flex>
       </Flex>
-      <Flex sx={{ flexDirection: 'column', margin: '10px 0px' }}>
+      <Flex sx={{ flexDirection: 'column', margin: '10px 0px', textAlign: 'center' }}>
         <Text size="20px" weight={700} textAlign="center" color="error" mb="16px">
           {t('Trade at your own risk!')}
         </Text>
@@ -135,8 +135,8 @@ function ImportList({ listURL, list, onImport }: ImportProps) {
             </Text>
           </>
         )}
-        <Flex sx={{ alignItems: 'center', margin: '15px 0px 5px 0px' }}>
-          <Flex sx={{ alignItems: 'center', margin: '15px 0px 5px 0px' }}>
+        <Flex sx={{ alignItems: 'center', margin: '15px 0px 5px 0px', textAlign: 'center' }}>
+          <Flex sx={{ alignItems: 'center', margin: '15px 0px 5px 0px', width: '100%', justifyContent: 'center' }}>
             <Checkbox
               name="confirmed"
               type="checkbox"

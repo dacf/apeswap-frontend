@@ -10,14 +10,15 @@ const MyPositions: React.FC = () => {
   return (
     <Flex
       sx={{
-        margin: '0px 0px 40px 0px',
+        marginTop: '10px',
+        marginBottom: '15px',
         width: 'fit-content',
         alignItems: 'center',
         position: 'relative',
         ...textUnderlineHover,
       }}
       as={Link}
-      to="/pool"
+      to="/liquidity"
     >
       <Svg icon="caret" direction="left" width="7px" />
       <Text size="12px" ml="5px">

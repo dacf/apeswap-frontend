@@ -7,7 +7,7 @@ import { useCurrency } from 'hooks/Tokens'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Modal, Button, Text, Tab, Tabs } from '@ape.swap/uikit'
 import { Box, Flex, Heading } from 'theme-ui'
-import { Farm } from 'state/types'
+import { DualFarm, Farm } from 'state/types'
 import useIsMobile from 'hooks/useIsMobile'
 import { useTranslation } from 'contexts/Localization'
 import maxAmountSpend from 'utils/maxAmountSpend'
@@ -33,6 +33,7 @@ interface RoiCalculatorModalProps {
   farm?: Farm
   liquidityUrl?: string
   lpPrice?: number
+  dualFarm?: DualFarm
 }
 
 const modalStyle = {
@@ -156,7 +157,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = (props) => {
                 key={`${amount}`}
                 size="sm"
                 onClick={() => onDollarAmountChange(amount)}
-                style={{ lineHeight: '0.7' }}
+                style={{ lineHeight: '0.7', minWidth: '72px' }}
               >
                 ${amount}
               </Button>

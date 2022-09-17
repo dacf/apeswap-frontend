@@ -17,6 +17,7 @@ const styles = {
     fontSize: '14px',
     lineHeight: 0,
     width: '62px',
+    minWidth: '62px',
     height: '30px',
   },
   container: {

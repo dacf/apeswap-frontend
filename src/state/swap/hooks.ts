@@ -1,15 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import {
-  Currency,
-  CurrencyAmount,
-  ETHER,
-  JSBI,
-  Token,
-  TokenAmount,
-  Trade,
-  ChainId,
-  SmartRouter,
-} from '@apeswapfinance/sdk'
+import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade, ChainId, SmartRouter } from '@ape.swap/sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'

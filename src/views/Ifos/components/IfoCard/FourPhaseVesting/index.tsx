@@ -12,14 +12,13 @@ import { usePriceBnbBusd, usePriceGnanaBusd } from 'state/tokenPrices/hooks'
 import { useSafeIfoContract } from 'hooks/useContract'
 import getTimePeriods from 'utils/getTimePeriods'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { Toggle } from '@apeswapfinance/uikit'
 import { useTranslation } from 'contexts/Localization'
 import IfoCardHeader from '../CardHeader/IfoCardHeader'
 import IfoCardProgress from '../CardProgress/IfoCardProgress'
 import IfoCardDetails from '../CardDetails/IfoCardDetails'
 import IfoCardContribute from './IfoCardContribute'
 import useUserInfo from './useUserInfo'
-import { Container, Wrapper } from './styles'
+import { Container, Wrapper, StyledToggle } from './styles'
 
 const StyledUnlockButton = () => {
   return (
@@ -273,7 +272,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo, gnana }) => {
       )}
       {getBalanceNumber(userInfo.amount, 18) !== 0 && isFinished && (
         <Wrapper>
-          <Toggle
+          <StyledToggle
             size="md"
             labels={[t('MY STATS'), t('OVERALL STATS')]}
             onClick={() => {

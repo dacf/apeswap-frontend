@@ -10,7 +10,7 @@ import { useToast } from 'state/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { replaceSwapState, SwapDelay } from 'state/swap/actions'
 import { RouterTypes } from 'config/constants'
-import { SmartRouter } from '@apeswapfinance/sdk'
+import { SmartRouter } from '@ape.swap/sdk'
 
 const useSwitchNetwork = () => {
   const { chainId, account, library, connector } = useWeb3React()

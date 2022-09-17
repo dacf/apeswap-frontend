@@ -1,5 +1,5 @@
 import { MenuEntry } from '@ape.swap/uikit'
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import { ContextApi } from 'contexts/Localization/types'
 import { NETWORK_INFO_LINK } from 'config/constants/chains'
 
@@ -16,18 +16,18 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
       },
       {
         label: t('Orders'),
-        href: '/orders',
+        href: '/limit-orders',
         isNew: false,
       },
       {
         label: t('Liquidity'),
-        href: '/add',
+        href: '/zap',
         isNew: false,
       },
       {
         label: t('Pro Trading'),
         href: 'https://pro.apeswap.finance',
-        isNew: true,
+        isNew: false,
       },
       {
         label: t('GNANA'),
@@ -48,12 +48,12 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
       },
       {
         label: t('BANANA Maximizers'),
-        href: '/vaults',
+        href: '/maximizers',
         isNew: false,
       },
       {
         label: t('BANANA Farms'),
-        href: '/farms',
+        href: '/banana-farms',
         isNew: false,
       },
       {
@@ -76,11 +76,6 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
       {
         label: t('Official IAO'),
         href: '/iao',
-        isNew: false,
-      },
-      {
-        label: t('Self-Serve IAO'),
-        href: '/ss-iao',
         isNew: false,
       },
     ],
@@ -128,10 +123,20 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     isNew: false,
   },
   {
-    label: t('More'),
+    label: t('Explore'),
     lightIcon: 'MoreLightImage',
     darkIcon: 'MoreDarkImage',
     items: [
+      {
+        label: t('ApeStats'),
+        href: '/apestats',
+        isNew: false,
+      },
+      {
+        label: t('Dashboard'),
+        href: 'protocol-dashboard',
+        isNew: true,
+      },
       {
         label: t('Documentation'),
         href: 'https://apeswap.gitbook.io/apeswap-finance/',
@@ -144,44 +149,11 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
       },
       {
         label: t('Governance'),
-        href: 'https://vote.apeswap.finance',
-        isNew: false,
-      },
-      {
-        label: t('Education'),
-        href: 'https://www.apelabs.education/',
+        href: 'https://discuss.apeswap.finance',
         isNew: false,
       },
     ],
   },
-
-  // {
-  //   label: 'Burn',
-  //   icon: 'GameBurnIcon',
-  //   href: '/burn',
-  // },
-  // {
-  //   label: 'Info',
-  //   icon: 'InfoIcon',
-  //   items: [
-  //     {
-  //       label: 'Overview',
-  //       href: NETWORK_INFO_LINK[CHAIN_ID.BSC],
-  //     },
-  //     {
-  //       label: 'Tokens',
-  //       href: `${NETWORK_INFO_LINK[CHAIN_ID.BSC]}/tokens`,
-  //     },
-  //     {
-  //       label: 'Pairs',
-  //       href: `${NETWORK_INFO_LINK[CHAIN_ID.BSC]}/pairs`,
-  //     },
-  //     {
-  //       label: 'Accounts',
-  //       href: `${NETWORK_INFO_LINK[CHAIN_ID.BSC]}/accounts`,
-  //     },
-  //   ],
-  // },
 ]
 
 export default bscConfig

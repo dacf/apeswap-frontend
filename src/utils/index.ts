@@ -16,7 +16,7 @@ import {
   BONUS_ROUTER_ADDRESS,
   SMART_ROUTER_ADDRESS,
   SmartRouter,
-} from '@apeswapfinance/sdk'
+} from '@ape.swap/sdk'
 import { parseAddress, parseSmartAddress } from 'hooks/useAddress'
 import { RouterTypes } from 'config/constants'
 

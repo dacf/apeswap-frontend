@@ -76,8 +76,10 @@ export const fetchTokenPrices =
 export const fetchBananaPrice =
   (chainId): AppThunk =>
   async (dispatch) => {
-    const bananaPrice = await getTokenUsdPrice(chainId, getBananaAddress(chainId), 18)
-    dispatch(setBananaPrice(bananaPrice))
+    try {
+      const bananaPrice = await getTokenUsdPrice(chainId, getBananaAddress(chainId), 18)
+      dispatch(setBananaPrice(bananaPrice))
+    } catch {}
   }
 
 export default tokenPricesSlice.reducer

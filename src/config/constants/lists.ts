@@ -1,4 +1,4 @@
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 
 export const UNSUPPORTED_LIST_URLS: string[] = []
 
@@ -36,24 +36,21 @@ export const EXTENDED_LIST_DETAILS: Record<string, ExtendedListType> = {
   'PancakeSwap Extended': {
     name: 'BNB Top 300',
     warning:
-      // 'The ApeSwap DEX is decentralized, meaning that anyone can create or add liquidity for a token. Not all tokens on this list have been reviewed by ApeSwap or passed our due diligence process. Some tokens on this list may present scam risks, including the loss of funds.',
-      'The ApeSwap DEX is decentralized, meaning that anyone can add liquidity for a token. Some tokens on this list may present scam risks, including the loss of funds.',
+      'The ApeSwap DEX is decentralized, meaning that anyone can create or add liquidity for a token. Not all tokens on this list have been reviewed by ApeSwap or passed our due diligence process. Some tokens on this list may present scam risks, including the loss of funds.',
     logo: 'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/WBNB.svg',
     chainId: ChainId.BSC,
   },
   'Quickswap Token List': {
     name: 'Polygon List',
     warning:
-      // 'The ApeSwap DEX is decentralized, meaning that anyone can create or add liquidity for a token. Not all tokens on this list have been reviewed by ApeSwap or passed our due diligence process. Some tokens on this list may present scam risks, including the loss of funds.',
-      'The ApeSwap DEX is decentralized, meaning that anyone can add liquidity for a token. Some tokens on this list may present scam risks, including the loss of funds.',
+      'The ApeSwap DEX is decentralized, meaning that anyone can create or add liquidity for a token. Not all tokens on this list have been reviewed by ApeSwap or passed our due diligence process. Some tokens on this list may present scam risks, including the loss of funds.',
     logo: 'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/MATIC.svg',
     chainId: ChainId.MATIC,
   },
   'PancakeSwap Top 100': {
     name: 'BNB Top 100',
     warning:
-      // 'The ApeSwap DEX is decentralized, meaning that anyone can create or add liquidity for a token. Not all tokens on this list have been reviewed by ApeSwap or passed our due diligence process. Some tokens on this list may present scam risks, including the loss of funds.',
-      'The ApeSwap DEX is decentralized, meaning that anyone can add liquidity for a token. Some tokens on this list may present scam risks, including the loss of funds.',
+      'The ApeSwap DEX is decentralized, meaning that anyone can create or add liquidity for a token. Not all tokens on this list have been reviewed by ApeSwap or passed our due diligence process. Some tokens on this list may present scam risks, including the loss of funds.',
     logo: 'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/WBNB.svg',
     chainId: ChainId.BSC,
   },

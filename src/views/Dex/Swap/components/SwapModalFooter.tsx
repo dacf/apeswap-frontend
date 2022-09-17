@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useMemo } from 'react'
-import { Trade, TradeType } from '@apeswapfinance/sdk'
+import { Trade, TradeType } from '@ape.swap/sdk'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import { useTranslation } from 'contexts/Localization'
 import { Button, Text, Flex } from '@ape.swap/uikit'

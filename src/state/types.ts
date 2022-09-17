@@ -17,6 +17,8 @@ import {
   BillsConfig,
   Token,
 } from 'config/constants/types'
+import { ProtocolDashboardState } from './protocolDashboard/types'
+import { ApiResponse } from './statsPage/types'
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>
 
@@ -652,4 +654,6 @@ export interface State {
   jungleFarms: JungleFarmsState
   bills: BillsState
   nfas: NfaState
+  protocolDashboard: ProtocolDashboardState
+  userStats: ApiResponse
 }

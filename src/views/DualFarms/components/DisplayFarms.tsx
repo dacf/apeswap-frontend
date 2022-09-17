@@ -17,9 +17,12 @@ import HarvestAction from './CardActions/HarvestAction'
 import { ActionContainer } from './CardActions/styles'
 import useIsMobile from '../../../hooks/useIsMobile'
 import ServiceTokenDisplay from '../../../components/ServiceTokenDisplay'
-import { LiquidityModal } from 'components/LiquidityWidget'
 import { Field, selectCurrency } from 'state/swap/actions'
 import { useAppDispatch } from 'state'
+import DualLiquidityModal from 'components/DualAddLiquidity/DualLiquidityModal'
+import { ChainId } from '@ape.swap/sdk'
+import { Svg as Icon } from '@ape.swap/uikit'
+import { selectOutputCurrency } from 'state/zap/actions'
 
 const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags: Tag[] }> = ({
   farms,
@@ -31,18 +34,9 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
   const isMobile = useIsMobile()
   const dispatch = useAppDispatch()
 
-  // TODO: clean up this code
-  // Hack to get the close modal function from the provider
-  // Need to export ModalContext from uikit to clean up the code
-  const [, closeModal] = useModal(<></>)
-  const [onPresentAddLiquidityWidgetModal] = useModal(
-    <LiquidityModal handleClose={closeModal} />,
-    true,
-    true,
-    'liquidityWidgetModal',
-  )
+  const [onPresentAddLiquidityWidgetModal] = useModal(<DualLiquidityModal />, true, true, 'liquidityWidgetModal')
 
-  const showLiquidity = (token, quoteToken) => {
+  const showLiquidity = (token, quoteToken, farm) => {
     dispatch(
       selectCurrency({
         field: Field.INPUT,
@@ -53,6 +47,12 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
       selectCurrency({
         field: Field.OUTPUT,
         currencyId: quoteToken,
+      }),
+    )
+    dispatch(
+      selectOutputCurrency({
+        currency1: farm.stakeTokens.token1.address[ChainId.MATIC],
+        currency2: farm.stakeTokens.token0.address[ChainId.MATIC],
       }),
     )
     onPresentAddLiquidityWidgetModal()
@@ -181,6 +181,7 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
                   farm?.stakeTokens?.token0?.symbol === 'MATIC' ? 'ETH' : farm?.stakeTokens?.token0?.address[chainId]
                 }
                 lpPrice={farm.stakeTokenPrice}
+                dualFarm={farm}
               />
             }
           />
@@ -235,10 +236,11 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
                 showLiquidity(
                   farm?.stakeTokens?.token1?.address[chainId],
                   farm?.stakeTokens?.token0?.symbol === 'MATIC' ? 'ETH' : farm?.stakeTokens?.token0?.address[chainId],
+                  farm,
                 )
               }
             >
-              {t('GET LP')}
+              {t('GET LP')} <Icon icon="ZapIcon" color="primaryBright" />
             </FarmButton>
             {!isMobile && (
               <ListViewContent

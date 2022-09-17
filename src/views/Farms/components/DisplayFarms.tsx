@@ -1,10 +1,9 @@
 import React from 'react'
-import { Text, Svg, useModal } from '@apeswapfinance/uikit'
-import { TagVariants } from '@ape.swap/uikit'
+import { Text, Svg } from '@apeswapfinance/uikit'
+import { TagVariants, useModal } from '@ape.swap/uikit'
 import { Box } from 'theme-ui'
 import ListView from 'components/ListView'
 import { ExtendedListViewProps } from 'components/ListView/types'
-import { LiquidityModal } from 'components/LiquidityWidget'
 import ListViewContent from 'components/ListViewContent'
 import { Farm, Tag } from 'state/types'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -20,6 +19,9 @@ import { Container, FarmButton, NextArrow } from './styles'
 import HarvestAction from './CardActions/HarvestAction'
 import { ActionContainer, StyledTag } from './CardActions/styles'
 import InfoContent from '../InfoContent'
+import DualLiquidityModal from 'components/DualAddLiquidity/DualLiquidityModal'
+import { selectOutputCurrency } from 'state/zap/actions'
+import { Svg as Icon } from '@ape.swap/uikit'
 
 const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] }> = ({ farms, openPid, farmTags }) => {
   const { chainId } = useActiveWeb3React()
@@ -27,18 +29,9 @@ const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] 
   const isMobile = useIsMobile()
   const dispatch = useAppDispatch()
 
-  // TODO: clean up this code
-  // Hack to get the close modal function from the provider
-  // Need to export ModalContext from uikit to clean up the code
-  const [, closeModal] = useModal(<></>)
-  const [onPresentAddLiquidityWidgetModal] = useModal(
-    <LiquidityModal handleClose={closeModal} />,
-    true,
-    true,
-    'liquidityWidgetModal',
-  )
+  const [onPresentAddLiquidityModal] = useModal(<DualLiquidityModal />, true, true, 'liquidityWidgetModal')
 
-  const showLiquidity = (token, quoteToken) => {
+  const showLiquidity = (token, quoteToken, farm) => {
     dispatch(
       selectCurrency({
         field: Field.INPUT,
@@ -51,7 +44,13 @@ const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] 
         currencyId: quoteToken,
       }),
     )
-    onPresentAddLiquidityWidgetModal()
+    dispatch(
+      selectOutputCurrency({
+        currency1: farm.tokenAddresses[chainId],
+        currency2: farm.quoteTokenAdresses[chainId],
+      }),
+    )
+    onPresentAddLiquidityModal()
   }
 
   const farmsListView = farms.map((farm) => {
@@ -134,6 +133,7 @@ const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] 
                 isLp
                 tokenAddress={farm.tokenAddresses[chainId]}
                 quoteTokenAddress={farm.quoteTokenSymbol === 'BNB' ? 'ETH' : farm.quoteTokenAdresses[chainId]}
+                farm={farm}
               />
             }
           />
@@ -163,16 +163,16 @@ const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] 
                 ml={10}
               />
             )}
-
             <FarmButton
               onClick={() =>
                 showLiquidity(
                   farm.tokenAddresses[chainId],
                   farm.quoteTokenSymbol === 'BNB' ? 'ETH' : farm.quoteTokenAdresses[chainId],
+                  farm,
                 )
               }
             >
-              {t('GET LP')}
+              {t('GET LP')} <Icon icon="ZapIcon" color="primaryBright" />
             </FarmButton>
             {!isMobile && (
               <ListViewContent

@@ -15,7 +15,7 @@ interface PairCreationProps {
 }
 
 const PairCreation: React.FC<PairCreationProps> = ({ onChange }) => {
-  const tokenList = ['WBNB', 'BUSD']
+  const tokenList = ['BNB', 'BUSD']
   const [selectedToken, setSelectedToken] = useState<ExtendedERC20Details>({
     userBalance: null,
     tokenSymbol: null,

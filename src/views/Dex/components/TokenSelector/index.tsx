@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import { Flex, Svg, Text, useModal } from '@ape.swap/uikit'
-import { Currency } from '@apeswapfinance/sdk'
+import { Currency } from '@ape.swap/sdk'
 import { Skeleton } from '@apeswapfinance/uikit'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'components/Logo'
 import CurrencySearchModal from 'components/SearchModal/CurrencySearchModal'
@@ -15,8 +15,20 @@ const TokenSelector: React.FC<{
   field: any
   typedValue?: string
   showCommonBases?: boolean
+  disableTokenSelect?: boolean
   isRemoveLiquidity?: boolean
-}> = ({ currency, onCurrencySelect, otherCurrency, isRemoveLiquidity, typedValue, field, showCommonBases = false }) => {
+  isZapInput?: boolean
+}> = ({
+  currency,
+  onCurrencySelect,
+  otherCurrency,
+  isRemoveLiquidity,
+  disableTokenSelect,
+  typedValue,
+  field,
+  showCommonBases = false,
+  isZapInput,
+}) => {
   const { chainId } = useActiveWeb3React()
 
   const handleDynamicCurrencySelect = useCallback(
@@ -32,10 +44,27 @@ const TokenSelector: React.FC<{
       selectedCurrency={currency}
       otherSelectedCurrency={otherCurrency}
       showCommonBases={showCommonBases}
+      isZapInput={isZapInput}
     />,
   )
 
-  return isRemoveLiquidity ? (
+  return disableTokenSelect ? (
+    <Flex
+      sx={{
+        ...styles.primaryFlex,
+        cursor: 'default',
+        '&:active': { transform: 'none' },
+        ':hover': { background: 'white4' },
+      }}
+    >
+      {currency ? (
+        <CurrencyLogo currency={currency} size="30px" />
+      ) : (
+        <Skeleton width="30px" height="30px" animation="waves" variant="circle" />
+      )}
+      <Text sx={{ ...styles.tokenText }}>{currency?.getSymbol(chainId)}</Text>
+    </Flex>
+  ) : isRemoveLiquidity ? (
     <Flex
       sx={{
         ...styles.primaryFlex,

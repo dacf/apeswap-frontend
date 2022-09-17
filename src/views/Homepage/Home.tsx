@@ -1,4 +1,4 @@
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import SwiperProvider from 'contexts/SwiperProvider'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React from 'react'

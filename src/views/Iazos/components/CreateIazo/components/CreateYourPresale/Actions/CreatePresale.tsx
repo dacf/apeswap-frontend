@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { AutoRenewIcon } from '@apeswapfinance/uikit'
 import { useHistory } from 'react-router-dom'
 import useCreateIazo from 'views/Iazos/hooks/useCreateIazo'
-import { useSelector } from 'react-redux'
-import { State } from 'state/types'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import useCreateIazoApi from 'views/Iazos/hooks/useCreateIazoApi'
@@ -12,6 +10,7 @@ import { useToast } from 'state/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { PresaleData } from '../types'
 import StyledButton from './styles'
+import { useTokenPrices } from 'state/tokenPrices/hooks'
 
 interface CreatePresaleProps {
   presaleData: PresaleData
@@ -24,14 +23,14 @@ const CreatePresale: React.FC<CreatePresaleProps> = ({ presaleData, disabled, cr
   const { chainId, account } = useWeb3React()
   const history = useHistory()
   const { toastSuccess, toastError } = useToast()
-  const tokens = useSelector((state: State) => state.tokenPrices.tokens)
+  const tokens = useTokenPrices().tokenPrices
   const { datesSelected, pairCreation, postsaleDetails, presaleTokenDetails, information } = presaleData
   const { tokenAddress, quoteToken, tokenDecimals, tokenSymbol } = pairCreation
   const { burnRemains, pricePerToken, softcap, limitPerUser, tokensForSale } = presaleTokenDetails
   const { website, whitepaper, twitter, telegram, medium, description, tokenLogo } = information
   const { start, end } = datesSelected
   const { lockLiquidity, liquidityPercent, listingPrice } = postsaleDetails
-  const quoteTokenObject: Token = tokens[quoteToken.toLowerCase()]
+  const quoteTokenObject: Token = tokens.find((token) => token.symbol.toLowerCase() === quoteToken.toLowerCase())
 
   // Format token price
   // TOKEN_PRICE = BASE_TOKEN_AMOUNT * 10**(18 - iazoTokenDecimals)

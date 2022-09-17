@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@apeswapfinance/sdk'
+import { ChainId, Token } from '@ape.swap/sdk'
 import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'

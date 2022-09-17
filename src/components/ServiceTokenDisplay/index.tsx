@@ -15,6 +15,7 @@ interface ServiceTokenDisplayProps {
   size?: number
   billArrow?: boolean
   dualEarn?: boolean
+  tokensMargin?: number
 }
 
 const setUrls = (tokenSymbol: string) => {
@@ -36,6 +37,7 @@ const ServiceTokenDisplay: React.FC<ServiceTokenDisplayProps> = ({
   earnLp = false,
   noEarnToken = false,
   dualEarn = false,
+  tokensMargin,
 }) => {
   const token1Urls = setUrls(token1)
   const token2Urls = token2 ? setUrls(token2) : []
@@ -60,7 +62,7 @@ const ServiceTokenDisplay: React.FC<ServiceTokenDisplayProps> = ({
   const StakeLpEarnToken = (
     <Flex alignItems="center">
       <TokenContainer zIndex={1} srcs={token1Urls} size={size} />
-      <TokenContainer ml={-15} srcs={token2Urls} size={size} />
+      <TokenContainer ml={tokensMargin ? tokensMargin : -15} srcs={token2Urls} size={size} />
       {billArrow ? <BillsArrow /> : <EarnIcon color={iconFill} />}
       <TokenContainer srcs={token3Urls} size={size} />
     </Flex>
@@ -68,7 +70,7 @@ const ServiceTokenDisplay: React.FC<ServiceTokenDisplayProps> = ({
   const StakeLpEarnLp = (
     <Flex alignItems="center">
       <TokenContainer zIndex={1} srcs={token1Urls} size={size} />
-      <TokenContainer ml={-15} srcs={token2Urls} size={size} />
+      <TokenContainer ml={tokensMargin ? tokensMargin : -15} srcs={token2Urls} size={size} />
       <EarnIcon color={iconFill} />
       <TokenContainer zIndex={1} srcs={token3Urls} size={size} />
       {token4 !== undefined && <TokenContainer ml={-15} srcs={token4Urls} size={size} />}
@@ -77,7 +79,7 @@ const ServiceTokenDisplay: React.FC<ServiceTokenDisplayProps> = ({
   const DualEarn = (
     <Flex alignItems="center">
       <TokenContainer zIndex={1} srcs={token1Urls} size={size} />
-      <TokenContainer ml={-15} srcs={token2Urls} size={size} />
+      <TokenContainer ml={tokensMargin ? tokensMargin : -15} srcs={token2Urls} size={size} />
       <EarnIcon color={iconFill} />
       <TokenContainer mt={-20} srcs={token3Urls} size={25} />
       <TokenContainer mt={20} srcs={token4Urls} size={25} />
@@ -88,7 +90,7 @@ const ServiceTokenDisplay: React.FC<ServiceTokenDisplayProps> = ({
       <TokenContainer srcs={token1Urls} size={size} />
       <EarnIcon color={iconFill} />
       <TokenContainer zIndex={1} srcs={token2Urls} size={size} />
-      <TokenContainer ml={-15} srcs={token3Urls} size={size} />
+      <TokenContainer ml={tokensMargin ? tokensMargin : -15} srcs={token3Urls} size={size} />
     </Flex>
   )
   const displayToReturn = () => {

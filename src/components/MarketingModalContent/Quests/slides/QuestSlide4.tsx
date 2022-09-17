@@ -14,7 +14,7 @@ const QuestSlide4 = () => {
         <Heading sx={styles.second}>{t('Congratulations!')}</Heading>
       </Box>
       <Box sx={styles.thirdWrapper}>
-        <Text sx={styles.third}>{t('You are officialy ready to begin your')}</Text>{' '}
+        <Text sx={styles.third}>{t('You are officially ready to begin your')}</Text>{' '}
         <Text color="yellow" sx={styles.third}>
           <a
             href="https://box.genki.io/RJ4LP3"

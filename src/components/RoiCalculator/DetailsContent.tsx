@@ -1,18 +1,20 @@
 /** @jsxImportSource theme-ui */
 import React, { useEffect, useState } from 'react'
 import { Flex, Text, Box, Link } from 'theme-ui'
-import { Button, useModal } from '@ape.swap/uikit'
+import { Button, Svg, useModal } from '@ape.swap/uikit'
 import { DropDownIcon } from 'components/ListView/styles'
 import { useTranslation } from 'contexts/Localization'
 import { useBananaAddress, useGoldenBananaAddress } from 'hooks/useAddress'
-import { LiquidityModal } from 'components/LiquidityWidget'
 import { Field, selectCurrency } from 'state/swap/actions'
 import { useAppDispatch } from 'state'
 import { FarmButton } from 'views/Farms/components/styles'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { Farm } from 'state/types'
+import { DualFarm, Farm } from 'state/types'
 import { tokenInfo, tokenListInfo } from './tokenInfo'
 import styles from './styles'
+import DualLiquidityModal from '../DualAddLiquidity/DualLiquidityModal'
+import { selectOutputCurrency } from 'state/zap/actions'
+import { ChainId } from '@ape.swap/sdk'
 
 interface DetailsContentProps {
   onDismiss?: () => void
@@ -28,6 +30,7 @@ interface DetailsContentProps {
   isLp?: boolean
   farm?: Farm
   liquidityUrl?: string
+  dualFarm?: DualFarm
 }
 
 const DetailsContent: React.FC<DetailsContentProps> = ({
@@ -40,6 +43,8 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
   apy,
   liquidityUrl,
   rewardTokenName,
+  farm,
+  dualFarm,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const [link, setLink] = useState('')
@@ -49,13 +54,7 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
   const banana = useBananaAddress()
   const gnana = useGoldenBananaAddress()
 
-  const [, closeModal] = useModal(<></>)
-  const [onPresentAddLiquidityWidgetModal] = useModal(
-    <LiquidityModal handleClose={closeModal} />,
-    true,
-    true,
-    'liquidityWidgetModal',
-  )
+  const [onPresentDualLiquidityModal] = useModal(<DualLiquidityModal />, true, true, 'liquidityWidgetModal')
 
   useEffect(() => {
     if (!isLp) {
@@ -69,21 +68,35 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
   }, [chainId, tokenAddress, isLp, banana, gnana])
 
   const showLiquidity = (token?, quoteToken?) => {
-    if (isLp) {
+    dispatch(
+      selectCurrency({
+        field: Field.INPUT,
+        currencyId: token,
+      }),
+    )
+    dispatch(
+      selectCurrency({
+        field: Field.OUTPUT,
+        currencyId: quoteToken,
+      }),
+    )
+    if (chainId === ChainId.BSC) {
       dispatch(
-        selectCurrency({
-          field: Field.INPUT,
-          currencyId: token,
+        selectOutputCurrency({
+          currency1: farm?.tokenAddresses[chainId],
+          currency2: farm?.quoteTokenAdresses[chainId],
         }),
       )
-      dispatch(
-        selectCurrency({
-          field: Field.OUTPUT,
-          currencyId: quoteToken,
-        }),
-      )
-      onPresentAddLiquidityWidgetModal()
     }
+    if (chainId === ChainId.MATIC) {
+      dispatch(
+        selectOutputCurrency({
+          currency1: dualFarm.stakeTokens.token1.address[ChainId.MATIC],
+          currency2: dualFarm.stakeTokens.token0.address[ChainId.MATIC],
+        }),
+      )
+    }
+    onPresentDualLiquidityModal()
   }
 
   return (
@@ -138,7 +151,7 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
         <Flex sx={{ marginTop: '25px', justifyContent: 'center' }}>
           {isLp && !liquidityUrl && (
             <FarmButton onClick={() => showLiquidity(tokenAddress, quoteTokenAddress)}>
-              {t('GET')} {label}
+              {t('GET')} {label} <Svg icon="ZapIcon" />
             </FarmButton>
           )}
           {isLp && liquidityUrl && (
@@ -167,7 +180,7 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
               }}
             >
               <Button style={{ fontSize: '16px' }}>
-                {t('GET')} {label}
+                {t('GET')} {label} <Svg icon="ZapIcon" />
               </Button>
             </Link>
           )}

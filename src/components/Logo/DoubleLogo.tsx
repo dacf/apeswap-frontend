@@ -1,4 +1,4 @@
-import { Currency } from '@apeswapfinance/sdk'
+import { Currency } from '@ape.swap/sdk'
 import React from 'react'
 import styled from 'styled-components'
 import CurrencyLogo from './CurrencyLogo'

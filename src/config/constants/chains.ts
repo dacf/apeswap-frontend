@@ -1,6 +1,6 @@
 // Network chain ids
 
-import { ChainId, SmartRouter } from '@apeswapfinance/sdk'
+import { ChainId, SmartRouter } from '@ape.swap/sdk'
 
 export const CHAIN_ID = {
   BSC: 56,
@@ -166,6 +166,14 @@ export const WALLCHAIN_PARAMS = {
       apiKey: 'e04868d1-c99d-4bb3-9af9-fb2336310eaa',
     },
   },
+}
+
+// Dont use bonus router if the bonus is lower than the cutoff
+export const BONUS_CUTOFF_AMOUNT = {
+  [ChainId.BSC]: 0.5,
+  [ChainId.BSC_TESTNET]: 0,
+  [ChainId.MATIC]: 0,
+  [ChainId.MAINNET]: 0,
 }
 
 // To display correct prices for each liquidity pool when need to swap the contract out

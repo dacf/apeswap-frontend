@@ -1,4 +1,4 @@
-import { ChainId, Currency, ETHER, Token } from '@apeswapfinance/sdk'
+import { ChainId, Currency, ETHER, Token } from '@ape.swap/sdk'
 import { getMaticTokenLogoURL } from 'config/constants/maticTokenMapping'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React, { useMemo } from 'react'

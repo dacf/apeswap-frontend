@@ -13,6 +13,7 @@ import { BlockNumberProvider } from 'lib/hooks/useBlockNumber'
 import NftProvider from 'views/Nft/contexts/NftProvider'
 import { NetworkContextName } from 'config/constants'
 import { LanguageProvider } from './contexts/Localization'
+import Blocklist from 'components/Blocklist'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -28,13 +29,15 @@ const Providers: React.FC = ({ children }) => {
               <ThemeContextProvider>
                 <NftProvider>
                   <LanguageProvider>
-                    <RefreshContextProvider>
-                      <ModalProvider>
-                        <OldModalProvider>
-                          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-                        </OldModalProvider>
-                      </ModalProvider>
-                    </RefreshContextProvider>
+                    <Blocklist>
+                      <RefreshContextProvider>
+                        <ModalProvider>
+                          <OldModalProvider>
+                            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+                          </OldModalProvider>
+                        </ModalProvider>
+                      </RefreshContextProvider>
+                    </Blocklist>
                   </LanguageProvider>
                 </NftProvider>
               </ThemeContextProvider>

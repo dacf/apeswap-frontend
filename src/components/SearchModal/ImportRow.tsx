@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { CSSProperties } from 'react'
-import { Token } from '@apeswapfinance/sdk'
+import { Token } from '@ape.swap/sdk'
 import { Button, Text, CheckmarkCircleIcon, Flex } from '@ape.swap/uikit'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { EXTENDED_LIST_DETAILS } from 'config/constants/lists'

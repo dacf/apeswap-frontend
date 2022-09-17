@@ -1,4 +1,4 @@
-import { Percent, SmartRouter, Trade } from '@apeswapfinance/sdk'
+import { Percent, SmartRouter, Trade } from '@ape.swap/sdk'
 import { RouterTypes } from 'config/constants'
 import { WrapType } from 'hooks/useWrapCallback'
 

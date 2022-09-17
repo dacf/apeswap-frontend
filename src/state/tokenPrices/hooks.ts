@@ -55,6 +55,6 @@ export const usePriceBnbBusd = (): BigNumber => {
 }
 
 export const usePriceGnanaBusd = (): BigNumber => {
-  const bananaPrice = usePriceBananaBusd()
-  return bananaPrice.times(1.3889)
+  const bananaPrice = useBananaPrice()
+  return new BigNumber(bananaPrice).times(1.3889)
 }

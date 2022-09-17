@@ -1,4 +1,4 @@
-import { IconButton, Text, Flex, TagVariants } from '@ape.swap/uikit'
+import { IconButton, Text, Flex, TagVariants, Svg } from '@ape.swap/uikit'
 import { Box } from 'theme-ui'
 import BigNumber from 'bignumber.js'
 import ListView from 'components/ListView'
@@ -18,10 +18,11 @@ import Actions from './Actions'
 import HarvestAction from './Actions/HarvestAction'
 import InfoContent from '../InfoContent'
 import { Container, StyledButton, ActionContainer } from './styles'
-import { LiquidityModal } from '../../../components/LiquidityWidget'
-import { Field, selectCurrency } from '../../../state/swap/actions'
-import { useAppDispatch } from '../../../state'
+import { Field, selectCurrency } from 'state/swap/actions'
+import { useAppDispatch } from 'state'
 import { StyledTag } from '../../Pools/components/styles'
+import DualLiquidityModal from 'components/DualAddLiquidity/DualLiquidityModal'
+import { selectOutputCurrency } from 'state/zap/actions'
 
 const DisplayJungleFarms: React.FC<{ jungleFarms: JungleFarm[]; openId?: number; jungleFarmTags: Tag[] }> = ({
   jungleFarms,
@@ -35,18 +36,9 @@ const DisplayJungleFarms: React.FC<{ jungleFarms: JungleFarm[]; openId?: number;
   const isActive = !pathname.includes('history')
   const dispatch = useAppDispatch()
 
-  // TODO: clean up this code
-  // Hack to get the close modal function from the provider
-  // Need to export ModalContext from uikit to clean up the code
-  const [, closeModal] = useModal(<></>)
-  const [onPresentAddLiquidityWidgetModal] = useModal(
-    <LiquidityModal handleClose={closeModal} />,
-    true,
-    true,
-    'liquidityWidgetModal',
-  )
+  const [onPresentAddLiquidityWidgetModal] = useModal(<DualLiquidityModal />, true, true, 'dualLiquidityModal')
 
-  const showLiquidity = (token, quoteToken) => {
+  const showLiquidity = (token, quoteToken, farm) => {
     dispatch(
       selectCurrency({
         field: Field.INPUT,
@@ -59,15 +51,19 @@ const DisplayJungleFarms: React.FC<{ jungleFarms: JungleFarm[]; openId?: number;
         currencyId: quoteToken,
       }),
     )
+    dispatch(
+      selectOutputCurrency({
+        currency1: farm.lpTokens.token.address[chainId],
+        currency2: farm.lpTokens.quoteToken.address[chainId],
+      }),
+    )
     onPresentAddLiquidityWidgetModal()
   }
 
   const jungleFarmsListView = jungleFarms.map((farm) => {
     const [token1, token2] = farm.tokenName.split('-')
     const totalDollarAmountStaked = Math.round(getBalanceNumber(farm?.totalStaked) * farm?.stakingToken?.price)
-    const liquidityUrl = `https://apeswap.finance/add/${farm?.lpTokens?.token?.address[chainId]}/${
-      farm?.lpTokens?.quoteToken?.symbol === 'BNB' ? 'ETH' : farm?.lpTokens?.quoteToken?.address[chainId]
-    }`
+
     const userAllowance = farm?.userData?.allowance
     const userEarnings = getBalanceNumber(
       farm?.userData?.pendingReward || new BigNumber(0),
@@ -137,11 +133,10 @@ const DisplayJungleFarms: React.FC<{ jungleFarms: JungleFarm[]; openId?: number;
             toolTipTransform="translate(8%, 0%)"
             aprCalculator={
               <ApyButton
-                lpLabel={farm?.stakingToken?.symbol}
                 rewardTokenName={farm?.rewardToken?.symbol}
                 rewardTokenPrice={farm?.rewardToken?.price}
                 apy={farm?.apr / 100}
-                addLiquidityUrl={liquidityUrl}
+                jungleFarm={farm}
               />
             }
           />
@@ -178,10 +173,11 @@ const DisplayJungleFarms: React.FC<{ jungleFarms: JungleFarm[]; openId?: number;
                 showLiquidity(
                   farm?.lpTokens?.token?.address[chainId],
                   farm?.lpTokens?.quoteToken?.symbol === 'BNB' ? 'ETH' : farm?.lpTokens?.quoteToken?.address[chainId],
+                  farm,
                 )
               }
             >
-              {t('GET LP')}
+              {t('GET LP')} <Svg icon="ZapIcon" color="primaryBright" />
             </StyledButton>
 
             {!isMobile && (

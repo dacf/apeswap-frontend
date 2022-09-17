@@ -5,13 +5,14 @@ import SwiperCore from 'swiper'
 import 'swiper/swiper.min.css'
 import { Box, Flex } from 'theme-ui'
 import useSwiper from 'hooks/useSwiper'
-import { Button, Heading, IconButton, Modal, Text } from '@ape.swap/uikit'
+import { Button, Checkbox, Heading, IconButton, Modal, Text } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { ThemeContext } from 'contexts/ThemeContext'
 import { Bubble, showApe, styles, subtitle } from './styles'
 import { QuestSlides } from './slides'
+import { SwiperProps } from './types'
 
-const MarketingSwipper: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
+const MarketingSwipper: React.FC<SwiperProps> = ({ onDismiss, setDefaultNoShow, hideDefault, alreadySet }) => {
   const { t } = useTranslation()
   const { isDark } = useContext(ThemeContext)
   const { swiper, setSwiper } = useSwiper()
@@ -66,7 +67,7 @@ const MarketingSwipper: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) =>
             onSlideChange={handleSlide}
           >
             {QuestSlides.map((slide) => {
-              return <SwiperSlide key={QuestSlides[activeSlide]?.key}>{slide}</SwiperSlide>
+              return <SwiperSlide key={slide.key}>{slide}</SwiperSlide>
             })}
           </Swiper>
           <Flex sx={styles.bubbleWrapper}>
@@ -76,15 +77,30 @@ const MarketingSwipper: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) =>
                   isActive={i === activeSlide}
                   onClick={() => slideNav(i)}
                   style={{ marginRight: '10px' }}
-                  key={QuestSlides[activeSlide]?.key}
+                  key={i}
                 />
               )
             })}
           </Flex>
-          <Flex sx={{ width: '222px' }}>
+          <Flex
+            sx={{
+              width: '222px',
+            }}
+          >
             <Button fullWidth onClick={handleNext} sx={styles.button}>
               {activeSlide + 1 === QuestSlides.length ? t("I'm ready") : t('Next')}
             </Button>
+          </Flex>
+          <Flex sx={styles.defaultNoShow}>
+            <Flex sx={styles.checkboxCon}>
+              <Checkbox
+                id="checkbox"
+                checked={alreadySet || hideDefault}
+                sx={{ backgroundColor: 'white2' }}
+                onChange={setDefaultNoShow}
+              />
+            </Flex>
+            <Text sx={styles.checkboxText}>{t('Don’t show this again')}</Text>
           </Flex>
         </Flex>
       </Flex>

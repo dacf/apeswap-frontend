@@ -7,7 +7,7 @@ import { Link } from '@apeswapfinance/uikit'
 import { computeLegacyPriceBreakdown } from 'utils/prices'
 import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
-import { CurrencyAmount, JSBI, Token, Trade } from '@apeswapfinance/sdk'
+import { CurrencyAmount, JSBI, Token, Trade } from '@ape.swap/sdk'
 import { useExpertModeManager, useUserSlippageTolerance } from 'state/user/hooks'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/orders/hooks'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
@@ -65,7 +65,7 @@ const Orders: React.FC = () => {
     })
 
   const [onPresentImportTokenWarningModal] = useModal(
-    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => history.push('/orders')} />,
+    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => history.push('/limit-orders')} />,
   )
 
   useEffect(() => {

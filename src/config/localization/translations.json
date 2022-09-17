@@ -900,5 +900,20 @@
   "SS-IAO Error: Please contact the ApeSwap team for assistance.": "SS-IAO Error: Please contact the ApeSwap team for assistance.",
   "Error: Value must be greater than": "Error: Value must be greater than",
   "Error: Value must be less than": "Error: Value must be less than",
-  "Slippage Error: Please check your slippage & try again!": "Slippage Error: Please check your slippage & try again!"
+  "Slippage Error: Please check your slippage & try again!": "Slippage Error: Please check your slippage & try again!",
+  "Pending Rewards": "Pending Rewards",
+  "Asset Breakdown": "Asset Breakdown",
+  "Asset Price": "Asset Price",
+  "Earnings are calculated at current, real-time market rates, are not guaranteed, and are intended for illustrative purposes only.": "Earnings are calculated at current, real-time market rates, are not guaranteed, and are intended for illustrative purposes only.",
+  "Earnings are vested over predefined timeframes based on your commitments to various ApeSwap products.": "Earnings are vested over predefined timeframes based on your commitments to various ApeSwap products.",
+  "Time remaining until an asset is fully vested.": "Time remaining until an asset is fully vested.",
+  "Estimated Earnings": "Estimated Earnings",
+  "Total Holdings": "Total Holdings",
+  "Total Funds": "Total Funds",
+  "Funds Breakdown": "Funds Breakdown",
+  "Capital that ApeSwap has on hand to use for DAO expenses.": "Capital that ApeSwap has on hand to use for DAO expenses.",
+  "Total value of the liquidity that ApeSwap Partners own in the form of LP tokens.": "Total value of the liquidity that ApeSwap Partners own in the form of LP tokens.",
+  "Includes the number of wallets that actively hold or stake BANANA or GNANA.": "Includes the number of wallets that actively hold or stake BANANA or GNANA.",
+  "Total value of BANANA tokens in circulation, based on current BANANA price.": "Total value of BANANA tokens in circulation, based on current BANANA price.",
+  "Total number of BANANA tokens burned through manual and protocol burns.": "Total number of BANANA tokens burned through manual and protocol burns."
 }

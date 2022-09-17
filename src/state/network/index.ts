@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { NETWORK_LABEL } from 'config/constants/chains'
 import { Network, NetworkState } from 'state/types'
@@ -18,6 +18,9 @@ const chainIdSafeCheck = (): { chainId: number; chainIdFromUrl: boolean } => {
     }
     if (chainStr.toLowerCase() === NETWORK_LABEL[ChainId.MATIC].toLowerCase()) {
       return { chainId: ChainId.MATIC, chainIdFromUrl: true }
+    }
+    if (chainStr.toLowerCase() === NETWORK_LABEL[ChainId.MAINNET].toLowerCase()) {
+      return { chainId: ChainId.MAINNET, chainIdFromUrl: true }
     }
     return { chainId: localStorageChain || ChainId.BSC, chainIdFromUrl: false }
   }

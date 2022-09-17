@@ -1,4 +1,4 @@
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import { getMaticTokenLogoURL } from 'config/constants/maticTokenMapping'
 
 const getTokenLogoURL = (address: string, chainId: any) => {

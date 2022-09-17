@@ -1,4 +1,4 @@
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useRefresh from 'hooks/useRefresh'
 import { useEffect } from 'react'

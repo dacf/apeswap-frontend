@@ -1,4 +1,4 @@
-import { SmartRouter } from '@apeswapfinance/sdk'
+import { SmartRouter } from '@ape.swap/sdk'
 import { createReducer } from '@reduxjs/toolkit'
 import { RouterTypes } from 'config/constants'
 import {

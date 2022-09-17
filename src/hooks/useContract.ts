@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import { Contract } from '@ethersproject/contracts'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import { useSelector } from 'react-redux'
@@ -23,6 +23,8 @@ import vaultApeV1 from 'config/abi/vaultApeV1.json'
 import vaultApeV2 from 'config/abi/vaultApeV2.json'
 import apePriceGetter from 'config/abi/apePriceGetter.json'
 import miniChef from 'config/abi/miniApeV2.json'
+import babToken from 'config/abi/babToken.json'
+import raffle from 'config/abi/raffle.json'
 import multi from 'config/abi/Multicall.json'
 import ensPublicResolver from 'config/abi/ens-public-resolver.json'
 import ens from 'config/abi/ens-registrar.json'
@@ -32,6 +34,7 @@ import iazoExposerAbi from 'config/abi/iazoExposer.json'
 import iazoSettingsAbi from 'config/abi/iazoSettings.json'
 import iazoFactoryAbi from 'config/abi/iazoFactory.json'
 import iazoAbi from 'config/abi/iazo.json'
+import zap from 'config/abi/zap.json'
 import {
   Treasury,
   IazoExposer,
@@ -64,6 +67,7 @@ import {
 import {
   useApePriceGetterAddress,
   useAuctionAddress,
+  useBabTokenAddress,
   useBananaAddress,
   useBananaProfileAddress,
   useGoldenBananaAddress,
@@ -76,11 +80,14 @@ import {
   useMulticallV3Address,
   useNativeWrapCurrencyAddress,
   useNonFungibleApesAddress,
+  useRaffleAddress,
   useTreasuryAddress,
   useVaultApeAddressV1,
   useVaultApeAddressV2,
+  useZapAddress,
 } from './useAddress'
 import useActiveWeb3React from './useActiveWeb3React'
+import { Zap } from 'config/abi/types/Zap'
 
 export function useContract(abi: any, address: string | undefined, withSignerIfPossible = true): Contract | null {
   const { library, account } = useActiveWeb3React()
@@ -202,6 +209,16 @@ export const useBillNftContract = (address: string) => {
   return useContract(billNftAbi, address) as BillNft
 }
 
+export const useBabContract = () => {
+  // TODO: generate type
+  return useContract(babToken, useBabTokenAddress())
+}
+
+export const useRaffleContract = () => {
+  // TODO: generate type
+  return useContract(raffle, useRaffleAddress())
+}
+
 export function useENSRegistrarContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   let address: string | undefined
@@ -238,6 +255,10 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 
 export function useInterfaceMulticall() {
   return useContract(multicallV3, useMulticallV3Address(), false) as Multicallv3
+}
+
+export function useZapContract() {
+  return useContract(zap, useZapAddress()) as Zap
 }
 
 export default useContract

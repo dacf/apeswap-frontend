@@ -29,7 +29,9 @@ const DexPanel: React.FC<DexPanelProps> = ({
   smartRouter,
   independentField,
   ordersDisabled,
+  disableTokenSelect,
   showCommonBases = false,
+  isZapInput,
 }) => {
   const [usdVal, setUsdVal] = useState(null)
   const { chainId, account } = useActiveWeb3React()
@@ -75,9 +77,11 @@ const DexPanel: React.FC<DexPanelProps> = ({
           otherCurrency={otherCurrency}
           onCurrencySelect={onCurrencySelect}
           showCommonBases={showCommonBases}
+          disableTokenSelect={disableTokenSelect}
           isRemoveLiquidity={isRemoveLiquidity}
           field={fieldType}
           typedValue={value}
+          isZapInput={isZapInput}
         />
       </Flex>
       <Flex sx={styles.panelBottomContainer}>

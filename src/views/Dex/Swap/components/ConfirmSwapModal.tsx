@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useCallback, useMemo } from 'react'
-import { currencyEquals, Trade } from '@apeswapfinance/sdk'
+import { currencyEquals, Trade } from '@ape.swap/sdk'
 import { ModalProps } from '@apeswapfinance/uikit'
 import { Flex } from '@ape.swap/uikit'
 import { RouterTypeParams } from 'state/swap/actions'
@@ -107,7 +107,7 @@ const ConfirmSwapModal: React.FC<ModalProps & ConfirmSwapModalProps> = ({
           {modalBottom()}
         </Flex>
       ),
-    [onDismiss, modalBottom, modalHeader, t, swapErrorMessage],
+    [onDismiss, modalBottom, modalHeader, swapErrorMessage, t],
   )
 
   return (

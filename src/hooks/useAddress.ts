@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import addresses from 'config/constants/contracts'
 import { Address } from 'config/constants/types'
-import { ChainId, SmartRouter } from '@apeswapfinance/sdk'
+import { ChainId, SmartRouter, ZAP_ADDRESS } from '@ape.swap/sdk'
 import useActiveWeb3React from './useActiveWeb3React'
 
 export const parseAddress = (currAddress: Address, chainId: ChainId) => {
@@ -96,4 +96,16 @@ export const useIazoSettingsAddress = () => {
 
 export const useIazoFactoryAddress = () => {
   return useAddress(addresses.iazoFactoryProxy)
+}
+
+export const useZapAddress = () => {
+  return useAddress(ZAP_ADDRESS)
+}
+
+export const useBabTokenAddress = () => {
+  return useAddress(addresses.babToken)
+}
+
+export const useRaffleAddress = () => {
+  return useAddress(addresses.raffle)
 }

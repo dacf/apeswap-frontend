@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import masterChefABI from 'config/abi/masterchef.json'
 import miniChefABI from 'config/abi/miniApeV2.json'
 import multicall from 'utils/multicall'

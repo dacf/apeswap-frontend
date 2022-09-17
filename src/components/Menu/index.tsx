@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Navbar as UikitMenu, useModal } from '@ape.swap/uikit'
-import { ChainId } from '@apeswapfinance/sdk'
+import { ChainId } from '@ape.swap/sdk'
 import { uauth } from 'utils/web3React'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useRefresh from 'hooks/useRefresh'
