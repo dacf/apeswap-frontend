@@ -9,6 +9,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { UAuthConnector } from '@uauth/web3-react'
 import UAuth from '@uauth/js'
 import { ChainId } from '@ape.swap/sdk'
+import { BloctoConnector } from '@blocto/blocto-connector'
 
 const POLLING_INTERVAL = 15000
 
@@ -46,6 +47,11 @@ export const uauth = new UAuthConnector({
   connectors: { injected, walletconnect },
 })
 
+export const blocto = new BloctoConnector({
+  chainId: ChainId.BSC,
+  rpc: getRpcUrl(ChainId.BSC),
+})
+
 export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
   [ConnectorNames.Injected]: injected,
   [ConnectorNames.WalletConnect]: walletconnect,
@@ -53,6 +59,7 @@ export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
   [ConnectorNames.Walletlink]: walletlink,
   [ConnectorNames.Torus]: torus,
   [ConnectorNames.Unstoppable]: uauth,
+  [ConnectorNames.Blocto]: blocto,
 }
 
 export const getLibrary = (provider: any): Web3Provider => {

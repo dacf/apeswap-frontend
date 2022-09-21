@@ -11,6 +11,7 @@ import { useTranslation } from 'contexts/Localization'
 import { replaceSwapState, SwapDelay } from 'state/swap/actions'
 import { RouterTypes } from 'config/constants'
 import { SmartRouter } from '@ape.swap/sdk'
+import { BloctoConnector } from '@blocto/blocto-connector'
 
 const useSwitchNetwork = () => {
   const { chainId, account, library, connector } = useWeb3React()
@@ -21,8 +22,8 @@ const useSwitchNetwork = () => {
 
   const switchNetwork = useCallback(
     async (userChainId: number) => {
-      if (connector instanceof TorusConnector) {
-        toastError(t('Chain Select Error: Torus Wallet is only available on BNB Chain.'))
+      if (connector instanceof TorusConnector || connector instanceof BloctoConnector) {
+        toastError(t('Chain Select Error: Your current wallet is only available on BNB Chain.'))
         return
       }
       if (account && userChainId !== chainId) {
