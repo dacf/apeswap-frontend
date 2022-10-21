@@ -9,12 +9,10 @@ import { Field, selectCurrency } from 'state/swap/actions'
 import { useAppDispatch } from 'state'
 import { FarmButton } from 'views/Farms/components/styles'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { DualFarm, Farm } from 'state/types'
-import { tokenInfo, tokenListInfo } from './tokenInfo'
+import { tokenListInfo } from './tokenInfo'
 import styles from './styles'
 import DualLiquidityModal from '../DualAddLiquidity/DualLiquidityModal'
 import { selectOutputCurrency } from 'state/zap/actions'
-import { ChainId } from '@ape.swap/sdk'
 
 interface DetailsContentProps {
   onDismiss?: () => void
@@ -28,9 +26,9 @@ interface DetailsContentProps {
   tokenAddress?: string
   quoteTokenAddress?: string
   isLp?: boolean
-  farm?: Farm
   liquidityUrl?: string
-  dualFarm?: DualFarm
+  lpCurr1?: string
+  lpCurr2?: string
 }
 
 const DetailsContent: React.FC<DetailsContentProps> = ({
@@ -43,8 +41,8 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
   apy,
   liquidityUrl,
   rewardTokenName,
-  farm,
-  dualFarm,
+  lpCurr1,
+  lpCurr2,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const [link, setLink] = useState('')
@@ -80,22 +78,12 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
         currencyId: quoteToken,
       }),
     )
-    if (chainId === ChainId.BSC) {
-      dispatch(
-        selectOutputCurrency({
-          currency1: farm?.tokenAddresses[chainId],
-          currency2: farm?.quoteTokenAdresses[chainId],
-        }),
-      )
-    }
-    if (chainId === ChainId.MATIC) {
-      dispatch(
-        selectOutputCurrency({
-          currency1: dualFarm.stakeTokens.token1.address[ChainId.MATIC],
-          currency2: dualFarm.stakeTokens.token0.address[ChainId.MATIC],
-        }),
-      )
-    }
+    dispatch(
+      selectOutputCurrency({
+        currency1: lpCurr1,
+        currency2: lpCurr2,
+      }),
+    )
     onPresentDualLiquidityModal()
   }
 
@@ -120,7 +108,7 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
       </Flex>
       <Box sx={styles.detailContainer(!expanded)}>
         <Flex sx={styles.detailRow}>
-          {isLp ? (
+          {lpApr ? (
             <Text>{t('APR (incl. LP rewards)')}</Text>
           ) : (
             <Text>
@@ -129,17 +117,18 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
           )}
           <Text>{(apr + (lpApr || 0)).toFixed(2)}%</Text>
         </Flex>
-
-        {isLp &&
-          tokenInfo.map((item) => {
-            return (
-              <Flex key={item.value} sx={styles.detailRow}>
-                <Text>{t(`${item.text}`)}</Text>
-                <Text>{item.value === 'apr' ? apr.toFixed(2) : apy.toFixed(2)}%</Text>
-              </Flex>
-            )
-          })}
-
+        {isLp && lpApr && (
+          <>
+            <Flex sx={styles.detailRow}>
+              <Text>{t('Base APR (BANANA yield only)')}</Text>
+              <Text>{apr?.toFixed(2)}%</Text>
+            </Flex>
+            <Flex sx={styles.detailRow}>
+              <Text>{t('APY (1x daily compound)')}</Text>
+              <Text>{apy?.toFixed(2)}%</Text>
+            </Flex>
+          </>
+        )}
         <ul>
           {tokenListInfo[isLp ? 'lpPair' : 'notLpPair']?.map((item) => (
             <li key={item}>
@@ -151,7 +140,10 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
         <Flex sx={{ marginTop: '25px', justifyContent: 'center' }}>
           {isLp && !liquidityUrl && (
             <FarmButton onClick={() => showLiquidity(tokenAddress, quoteTokenAddress)}>
-              {t('GET')} {label} <Svg icon="ZapIcon" />
+              {t('GET')} {label}
+              <Box sx={{ marginLeft: '5px' }}>
+                <Svg icon="ZapIcon" color="primaryBright" />
+              </Box>
             </FarmButton>
           )}
           {isLp && liquidityUrl && (
@@ -180,7 +172,10 @@ const DetailsContent: React.FC<DetailsContentProps> = ({
               }}
             >
               <Button style={{ fontSize: '16px' }}>
-                {t('GET')} {label} <Svg icon="ZapIcon" />
+                {t('GET')} {label}
+                <Box sx={{ marginLeft: '5px' }}>
+                  <Svg icon="ZapIcon" color="primaryBright" />
+                </Box>
               </Button>
             </Link>
           )}

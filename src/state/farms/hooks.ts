@@ -32,7 +32,7 @@ export const useFarms = (account): Farm[] => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
   const farms = useSelector((state: State) => state.farms.data)
-  const farmsLoaded = farms.length > 0
+  const farmsLoaded = farms?.length > 0
   useEffect(() => {
     if (account && (chainId === ChainId.BSC || chainId === ChainId.BSC_TESTNET)) {
       dispatch(fetchFarmUserDataAsync(chainId, account))
@@ -64,7 +64,7 @@ export const useFarmUser = (pid) => {
 
 export const useFarmTags = (chainId: number) => {
   const { Tags }: StatsState = useSelector((state: State) => state.stats)
-  const farmTags = Tags?.[`${chainId}`].farms
+  const farmTags = Tags?.[`${chainId}`]?.farms
   return { farmTags }
 }
 

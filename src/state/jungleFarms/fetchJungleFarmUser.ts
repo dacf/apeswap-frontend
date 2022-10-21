@@ -9,13 +9,11 @@ export const fetchJungleFarmsAllowance = async (
   account: string,
   jungleFarmsConfig: JungleFarmConfig[],
 ) => {
-  const calls = jungleFarmsConfig
-    .filter((f) => f.network === chainId)
-    .map((f) => ({
-      address: f.stakingToken.address[chainId],
-      name: 'allowance',
-      params: [account, f.contractAddress[chainId]],
-    }))
+  const calls = jungleFarmsConfig.map((f) => ({
+    address: f.stakingToken.address[chainId],
+    name: 'allowance',
+    params: [account, f.contractAddress[chainId]],
+  }))
 
   const allowances = await multicall(chainId, erc20ABI, calls)
   return jungleFarmsConfig.reduce(
@@ -25,13 +23,11 @@ export const fetchJungleFarmsAllowance = async (
 }
 
 export const fetchUserBalances = async (chainId: number, account: string, jungleFarmsConfig: JungleFarmConfig[]) => {
-  const calls = jungleFarmsConfig
-    .filter((f) => f.network === chainId)
-    .map((p) => ({
-      address: p.stakingToken.address[chainId],
-      name: 'balanceOf',
-      params: [account],
-    }))
+  const calls = jungleFarmsConfig.map((p) => ({
+    address: p.stakingToken.address[chainId],
+    name: 'balanceOf',
+    params: [account],
+  }))
   const tokenBalancesRaw = await multicall(chainId, erc20ABI, calls)
   const tokenBalances = jungleFarmsConfig.reduce(
     (acc, farm, index) => ({ ...acc, [farm.jungleId]: new BigNumber(tokenBalancesRaw[index]).toJSON() }),

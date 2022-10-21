@@ -1,7 +1,7 @@
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import multicall from 'lib/state/multicall'
-import { useBlock } from 'state/block/hooks'
 import { SkipFirst } from 'types/tuple'
+import useBlockNumber from './useBlockNumber'
 
 export type { CallStateResult } from '@uniswap/redux-multicall' // re-export for convenience
 export { NEVER_RELOAD } from '@uniswap/redux-multicall' // re-export for convenience
@@ -38,6 +38,6 @@ export function useSingleContractWithCallData(
 
 function useCallContext() {
   const { chainId } = useActiveWeb3React()
-  const { currentBlock } = useBlock()
+  const currentBlock = useBlockNumber()
   return { chainId, currentBlock }
 }

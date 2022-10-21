@@ -51,7 +51,13 @@ const fetchPoolTokenStatsAndApr = (
     ? tokenPrices.find((token) => token?.address?.[chainId] === pool?.stakingToken?.address?.[chainId])
     : pool?.stakingToken
   // Calculate apr
-  const apr = getPoolApr(stakingToken?.price, rewardToken?.price, getBalanceNumber(totalStaked), curPool?.tokenPerBlock)
+  const apr = getPoolApr(
+    chainId,
+    stakingToken?.price,
+    rewardToken?.price,
+    getBalanceNumber(totalStaked),
+    curPool?.tokenPerBlock,
+  )
   return [stakingToken, rewardToken, apr]
 }
 

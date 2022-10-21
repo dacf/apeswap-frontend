@@ -1,4 +1,3 @@
-import { ChainId } from '@ape.swap/sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useRefresh from 'hooks/useRefresh'
 import { useEffect } from 'react'
@@ -15,9 +14,7 @@ export const usePollJungleFarms = () => {
 
   const dispatch = useAppDispatch()
   useEffect(() => {
-    if (chainId === ChainId.BSC) {
-      dispatch(fetchJungleFarmsPublicDataAsync(chainId, tokenPrices))
-    }
+    dispatch(fetchJungleFarmsPublicDataAsync(chainId, tokenPrices))
   }, [dispatch, tokenPrices, chainId])
 }
 
@@ -26,24 +23,29 @@ export const useJungleFarms = (account): JungleFarm[] => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
   const farms = useSelector((state: State) => state.jungleFarms.data)
-  const farmsLoaded = farms.length > 0
 
   useEffect(() => {
-    if (account && (chainId === ChainId.BSC || chainId === ChainId.BSC_TESTNET)) {
+    if (account) {
       dispatch(fetchJungleFarmsUserDataAsync(chainId, account))
     }
-  }, [account, dispatch, slowRefresh, farmsLoaded, chainId])
+  }, [account, dispatch, slowRefresh, farms.length, chainId])
 
   return farms
 }
 
+let prevChainId = null
+
 export const useSetJungleFarms = () => {
   useFetchTokenPrices()
+  const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const jungleFarms = useJungleFarms(null)
-  if (jungleFarms.length === 0) {
-    dispatch(setInitialJungleFarmDataAsync())
-  }
+  useEffect(() => {
+    if (jungleFarms.length === 0 || chainId !== prevChainId) {
+      dispatch(setInitialJungleFarmDataAsync(chainId))
+      prevChainId = chainId
+    }
+  }, [chainId, jungleFarms.length, dispatch])
 }
 
 export const useJungleFarmTags = (chainId: number) => {

@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useDispatch } from 'react-redux'
+import masterChefAbi from 'config/abi/masterchef.json'
 import {
   updateUserStakedBalance,
   updateUserBalance,
@@ -26,6 +27,10 @@ import {
 import { useNetworkChainId } from 'state/hooks'
 import { useJungleChef, useMasterchef, useMiniChefContract, useNfaStakingChef, useSousChef } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
+import { Contract } from 'ethers'
+import { Masterchef } from 'config/abi/types'
+import { getProviderOrSigner } from 'utils'
+import { CHEF_ADDRESSES } from 'config/constants/chains'
 
 const useUnstake = (pid: number) => {
   const { chainId } = useActiveWeb3React()
@@ -175,6 +180,35 @@ export const useMiniChefUnstake = (pid: number) => {
       return txHash
     },
     [account, dispatch, miniChefContract, pid, chainId],
+  )
+
+  return { onUnstake: handleUnstake }
+}
+
+export const useMigrateUnstake = (chefAddress: string, pid: number) => {
+  const { chainId, library, account } = useActiveWeb3React()
+
+  const handleUnstake = useCallback(
+    async (amount: string) => {
+      const masterChefContract = new Contract(
+        chefAddress,
+        masterChefAbi,
+        getProviderOrSigner(library, account),
+      ) as Masterchef
+      const trxHash = await unstake(masterChefContract, pid, amount)
+      track({
+        event: 'farm',
+        chain: chainId,
+        data: {
+          platform: CHEF_ADDRESSES[chainId][chefAddress],
+          cat: 'unstake',
+          amount,
+          pid,
+        },
+      })
+      return trxHash
+    },
+    [chefAddress, pid, chainId, library, account],
   )
 
   return { onUnstake: handleUnstake }

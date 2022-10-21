@@ -25,6 +25,7 @@ const ListView: React.FC<{ listViews: ExtendedListViewProps[] }> = ({ listViews 
                 earnLp={view?.earnLp}
                 stakeLp={view?.stakeLp}
                 dualEarn={view.tokens?.token4 != null}
+                noEarnToken={view?.noEarnToken}
               />
             }
             tag={view?.tag}
@@ -40,6 +41,8 @@ const ListView: React.FC<{ listViews: ExtendedListViewProps[] }> = ({ listViews 
             toolTipIconWidth={view?.toolTipIconWidth}
             toolTipStyle={view?.toolTipStyle}
             ttWidth={view?.ttWidth}
+            backgroundColor={view?.backgroundColor}
+            beforeTokenContent={view?.beforeTokenContent}
           />
         ) : (
           <ListCard
@@ -53,6 +56,7 @@ const ListView: React.FC<{ listViews: ExtendedListViewProps[] }> = ({ listViews 
                 earnLp={view?.earnLp}
                 stakeLp={view?.stakeLp}
                 dualEarn={view.tokens?.token4 != null}
+                noEarnToken={view?.noEarnToken}
               />
             }
             tag={view?.tag}
@@ -69,6 +73,8 @@ const ListView: React.FC<{ listViews: ExtendedListViewProps[] }> = ({ listViews 
             toolTipIconWidth={view?.toolTipIconWidth}
             toolTipStyle={view?.toolTipStyle}
             ttWidth={view?.ttWidth}
+            backgroundColor={view?.backgroundColor}
+            beforeTokenContent={view?.beforeTokenContent}
           />
         )
       })}

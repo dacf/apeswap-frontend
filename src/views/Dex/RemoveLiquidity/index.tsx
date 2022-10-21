@@ -13,8 +13,8 @@ import DexPanel from '../components/DexPanel'
 import DexNav from '../components/DexNav'
 import PoolInfo from './components/PoolInfo'
 import RemoveLiquidityActions from './components/Actions'
-import MyPositions from '../components/MyPositions'
 import RecentTransactions from '../components/RecentTransactions'
+import MyPositions from '../components/MyPositions'
 
 function RemoveLiquidity({
   match: {
@@ -71,10 +71,10 @@ function RemoveLiquidity({
       <Flex sx={{ flexDirection: 'column' }}>
         <Flex sx={{ ...dexStyles.dexContainer }}>
           <DexNav />
-          <Flex sx={{ margin: '20px 0px 5px 0px', justifyContent: 'center', maxWidth: '100%', width: '420px' }}>
+          <MyPositions />
+          <Flex sx={{ margin: '0px 0px 5px 0px', justifyContent: 'center', maxWidth: '100%', width: '420px' }}>
             <Text weight={700}>{t('REMOVE LIQUIDITY')}</Text>
           </Flex>
-          <MyPositions />
           <Flex sx={{ marginTop: '35px', flexWrap: 'wrap' }}>
             <DexPanel
               value={formattedAmounts[Field.LIQUIDITY_PERCENT]}

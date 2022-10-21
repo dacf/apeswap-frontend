@@ -53,7 +53,7 @@ export const fetchPoolTokenStatsAndApr = async (
       : pool.rewardToken
     const totalStaked = totalStakingList.find((totalStake) => totalStake.sousId === pool.sousId)?.totalStaked
     // Calculate apr
-    const apr = getPoolApr(1, rewardToken?.price, getBalanceNumber(totalStaked), curPool?.tokenPerBlock)
+    const apr = getPoolApr(56, 1, rewardToken?.price, getBalanceNumber(totalStaked), curPool?.tokenPerBlock)
     return {
       sousId: curPool.sousId,
       rewardToken,

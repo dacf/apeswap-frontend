@@ -16,7 +16,7 @@ export const TokenContainer = styled(Logo)<{
   margin-right: ${({ mr }) => mr}px;
   margin-top: ${({ mt }) => mt}px;
   z-index: ${({ zIndex }) => zIndex};
-  border-radius: ${({ size }) => (size || 35) / 2}px;
+  border-radius: $50px;
   ${({ theme }) => theme.mediaQueries.lg} {
     width: ${({ size }) => size || 35}px;
     height: ${({ size }) => size || 35}px;
@@ -39,7 +39,7 @@ export const TokenWrapper = styled(Flex)<{
   background: #fff;
   justify-content: center;
   align-items: center;
-  border-radius: ${({ size }) => (size || 37) / 2}px;
+  border-radius: 50px;
   ${({ theme }) => theme.mediaQueries.lg} {
     width: ${({ size }) => size + 2 || 37}px;
     height: ${({ size }) => size + 2 || 37}px;

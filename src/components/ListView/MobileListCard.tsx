@@ -17,12 +17,15 @@ const MobileListCard: React.FC<ListCardProps> = ({
   toolTipIconWidth,
   toolTipStyle,
   ttWidth,
+  backgroundColor,
+  beforeTokenContent,
 }) => {
   const [expanded, setExpanded] = useState(open)
   return (
     <>
-      <ListCardContainer onClick={() => setExpanded((prev) => !prev)}>
+      <ListCardContainer onClick={() => setExpanded((prev) => !prev)} backgroundColor={backgroundColor}>
         <Flex sx={{ width: '100%', justifyContent: 'space-between' }}>
+          <Flex>{beforeTokenContent}</Flex>
           <Flex sx={styles.titleContainer}>
             {serviceTokenDisplay}
             <Flex sx={{ flexDirection: 'column', marginLeft: '10px' }}>

@@ -42,17 +42,30 @@ const sortAndAddAssets = (assets: TreasuryAssetOverviewInterface[]) => {
   return [...topSix, { symbol: 'Other', value: otherAssetsSum }]
 }
 
+const getMergedAssets = (assets: TreasuryAssetOverviewInterface[]) => {
+  const assetTracker: TreasuryAssetOverviewInterface[] = []
+  const mergedAssets = assets.map((asset: TreasuryAssetOverviewInterface) => {
+    const searchAsset = assetTracker.find((searchAsset) => asset.symbol === searchAsset.symbol)
+    if (searchAsset) {
+      const newAsset = {
+        symbol: asset.symbol,
+        value: asset.value + searchAsset.value,
+      }
+      assetTracker.push(newAsset as TreasuryAssetOverviewInterface)
+      return newAsset as TreasuryAssetOverviewInterface
+    } else {
+      return asset as TreasuryAssetOverviewInterface
+    }
+  })
+  return mergedAssets
+}
+
 const AssetOverview: React.FC<{ activeView: number }> = ({ activeView }) => {
   const assets = useFetchTreasuryAssetOverview()
   const treasuryAssets = assets?.filter((asset) => asset.location === 'Operational Funds')
   const polAssets = assets?.filter((asset) => asset.location === 'POL')
-  const mergedAssets = treasuryAssets?.map((treasAsset) => {
-    const matchAsset = polAssets?.filter((asset) => asset.symbol === treasAsset.symbol)
-    return {
-      ...treasAsset,
-      value: (matchAsset.length > 0 ? matchAsset[0].value : 0) + treasAsset.value,
-    }
-  })
+  const mergedAssets = getMergedAssets(assets)
+
   const cleanedAssets = sortAndAddAssets([mergedAssets, treasuryAssets, polAssets][activeView])
   const data = useMemo(() => setData(cleanedAssets), [cleanedAssets])
   const { t } = useTranslation()

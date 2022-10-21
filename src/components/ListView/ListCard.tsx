@@ -19,12 +19,15 @@ const ListCard: React.FC<ListCardProps> = ({
   alignServiceTokens,
   toolTipIconWidth,
   ttWidth,
+  backgroundColor,
+  beforeTokenContent,
 }) => {
   const [expanded, setExpanded] = useState(open)
   return (
     <>
-      <ListCardContainer onClick={() => setExpanded((prev) => !prev)}>
+      <ListCardContainer onClick={() => setExpanded((prev) => !prev)} backgroundColor={backgroundColor}>
         <Flex sx={{ ...styles.titleContainer, maxWidth: titleContainerWidth || '290px' }}>
+          <Flex>{beforeTokenContent}</Flex>
           <Flex sx={{ mr: '10px' }}>
             {alignServiceTokens ? (
               <Flex sx={{ width: '130px', justifyContent: 'flex-end' }}>{serviceTokenDisplay}</Flex>

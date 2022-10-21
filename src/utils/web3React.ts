@@ -15,13 +15,22 @@ const POLLING_INTERVAL = 15000
 
 // When adding a new chain we need to add the CHAIN_ID to the supported chains
 
+const supportedChains = [
+  ChainId.BSC,
+  ChainId.BSC_TESTNET,
+  ChainId.MATIC,
+  ChainId.MATIC_TESTNET,
+  ChainId.MAINNET,
+  ChainId.TLOS,
+]
+
 const injected = new InjectedConnector({
-  supportedChainIds: [ChainId.BSC, ChainId.BSC_TESTNET, ChainId.MATIC, ChainId.MATIC_TESTNET, ChainId.MAINNET],
+  supportedChainIds: supportedChains,
 })
 
 const walletconnect = new WalletConnectConnector({
   rpc: { [ChainId.BSC]: getRpcUrl(ChainId.BSC) },
-  supportedChainIds: [ChainId.BSC, ChainId.BSC_TESTNET, ChainId.MATIC, ChainId.MATIC_TESTNET, ChainId.MAINNET],
+  supportedChainIds: supportedChains,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
@@ -32,7 +41,7 @@ const torus = new TorusConnector({ chainId: ChainId.BSC, initOptions: { network:
 
 export const walletlink = new WalletLinkConnector({
   url: getRpcUrl(ChainId.BSC),
-  supportedChainIds: [ChainId.BSC],
+  supportedChainIds: supportedChains,
   appName: 'Apeswap',
   darkMode: true,
   appLogoUrl: 'https://apeswap.finance/logo.png',

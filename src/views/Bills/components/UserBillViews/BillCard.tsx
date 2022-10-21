@@ -35,7 +35,11 @@ const BillCard: React.FC<{ bills: Bills[]; ml?: string }> = ({ bills, ml }) => {
           <SwiperSlide style={{ maxWidth: '270px', height: '307px' }} key={ownedBill.id}>
             <CardContainer ml={ml} key={ownedBill.id}>
               {ownedBillNftData?.image ? (
-                <BillModal bill={bill} billId={ownedBill.id} billCardImage={ownedBillNftData?.image} />
+                <BillModal
+                  bill={bill}
+                  billId={ownedBill.id}
+                  billCardImage={`${ownedBillNftData?.image + '?img-width=720'}`}
+                />
               ) : (
                 <Skeleton width="270px" height="159px" />
               )}

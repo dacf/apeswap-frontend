@@ -16,6 +16,8 @@ import Banner from 'components/Banner'
 import { Pool } from 'state/types'
 import PoolMenu from './components/Menu'
 import DisplayPools from './components/DisplayPools'
+import { AVAILABLE_CHAINS_ON_PRODUCTS } from 'config/constants/chains'
+import ListView404 from 'components/ListView404'
 
 const NUMBER_OF_POOLS_VISIBLE = 12
 
@@ -180,7 +182,11 @@ const Pools: React.FC = () => {
               stakedOnly={stakedOnly}
               query={searchQuery}
             />
-            <DisplayPools pools={renderPools()} openId={urlSearchedPool} poolTags={poolTags} />
+            {!AVAILABLE_CHAINS_ON_PRODUCTS['pools'].includes(chainId) ? (
+              <ListView404 product="pools" />
+            ) : (
+              <DisplayPools pools={renderPools()} openId={urlSearchedPool} poolTags={poolTags} />
+            )}
             <div ref={loadMoreRef} />
           </Flex>
         </ListViewLayout>

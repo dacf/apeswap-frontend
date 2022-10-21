@@ -6,7 +6,6 @@ import { ExtendedListViewProps } from 'components/ListView/types'
 import ListViewContent from 'components/ListViewContent'
 import { useLocation } from 'react-router-dom'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import ApyButton from 'components/ApyCalculator/ApyButton'
 import useIsMobile from 'hooks/useIsMobile'
 import React from 'react'
 import { JungleFarm, Tag } from 'state/types'
@@ -23,6 +22,7 @@ import { useAppDispatch } from 'state'
 import { StyledTag } from '../../Pools/components/styles'
 import DualLiquidityModal from 'components/DualAddLiquidity/DualLiquidityModal'
 import { selectOutputCurrency } from 'state/zap/actions'
+import CalcButton from 'components/RoiCalculator/CalcButton'
 
 const DisplayJungleFarms: React.FC<{ jungleFarms: JungleFarm[]; openId?: number; jungleFarmTags: Tag[] }> = ({
   jungleFarms,
@@ -132,11 +132,22 @@ const DisplayJungleFarms: React.FC<{ jungleFarms: JungleFarm[]; openId?: number;
             toolTipPlacement="bottomLeft"
             toolTipTransform="translate(8%, 0%)"
             aprCalculator={
-              <ApyButton
+              <CalcButton
+                label={farm.tokenName}
                 rewardTokenName={farm?.rewardToken?.symbol}
                 rewardTokenPrice={farm?.rewardToken?.price}
-                apy={farm?.apr / 100}
-                jungleFarm={farm}
+                apr={farm?.apr}
+                lpAddress={farm?.stakingToken?.address[chainId]}
+                isLp
+                lpPrice={farm?.stakingToken?.price}
+                tokenAddress={farm?.lpTokens?.token?.address[chainId]}
+                quoteTokenAddress={
+                  farm?.lpTokens?.quoteToken?.address[chainId] === 'TLOS'
+                    ? 'ETH'
+                    : farm?.lpTokens?.quoteToken?.address[chainId]
+                }
+                lpCurr1={farm?.lpTokens?.token?.address[chainId]}
+                lpCurr2={farm?.lpTokens?.quoteToken?.address[chainId]}
               />
             }
           />

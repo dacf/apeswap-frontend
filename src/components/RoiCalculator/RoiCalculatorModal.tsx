@@ -7,7 +7,6 @@ import { useCurrency } from 'hooks/Tokens'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Modal, Button, Text, Tab, Tabs } from '@ape.swap/uikit'
 import { Box, Flex, Heading } from 'theme-ui'
-import { DualFarm, Farm } from 'state/types'
 import useIsMobile from 'hooks/useIsMobile'
 import { useTranslation } from 'contexts/Localization'
 import maxAmountSpend from 'utils/maxAmountSpend'
@@ -30,10 +29,10 @@ interface RoiCalculatorModalProps {
   tokenAddress?: string
   quoteTokenAddress?: string
   isLp?: boolean
-  farm?: Farm
   liquidityUrl?: string
   lpPrice?: number
-  dualFarm?: DualFarm
+  lpCurr1?: string
+  lpCurr2?: string
 }
 
 const modalStyle = {
@@ -103,12 +102,12 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = (props) => {
 
   const rewardPrice = useMemo(() => {
     if (!isLp) {
-      const { price } = tokenPrices.find((tok) => tok.address[chainId].toLowerCase() === tokenAddress.toLowerCase())
-      return price
+      const rewardToken = tokenPrices?.find((tok) => tok.address[chainId].toLowerCase() === tokenAddress.toLowerCase())
+      return rewardToken?.price
     }
     if (isLp && !lpPrice) {
-      const { price } = lpTokenPrices.find((tok) => tok.address[chainId].toLowerCase() === lpAddress.toLowerCase())
-      return price
+      const rewardToken = lpTokenPrices?.find((tok) => tok.address[chainId].toLowerCase() === lpAddress.toLowerCase())
+      return rewardToken?.price
     }
     return lpPrice
   }, [chainId, isLp, lpAddress, lpPrice, lpTokenPrices, tokenAddress, tokenPrices])

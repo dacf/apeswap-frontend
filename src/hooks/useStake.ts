@@ -17,6 +17,7 @@ import {
 import { useNetworkChainId } from 'state/hooks'
 import { useJungleChef, useMasterchef, useMiniChefContract, useNfaStakingChef, useSousChef } from './useContract'
 import useActiveWeb3React from './useActiveWeb3React'
+import { ChainId } from '@ape.swap/sdk'
 
 const useStake = (pid: number) => {
   const { chainId } = useActiveWeb3React()
@@ -82,12 +83,12 @@ export const useJungleStake = (jungleId) => {
   const jungleChefContract = useJungleChef(jungleId)
 
   const handleStake = useCallback(
-    async (amount: string) => {
+    async (amount: string, chainId: ChainId) => {
       const trxHash = await jungleStake(jungleChefContract, amount)
 
       track({
         event: 'jungle_farm',
-        chain: 56,
+        chain: chainId,
         data: {
           cat: 'stake',
           amount,

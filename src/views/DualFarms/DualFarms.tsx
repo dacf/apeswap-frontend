@@ -15,6 +15,9 @@ import HarvestAllAction from './components/CardActions/HarvestAllAction'
 import DisplayFarms from './components/DisplayFarms'
 import { BLUE_CHIPS, NUMBER_OF_FARMS_VISIBLE, STABLES } from '../Farms/constants'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
+import { useSetZapOutputList } from 'state/zap/hooks'
+import { AVAILABLE_CHAINS_ON_PRODUCTS } from 'config/constants/chains'
+import ListView404 from 'components/ListView404'
 
 const { search } = window.location
 const params = new URLSearchParams(search)
@@ -174,6 +177,16 @@ const DualFarms: React.FC = () => {
     }
   }
 
+  // Set zap output list to match dual farms
+  useSetZapOutputList(
+    activeFarms?.map((farm) => {
+      return {
+        currencyIdA: farm?.stakeTokens.token0.address[chainId],
+        currencyIdB: farm?.stakeTokens.token1.address[chainId],
+      }
+    }),
+  )
+
   return (
     <>
       <Flex
@@ -202,7 +215,11 @@ const DualFarms: React.FC = () => {
               showMonkeyImage
             />
           </Flex>
-          <DisplayFarms farms={renderFarms()} openPid={urlSearchedFarm} dualFarmTags={farmTags} />
+          {!AVAILABLE_CHAINS_ON_PRODUCTS['farms'].includes(chainId) ? (
+            <ListView404 product="farms" />
+          ) : (
+            <DisplayFarms farms={renderFarms()} openPid={urlSearchedFarm} dualFarmTags={farmTags} />
+          )}
         </ListViewLayout>
       </Flex>
       <div ref={loadMoreRef} />

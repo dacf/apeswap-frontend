@@ -35,6 +35,8 @@ import iazoSettingsAbi from 'config/abi/iazoSettings.json'
 import iazoFactoryAbi from 'config/abi/iazoFactory.json'
 import iazoAbi from 'config/abi/iazo.json'
 import zap from 'config/abi/zap.json'
+import migratorBalanceChecker from 'config/abi/migratorBalanceChecker.json'
+
 import {
   Treasury,
   IazoExposer,
@@ -75,6 +77,7 @@ import {
   useIazoFactoryAddress,
   useIazoSettingsAddress,
   useMasterChefAddress,
+  useMigratorBalanceCheckerAddress,
   useMiniChefAddress,
   useMulticallAddress,
   useMulticallV3Address,
@@ -88,6 +91,7 @@ import {
 } from './useAddress'
 import useActiveWeb3React from './useActiveWeb3React'
 import { Zap } from 'config/abi/types/Zap'
+import { MigratorBalanceChecker } from 'config/abi/types/MigratorBalanceChecker'
 
 export function useContract(abi: any, address: string | undefined, withSignerIfPossible = true): Contract | null {
   const { library, account } = useActiveWeb3React()
@@ -259,6 +263,10 @@ export function useInterfaceMulticall() {
 
 export function useZapContract() {
   return useContract(zap, useZapAddress()) as Zap
+}
+
+export function useMigratorBalanceCheckerContract(): Contract | null {
+  return useContract(migratorBalanceChecker, useMigratorBalanceCheckerAddress(), true) as MigratorBalanceChecker
 }
 
 export default useContract

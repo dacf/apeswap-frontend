@@ -1,6 +1,5 @@
 /** @jsxImportSource theme-ui */
 import React from 'react'
-import { DualFarm, Farm } from 'state/types'
 import { CalculateIcon } from '@apeswapfinance/uikit'
 import { IconButton, useModal } from '@ape.swap/uikit'
 import RoiCalculatorModal from './RoiCalculatorModal'
@@ -17,10 +16,10 @@ export interface CalcButtonProps {
   tokenAddress?: string
   quoteTokenAddress?: string
   isLp?: boolean
-  farm?: Farm
   liquidityUrl?: string
   lpPrice?: number
-  dualFarm?: DualFarm
+  lpCurr1?: string
+  lpCurr2?: string
 }
 
 const CalcButton: React.FC<CalcButtonProps> = (props) => {

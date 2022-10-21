@@ -1,3 +1,5 @@
+import { ChainId } from '@ape.swap/sdk'
+
 export type IfoStatus = 'coming_soon' | 'live' | 'finished'
 
 export interface Ifo {
@@ -56,21 +58,24 @@ export enum PoolCategory {
 }
 
 export interface Address {
-  97?: string
-  56?: string
-  137?: string
+  [ChainId.BSC_TESTNET]?: string
+  [ChainId.BSC]?: string
+  [ChainId.MATIC]?: string
+  [ChainId.TLOS]?: string
 }
 
 export interface ChainToNumber {
-  97?: number
-  56?: number
-  137?: number
+  [ChainId.BSC_TESTNET]?: number
+  [ChainId.BSC]?: number
+  [ChainId.MATIC]?: number
+  [ChainId.TLOS]?: number
 }
 
 export interface ChainToString {
-  97?: string
-  56?: string
-  137?: string
+  [ChainId.BSC_TESTNET]?: string
+  [ChainId.BSC]?: string
+  [ChainId.MATIC]?: string
+  [ChainId.TLOS]?: string
 }
 
 export interface FarmStyles {
@@ -270,7 +275,7 @@ export interface JungleFarmConfig {
   contractAddress: Address
   projectLink: string
   twitter?: string
-  tokenPerBlock: string
+  tokenPerBlock?: string
   sortOrder?: number
   harvest?: boolean
   reflect?: boolean
@@ -285,6 +290,8 @@ export interface JungleFarmConfig {
   forAdmins?: boolean
   emergencyWithdraw?: boolean
   isEarnTokenLp?: boolean
+  // With the switching of rewards per block to seconds
+  rewardsPerSecond?: string
   network: number
 }
 

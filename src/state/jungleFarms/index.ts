@@ -21,7 +21,10 @@ export const JungleFarmsSlice = createSlice({
     setJungleFarmsPublicData: (state, action) => {
       const liveJungleFarmsData: JungleFarm[] = action.payload
       state.data = state.data.map((farm) => {
-        const liveFarmData = liveJungleFarmsData.find((entry) => entry.jungleId === farm.jungleId)
+        let liveFarmData: JungleFarm = liveJungleFarmsData.find((entry) => entry.jungleId === farm.jungleId)
+        if (!liveFarmData?.rewardToken) {
+          liveFarmData = null
+        }
         return { ...farm, ...liveFarmData }
       })
     },
@@ -46,10 +49,16 @@ export const { setInitialJungleFarmData, setJungleFarmsPublicData, setJungleFarm
 
 // Thunks
 
-export const setInitialJungleFarmDataAsync = () => async (dispatch) => {
+export const setInitialJungleFarmDataAsync = (chainId: number) => async (dispatch) => {
   try {
     const initialJungleFarmState: JungleFarm[] = await fetchJungleFarmConfig()
-    dispatch(setInitialJungleFarmData(initialJungleFarmState || []))
+    const filterJungleFarmsByChainId = initialJungleFarmState.filter(
+      (farm) =>
+        farm.contractAddress?.[chainId] !== '' &&
+        farm.contractAddress?.[chainId] !== null &&
+        farm.contractAddress?.[chainId] !== undefined,
+    )
+    dispatch(setInitialJungleFarmData(filterJungleFarmsByChainId || []))
   } catch (error) {
     console.error(error)
   }
@@ -61,7 +70,9 @@ export const fetchJungleFarmsPublicDataAsync =
     try {
       const jungleFarms = getState().jungleFarms.data
       const farms = await fetchJungleFarms(chainId, tokenPrices, jungleFarms)
-      dispatch(setJungleFarmsPublicData(farms))
+      if (farms !== undefined) {
+        dispatch(setJungleFarmsPublicData(farms))
+      }
     } catch (error) {
       console.warn(error)
     }

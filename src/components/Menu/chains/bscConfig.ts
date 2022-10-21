@@ -152,6 +152,11 @@ const bscConfig: (t: ContextApi['t']) => MenuEntry[] = (t) => [
         href: 'https://discuss.apeswap.finance',
         isNew: false,
       },
+      {
+        label: t('Newsletter'),
+        href: '?modal=newsletter',
+        isNew: true,
+      },
     ],
   },
 ]

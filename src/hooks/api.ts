@@ -13,6 +13,7 @@ export const baseUrlStrapi = 'https://apeswap-strapi.herokuapp.com'
 const EXCHANGE_SUBGRAPH_URL = 'https://graph.apeswap.finance/subgraphs/name/ape-swap/apeswap-subgraph'
 const EXCHANGE_POLYGON_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/apeswapfinance/dex-polygon'
 
+// TODO: Switch this back to main
 export const apeswapListUrl =
   process.env.REACT_APP_LISTS_CONFIG_URL || 'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-lists/main/config'
 /* eslint-disable camelcase */
@@ -217,9 +218,10 @@ const defaultCurrencies = {
   137: 'matic_polygon',
 }
 
-export const useMoonPayUrl = () => {
+export const useMoonPayUrl = (manualChainId?: number) => {
   const { account, chainId } = useActiveWeb3React()
-  const defaultCurrency = defaultCurrencies[chainId] || defaultCurrencies[56]
+  const chainIdToUse = manualChainId || chainId
+  const defaultCurrency = defaultCurrencies[chainIdToUse] || defaultCurrencies[56]
   const baseMoonPayUrl = `${moonPayBaseUrl}&defaultCurrencyCode=${defaultCurrency}`
   const [url, setUrl] = useState<string>(baseMoonPayUrl)
 

@@ -22,4 +22,5 @@ export interface DexPanelProps {
   independentField?: Field
   disableTokenSelect?: boolean
   isZapInput?: boolean
+  userBalance?: number
 }

@@ -1,6 +1,6 @@
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useRefresh from 'hooks/useRefresh'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useFetchTokenPrices, useTokenPrices } from 'state/tokenPrices/hooks'
@@ -42,16 +42,17 @@ export const useBills = (): Bills[] => {
   return bills
 }
 
+let prevChainId = null
+
 export const useSetBills = () => {
   const { chainId } = useActiveWeb3React()
-  const refChainId = useRef(null)
   useFetchTokenPrices()
   const dispatch = useAppDispatch()
   const bills = useBills()
   useEffect(() => {
-    if (bills.length === 0 || refChainId.current !== chainId) {
+    if (bills.length === 0 || prevChainId !== chainId) {
       dispatch(setInitialBillsDataAsync(chainId))
-      refChainId.current = chainId
+      prevChainId = chainId
     }
   }, [chainId, bills.length, dispatch])
 }

@@ -4,10 +4,10 @@ import styled from '@emotion/styled'
 import { Flex, Modal } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import LPSearcher from './LPSearcher'
-import { ParsedFarm } from 'state/zap/reducer'
+import { Token } from '@ape.swap/sdk'
 
 interface LPSearchModalProps {
-  onLpSelect: (farm: ParsedFarm) => void
+  onSelect: (currencyA: Token, currencyB: Token) => void
   onDismiss?: () => void
 }
 
@@ -21,14 +21,14 @@ const ScrollableContainer = styled(Flex)`
   }
 `
 
-const LPSearchModal = ({ onDismiss = () => null, onLpSelect }: LPSearchModalProps) => {
+const LPSearchModal = ({ onDismiss = () => null, onSelect }: LPSearchModalProps) => {
   const { t } = useTranslation()
   const handleLPSelect = useCallback(
-    (farm: ParsedFarm) => {
+    (currencyA: Token, currencyB: Token) => {
       onDismiss()
-      onLpSelect(farm)
+      onSelect(currencyA, currencyB)
     },
-    [onDismiss, onLpSelect],
+    [onDismiss, onSelect],
   )
 
   const modalProps = {
@@ -46,7 +46,7 @@ const LPSearchModal = ({ onDismiss = () => null, onLpSelect }: LPSearchModalProp
     <Modal onDismiss={onDismiss} title={t('LP Tokens')} open {...modalProps}>
       <ScrollableContainer>
         <Flex sx={{ flexDirection: 'column', width: '380px', maxWidth: '100%' }}>
-          <LPSearcher onLpSelect={handleLPSelect} />
+          <LPSearcher onSelect={handleLPSelect} />
         </Flex>
       </ScrollableContainer>
     </Modal>

@@ -5,7 +5,7 @@ import multicall from 'utils/multicall'
 import { getApePriceGetterAddress } from 'utils/addressHelper'
 import { getBalanceNumber } from 'utils/formatBalance'
 
-const fetchPrices = async (chainId, tokens: Token[]) => {
+const fetchPrices = async (chainId: number, tokens: Token[]) => {
   const apePriceGetterAddress = getApePriceGetterAddress(chainId)
   const tokensToCall = Object.fromEntries(Object.entries(tokens).filter(([, values]) => values.address[chainId]))
   const erc20Calls = Object.values(tokensToCall).map((token) => {

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { JungleFarmConfig } from 'config/constants/types'
 import { JungleFarm, TokenPrices } from 'state/types'
-import { getPoolApr } from 'utils/apr'
+import { getPoolApr, getPoolAprPerSecond } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 
 const cleanJungleFarmData = (
@@ -51,7 +51,20 @@ const fetchJungleFarmTokenStatsAndApr = (
     ? tokenPrices.find((token) => token?.address[chainId] === farm?.stakingToken.address[chainId])
     : farm.stakingToken
   // Calculate apr
-  const apr = getPoolApr(stakingToken?.price, rewardToken?.price, getBalanceNumber(totalStaked), curFarm?.tokenPerBlock)
+  const apr = farm?.rewardsPerSecond
+    ? getPoolAprPerSecond(
+        stakingToken?.price,
+        rewardToken?.price,
+        getBalanceNumber(totalStaked),
+        curFarm?.rewardsPerSecond,
+      )
+    : getPoolApr(
+        chainId,
+        stakingToken?.price,
+        rewardToken?.price,
+        getBalanceNumber(totalStaked),
+        curFarm?.tokenPerBlock,
+      )
 
   return [stakingToken, rewardToken, apr]
 }

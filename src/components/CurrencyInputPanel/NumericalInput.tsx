@@ -62,6 +62,7 @@ export const Input = React.memo(function InnerInput({
   onUserInput,
   placeholder,
   removeLiquidity,
+  fontSize,
   disabledText,
   ...rest
 }: {
@@ -102,7 +103,7 @@ export const Input = React.memo(function InnerInput({
         minLength={1}
         maxLength={79}
         spellCheck="false"
-        fontSize="22px"
+        fontSize={fontSize || '22px'}
         style={{ marginRight: removeLiquidity ? '0px' : '10px' }}
         removeLiquidity={removeLiquidity}
         disabledText={disabledText}

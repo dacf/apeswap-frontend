@@ -1,4 +1,5 @@
-import { Flex } from '@apeswapfinance/uikit'
+/** @jsxImportSource theme-ui */
+import { Flex } from '@ape.swap/uikit'
 import { useLocation } from 'react-router-dom'
 import React, { useState } from 'react'
 import { usePollBills, useBills, usePollUserBills, useSetBills } from 'state/bills/hooks'
@@ -9,11 +10,17 @@ import { useTranslation } from 'contexts/Localization'
 import BillsListView from './components/BillsListView'
 import UserBillViews from './components/UserBillViews'
 import BillMenu from './components/Menu'
+import { BannerTypes } from 'components/Banner/types'
+import { useSetZapOutputList } from 'state/zap/hooks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import ListView404 from 'components/ListView404'
+import { AVAILABLE_CHAINS_ON_PRODUCTS } from 'config/constants/chains'
 
 const Bills: React.FC = () => {
   useSetBills()
   usePollBills()
   usePollUserBills()
+  const { chainId } = useActiveWeb3React()
   const bills = useBills()
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
@@ -50,19 +57,32 @@ const Bills: React.FC = () => {
 
     return billsToReturn
   }
+  // Set zap output list to match dual farms
+  useSetZapOutputList(
+    renderBills(false)?.map((bill) => {
+      return {
+        currencyIdA: bill?.token.address[chainId],
+        currencyIdB: bill?.quoteToken.address[chainId],
+      }
+    }),
+  )
 
   return (
     <>
       <Flex
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
         mb="80px"
-        style={{ position: 'relative', top: '30px', width: '100%' }}
+        sx={{
+          position: 'relative',
+          top: '30px',
+          width: '100%',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItem: 'center',
+        }}
       >
         <ListViewLayout>
           <Banner
-            banner="treasury-bills"
+            banner={`${chainId}-treasury-bills` as BannerTypes}
             title={t('Treasury Bills')}
             link="https://apeswap.gitbook.io/apeswap-finance/product-and-features/raise/treasury-bills"
             listViewBreak
@@ -76,8 +96,16 @@ const Bills: React.FC = () => {
             activeOption={sortOption}
             query={query}
           />
-          <UserBillViews bills={renderBills(true)} />
-          <BillsListView bills={renderBills(false)} />
+          {!AVAILABLE_CHAINS_ON_PRODUCTS['bills'].includes(chainId) ? (
+            <Flex sx={{ mt: '20px' }}>
+              <ListView404 product="bills" />
+            </Flex>
+          ) : (
+            <>
+              <UserBillViews bills={renderBills(true)} />
+              <BillsListView bills={renderBills(false)} />
+            </>
+          )}
         </ListViewLayout>
       </Flex>
     </>

@@ -161,6 +161,7 @@ const DisplayPools: React.FC<{ pools: Pool[]; openId?: number; poolTags: Tag[] }
             stakingTokenBalance={pool?.userData?.stakingTokenBalance?.toString()}
             stakeTokenAddress={pool?.stakingToken?.address[chainId]}
             stakeTokenValueUsd={pool?.stakingToken?.price}
+            earnTokenSymbol={pool?.rewardToken?.symbol || pool?.tokenName}
             sousId={pool?.sousId}
           />
           {!isMobile && <NextArrow />}

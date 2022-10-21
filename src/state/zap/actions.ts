@@ -50,5 +50,7 @@ export const replaceZapState = createAction<{
 }>('zap/replaceSwapState')
 export const setRecipient = createAction<{ recipient: string | null }>('zap/setRecipient')
 export const setInputList = createAction<{ zapInputList: { [symbol: string]: Token } }>('zap/setInputList')
+export const setZapNewOutputList = createAction<{ zapNewOutputList: { currencyIdA: string; currencyIdB: string }[] }>(
+  'zap/setZapNewOutputList',
+)
 export const setZapOutputList = createAction<{ zapOutputList: ParsedFarm[]; chainId: ChainId }>('zap/setOutputList')
-export const setZapSlippage = createAction<{ zapSlippage: number }>('zap/setZapSlippage')

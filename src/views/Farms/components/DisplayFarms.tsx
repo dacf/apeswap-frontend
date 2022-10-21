@@ -133,7 +133,8 @@ const DisplayFarms: React.FC<{ farms: Farm[]; openPid?: number; farmTags: Tag[] 
                 isLp
                 tokenAddress={farm.tokenAddresses[chainId]}
                 quoteTokenAddress={farm.quoteTokenSymbol === 'BNB' ? 'ETH' : farm.quoteTokenAdresses[chainId]}
-                farm={farm}
+                lpCurr1={farm?.tokenAddresses[chainId]}
+                lpCurr2={farm?.quoteTokenAdresses[chainId]}
               />
             }
           />

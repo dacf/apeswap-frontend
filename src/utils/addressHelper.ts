@@ -74,3 +74,6 @@ export const getIazoSettingsAddress = (chainId: number) => {
 export const getIazoFactoryAddress = (chainId: number) => {
   return addresses.iazoFactoryProxy[chainId]
 }
+export const getMigratorBalanceCheckerAddress = (chainId: number) => {
+  return addresses.migratorBalanceChecker[chainId]
+}

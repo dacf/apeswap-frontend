@@ -29,7 +29,12 @@ const Banner: React.FC<{
 
   // Media breaks are used until tablet mode on list view is designed
   return (
-    <Flex sx={{ ...styles.flexPrimary, margin }}>
+    <Flex
+      sx={{
+        ...styles.flexPrimary,
+        margin,
+      }}
+    >
       {loaded ? (
         <FlexImage sx={{ backgroundImage: `url(${loaded})` }} maxWidth={maxWidth} listViewBreak={listViewBreak} />
       ) : (

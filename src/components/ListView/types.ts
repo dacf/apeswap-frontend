@@ -1,3 +1,4 @@
+import React from 'react'
 import { CSSProperties } from 'theme-ui'
 
 export interface ListViewProps {
@@ -18,6 +19,9 @@ export interface ListViewProps {
   toolTipIconWidth?: string
   toolTipStyle?: CSSProperties
   ttWidth?: string
+  noEarnToken?: boolean
+  backgroundColor?: string
+  beforeTokenContent?: React.ReactNode
 }
 
 export interface ListCardProps extends ListViewProps {

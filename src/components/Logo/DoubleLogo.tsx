@@ -31,7 +31,7 @@ export default function DoubleCurrencyLogo({
         <CurrencyLogo
           currency={currency1}
           size={`${size.toString()}px`}
-          style={{ transform: 'translate(-8px, 0px)' }}
+          style={{ transform: 'translate(-13px, 0px)' }}
         />
       )}
     </Wrapper>

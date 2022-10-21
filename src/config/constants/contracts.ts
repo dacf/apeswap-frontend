@@ -6,6 +6,7 @@ const contracts = {
     [ChainId.BSC]: '0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95',
     [ChainId.MATIC]: '0x5d47baba0d66083c52009271faf3f50dcc01023c',
     [ChainId.MAINNET]: '0x92df60c51c710a1b1c20e42d85e221f3a1bfc7f2',
+    [ChainId.TLOS]: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
   },
   syrup: {
     [ChainId.BSC_TESTNET]: '0xAf1B22cBDbB502B2089885bcd230255f8B80243b',
@@ -24,6 +25,7 @@ const contracts = {
     [ChainId.BSC]: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     [ChainId.MATIC]: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     [ChainId.MAINNET]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    [ChainId.TLOS]: '0xd102ce6a4db07d247fcc28f366a623df0938ca9e',
   },
   lottery: {
     [ChainId.BSC_TESTNET]: '0xe42Ff4758C37ccC3A54004b176384477bbBe70D6',
@@ -38,6 +40,7 @@ const contracts = {
     [ChainId.BSC_TESTNET]: '0x67ADCB4dF3931b0C5Da724058ADC2174a9844412',
     [ChainId.MATIC]: '0x95028E5B8a734bb7E2071F96De89BABe75be9C8E',
     [ChainId.MAINNET]: '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441',
+    [ChainId.TLOS]: '0xa1a283f10f578201a97a8f69d8c15828b778f04b',
   },
   mulltiCallV3: {
     [ChainId.BSC]: '0x47A307e3167820daf22a377D777371753758f59c',
@@ -45,6 +48,7 @@ const contracts = {
     [ChainId.MATIC]: '0x1F98415757620B543A52E61c46B32eB19261F984',
     [ChainId.MATIC_TESTNET]: '0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3',
     [ChainId.MAINNET]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+    [ChainId.TLOS]: '0xf553b2be7aac670bcd812ba64a5025d9f5095ab5',
   },
   busd: {
     [ChainId.BSC_TESTNET]: '0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee',
@@ -111,6 +115,7 @@ const contracts = {
     [ChainId.BSC_TESTNET]: '0xd722f9A2950E35Ab3EeD1d013c214671750A638B',
     [ChainId.MATIC]: '0x05D6C73D7de6E02B3f57677f849843c03320681c',
     [ChainId.MAINNET]: '0x5fbFd1955EeA2F62F1AfD6d6E92223Ae859F7887',
+    [ChainId.TLOS]: '0x29392efed565c13a0901aeb88e32bf58eeb8a067',
   },
   miniApeV2: {
     [ChainId.BSC]: '',
@@ -136,6 +141,9 @@ const contracts = {
   raffle: {
     [ChainId.BSC]: '0xE136585d860B53dc2fC7ef00c268c8A8351c69d3',
     [ChainId.BSC_TESTNET]: '0x954c20D203e46e1e947079D5c7a265aFc52F0Efc',
+  },
+  migratorBalanceChecker: {
+    [ChainId.BSC]: '0x353045418118965FB2e2EF4637143776Cd98d5ce',
   },
 }
 

@@ -24,7 +24,7 @@ const useClaimBill = (billAddress: string, billIds: string[]) => {
     return tx
   }, [billContract, billIds, chainId, billType])
 
-  return { onClaimBill: handleClaimBill }
+  return { onClaimBill: handleClaimBill, billType }
 }
 
 export default useClaimBill

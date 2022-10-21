@@ -51,7 +51,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
       max={stakingTokenBalance}
       onConfirm={async (val) => {
         setPendingDepositTrx(true)
-        await onStake(val)
+        await onStake(val, chainId)
           .then((resp) => {
             const trxHash = resp.transactionHash
             toastSuccess(t('Deposit Successful'), {

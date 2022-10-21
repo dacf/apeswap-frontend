@@ -1,4 +1,4 @@
-import { Percent, SmartRouter, Trade } from '@ape.swap/sdk'
+import { Currency, Percent, SmartRouter, Trade } from '@ape.swap/sdk'
 import { RouterTypes } from 'config/constants'
 import { WrapType } from 'hooks/useWrapCallback'
 
@@ -26,4 +26,5 @@ export interface DexActionProps {
       txHash: string | undefined
     }>
   >
+  inputCurrency: Currency
 }

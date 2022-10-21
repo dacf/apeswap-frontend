@@ -25,6 +25,19 @@ export const usePollVaultsData = (includeArchive = false) => {
   }, [includeArchive, dispatch, slowRefresh, account, chainId, tokenPrices, farmLpAprs])
 }
 
+export const usePollVaultUserData = () => {
+  const dispatch = useAppDispatch()
+  const { slowRefresh } = useRefresh()
+  const { account, chainId } = useActiveWeb3React()
+  const vaults = useSelector((state: State) => state.vaults.data)
+  const vaultsLoaded = vaults.length > 0
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchVaultUserDataAsync(account, chainId))
+    }
+  }, [dispatch, slowRefresh, vaultsLoaded, account, chainId])
+}
+
 // Vaults
 
 export const useVaults = () => {

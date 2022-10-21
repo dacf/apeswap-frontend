@@ -4,15 +4,15 @@ import { Input as NumericalInput } from 'components/CurrencyInputPanel/Numerical
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Spinner } from 'theme-ui'
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Field } from 'state/swap/actions'
 import { Field as MintField } from 'state/mint/actions'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { getCurrencyUsdPrice } from 'utils/getTokenUsdPrice'
 import TokenSelector from '../TokenSelector'
 import { styles } from './styles'
 import { DexPanelProps } from './types'
 import Dots from 'components/Loader/Dots'
+import { useTokenPriceUsd } from 'hooks/useTokenPriceUsd'
 
 const DexPanel: React.FC<DexPanelProps> = ({
   value,
@@ -32,22 +32,19 @@ const DexPanel: React.FC<DexPanelProps> = ({
   disableTokenSelect,
   showCommonBases = false,
   isZapInput,
+  userBalance,
 }) => {
-  const [usdVal, setUsdVal] = useState(null)
   const { chainId, account } = useActiveWeb3React()
   const isRemoveLiquidity = !!lpPair
   const selectedCurrencyBalance = useCurrencyBalance(
     account ?? undefined,
     isRemoveLiquidity ? lpPair?.liquidityToken ?? undefined : currency ?? undefined,
   )
-  const currencyBalance = selectedCurrencyBalance?.toSignificant(6)
+  const currencyBalance = userBalance ? userBalance?.toFixed(6) : selectedCurrencyBalance?.toSignificant(6) || '0'
+
   const { t } = useTranslation()
 
-  useMemo(async () => {
-    setUsdVal(null)
-    setUsdVal(await getCurrencyUsdPrice(chainId, lpPair?.liquidityToken || currency, isRemoveLiquidity, smartRouter))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, currency, isRemoveLiquidity, smartRouter])
+  const usdVal = useTokenPriceUsd(chainId, lpPair?.liquidityToken || currency, isRemoveLiquidity, smartRouter)
 
   useEffect(() => {
     if (setTradeValueUsd) {

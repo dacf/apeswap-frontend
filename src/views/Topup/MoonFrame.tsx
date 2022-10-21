@@ -31,8 +31,8 @@ const StyledIframe = styled(Iframe)`
   }
 `
 
-export default function MoonPayIframe() {
-  const url = useMoonPayUrl()
+const MoonPayIframe: React.FC<{ manualChainId?: number }> = ({ manualChainId }) => {
+  const url = useMoonPayUrl(manualChainId)
 
   return (
     <StyledIframe
@@ -43,3 +43,5 @@ export default function MoonPayIframe() {
     />
   )
 }
+
+export default MoonPayIframe

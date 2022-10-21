@@ -181,7 +181,8 @@ const DisplayFarms: React.FC<{ farms: DualFarm[]; openPid?: number; dualFarmTags
                   farm?.stakeTokens?.token0?.symbol === 'MATIC' ? 'ETH' : farm?.stakeTokens?.token0?.address[chainId]
                 }
                 lpPrice={farm.stakeTokenPrice}
-                dualFarm={farm}
+                lpCurr1={farm.stakeTokens.token1.address[chainId]}
+                lpCurr2={farm.stakeTokens.token0.address[chainId]}
               />
             }
           />

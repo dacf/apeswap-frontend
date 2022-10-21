@@ -2,9 +2,9 @@ import { Pair, SmartRouter, Token } from '@ape.swap/sdk'
 import flatMap from 'lodash/flatMap'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'config/constants'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS, SHOW_MODAL_TYPES } from 'config/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useAllTokens } from 'hooks/Tokens'
+import { useAllTokens, useDefaultTokens } from 'hooks/Tokens'
 import { AppDispatch, AppState } from '../../index'
 import {
   addSerializedPair,
@@ -34,11 +34,14 @@ import {
   hidePhishingWarningBanner,
   setIsExchangeChartDisplayed,
   updateUserAutonomyPrepay,
+  lastZapMigratorRouter,
   setUnlimitedGnana,
+  setShowModal,
   updateUserBonusRouter,
+  setZapSlippage,
 } from '../actions'
 import { deserializeToken, serializeToken } from './helpers'
-import { setZapSlippage } from '../../zap/actions'
+import { PairState, usePairs } from 'hooks/usePairs'
 
 export function useAudioModeManager(): [boolean, () => void] {
   const dispatch = useDispatch<AppDispatch>()
@@ -125,6 +128,22 @@ export function useThemeManager(): [boolean, () => void] {
   return [isDark, toggleTheme]
 }
 
+export function useLastZapMigratorRouter(): [SmartRouter, (router: SmartRouter) => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const zapMigratorRouter = useSelector<AppState, AppState['user']['zapMigratorRouter']>(
+    (state) => state.user.zapMigratorRouter,
+  )
+
+  const updateLastZapMigratorRouter = useCallback(
+    (router: SmartRouter) => {
+      dispatch(lastZapMigratorRouter({ router }))
+    },
+    [dispatch],
+  )
+
+  return [zapMigratorRouter, updateLastZapMigratorRouter]
+}
+
 export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) => void] {
   const dispatch = useDispatch<AppDispatch>()
 
@@ -179,12 +198,12 @@ export function useUserRecentTransactions(): [boolean, (recentTransaction: boole
 export function useUserSlippageTolerance(isZap?: boolean): [number, (slippage: number) => void] {
   const dispatch = useDispatch<AppDispatch>()
 
-  const zapSlippageTolerance = useSelector<AppState, AppState['zap']['zapSlippage']>((state) => {
-    return state.zap.zapSlippage
+  const zapSlippageTolerance = useSelector<AppState, AppState['user']['userZapSlippage']>((state) => {
+    return state.user.userZapSlippage
   })
   const setZapSlippageTolerance = useCallback(
     (slippage: number) => {
-      dispatch(setZapSlippage({ zapSlippage: slippage }))
+      dispatch(setZapSlippage({ userZapSlippage: slippage }))
     },
     [dispatch],
   )
@@ -401,13 +420,14 @@ export function usePairAdder(): (pair: Pair) => void {
  * @param tokenB the other token
  * @param smartRouter the router to be used
  */
+
 export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token], smartRouter?: SmartRouter): Token {
   return new Token(
     tokenA.chainId,
     Pair.getAddress(tokenA, tokenB, smartRouter || SmartRouter.APE),
     18,
-    'Ape-LP',
-    'Apeswap LPs',
+    `${smartRouter || 'Ape'}-LP`,
+    `${smartRouter || 'Apeswap'} LPs`,
   )
 }
 
@@ -477,6 +497,61 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   }, [combinedList])
 }
 
+/**
+ * Returns all the valid pairs of tokens that are tracked by the user for the current chain ID.
+ */
+export function useValidTrackedTokenPairs(): [Token, Token][] {
+  const { chainId } = useActiveWeb3React()
+  const tokens = useDefaultTokens()
+
+  // pairs for every token against every base
+  const generatedPairs: [Token, Token][] = useMemo(
+    () =>
+      chainId
+        ? flatMap(Object.keys(tokens), (tokenAddress) => {
+            const token = tokens[tokenAddress]
+            // for each token on the current chain,
+            return (
+              // loop though all bases on the current chain
+              (BASES_TO_TRACK_LIQUIDITY_FOR[chainId] ?? [])
+                // to construct pairs of the given token with each base
+                .map((base) => {
+                  if (base.address === token.address) {
+                    return null
+                  }
+                  return [base, token]
+                })
+                .filter((p): p is [Token, Token] => p !== null)
+            )
+          })
+        : [],
+    [tokens, chainId],
+  )
+
+  const filterInvalidPairs = usePairs(useMemo(() => generatedPairs, [generatedPairs]))?.filter(
+    (pair) => pair[0] === PairState.EXISTS,
+  )
+
+  const filteredGeneratedPair: [Token, Token][] = useMemo(() => {
+    return filterInvalidPairs?.map(([, pair]) => {
+      return [pair.token0, pair.token1]
+    })
+  }, [filterInvalidPairs])
+
+  return useMemo(() => {
+    // dedupes pairs of tokens in the combined list
+    const keyed = filteredGeneratedPair.reduce<{ [key: string]: [Token, Token] }>((memo, [tokenA, tokenB]) => {
+      const sorted = tokenA.sortsBefore(tokenB)
+      const key = sorted ? `${tokenA.address}:${tokenB.address}` : `${tokenB.address}:${tokenA.address}`
+      if (memo[key]) return memo
+      memo[key] = sorted ? [tokenA, tokenB] : [tokenB, tokenA]
+      return memo
+    }, {})
+
+    return Object.keys(keyed).map((key) => keyed[key])
+  }, [filteredGeneratedPair])
+}
+
 export const useWatchlistTokens = (): [string[], (address: string) => void] => {
   const dispatch = useDispatch<AppDispatch>()
   const savedTokens = useSelector((state: AppState) => state.user.watchlistTokens) ?? []
@@ -514,4 +589,20 @@ export function useUserUnlimitedGnana(): [boolean, (allowUnlimitedGnana: boolean
   )
 
   return [unlimitedGnana, setUnlimitedGnanaMinting]
+}
+
+export const useIsModalShown = () => {
+  const isModalShown = useSelector<AppState, AppState['user']['showModal']>((state) => state.user.showModal)
+
+  return { ...isModalShown }
+}
+
+export const useShowModal = (actionType: string, flag: boolean) => {
+  const dispatch = useDispatch<AppDispatch>()
+
+  const toggleShowModal = useCallback(() => {
+    dispatch(setShowModal({ actionType: SHOW_MODAL_TYPES[actionType], flag: !flag }))
+  }, [actionType, dispatch, flag])
+
+  return [toggleShowModal]
 }

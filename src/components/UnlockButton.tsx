@@ -55,7 +55,7 @@ const UnlockButton = (props) => {
   ) : (
     <Button
       onClick={onPresentConnectModal}
-      sx={{ fontSize: '16px', padding: '0 24px', height: '44px', fontWeight: 600 }}
+      sx={{ fontSize: '16px', padding: '0 24px', height: '44px', fontWeight: 700 }}
       {...props}
     >
       {t('Connect Wallet')}

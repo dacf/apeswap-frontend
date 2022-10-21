@@ -73,6 +73,11 @@ const HeadingText = styled(Text)`
   font-weight: 700;
 `
 
+const ScrollableModal = styled(Modal)`
+  max-height: 500px;
+  overflow-y: scroll;
+`
+
 const NfaListingModal: React.FC<NfaListingModalProps> = ({ onConfirm, onDismiss, ownedNfas }) => {
   const auctionAddress = useAuctionAddress()
   const allowance = useNfaAllowance(auctionAddress)
@@ -108,7 +113,7 @@ const NfaListingModal: React.FC<NfaListingModalProps> = ({ onConfirm, onDismiss,
   }, [onApprove, setApproved])
 
   return (
-    <Modal title={`${t('Put Your NFA Up For Auction!')}`} onDismiss={onDismiss}>
+    <ScrollableModal title={`${t('NFA Auction')}`} onDismiss={onDismiss}>
       <DescriptionWrapper>
         <Text textAlign="center"> {t('Welcome to the Self-Serve Auction House!')} </Text>
         <HeadingText textAlign="center" marginTop="10px" fontWeight="600px">
@@ -220,7 +225,7 @@ const NfaListingModal: React.FC<NfaListingModalProps> = ({ onConfirm, onDismiss,
         )}
         <UnderlinedButton text={t('Cancel')} handleClick={onDismiss} />
       </ModalActions>
-    </Modal>
+    </ScrollableModal>
   )
 }
 

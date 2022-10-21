@@ -380,6 +380,50 @@ export const useClaimRaffle = () => {
   return { claiming, claim, hasClaimed, isLoading }
 }
 
+export const useWonRaffles = () => {
+  const [claiming, setIsClaiming] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [userWins, setUserWins] = useState([])
+  const [userWon, setUserWon] = useState(false)
+  const [userClaimed, setUserClaimed] = useState(false)
+  const { account } = useWeb3React()
+
+  const raffleContract = useRaffleContract()
+  const claim = async (winId: number) => {
+    setIsClaiming(true)
+    await raffleContract.claim(winId)
+    setIsClaiming(false)
+  }
+
+  useEffect(() => {
+    const fetchWinStatus = async () => {
+      try {
+        setIsLoading(true)
+        const result = await raffleContract.getUserWins(account)
+        if (result.length > 0) {
+          const userWinsResult = [
+            {
+              id: result[1][0].toNumber(),
+              prizeTokenId: result[0][0].prizeTokenId.toNumber(),
+              claimed: result[0][0].claimed,
+              tokenId: result[0][0].tokenId.toNumber(),
+            },
+          ]
+          setUserWins(userWinsResult)
+          setUserClaimed(userWinsResult[0].claimed)
+        }
+        setUserWon(result.length > 0)
+      } catch {
+        console.warn('Something went wrong fetching Raffle balance')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    if (account) fetchWinStatus()
+  }, [account, raffleContract])
+  return { claiming, claim, userWins, isLoading, userWon, userClaimed }
+}
+
 export const useNfas = () => {
   const { isInitialized, isLoading, data }: NfaState = useSelector((state: State) => state.nfas)
   return { nfas: data, isInitialized, isLoading }

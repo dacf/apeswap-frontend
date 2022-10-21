@@ -7,13 +7,19 @@ import { BSC_BLOCK_TIME } from 'config'
 import { BLOCK_EXPLORER } from 'config/constants/chains'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from 'contexts/Localization'
+import useCurrentTime from 'hooks/useTimer'
 
 const InfoContent: React.FC<{ farm: JungleFarm }> = ({ farm }) => {
   const { chainId } = useActiveWeb3React()
   const { currentBlock } = useBlock()
+  const currentTime = useCurrentTime()
   const { t } = useTranslation()
-  const timeUntilStart = getTimePeriods(Math.max(farm?.startBlock - currentBlock, 0) * BSC_BLOCK_TIME, true)
-  const timeUntilEnd = getTimePeriods(Math.max(farm?.endBlock - currentBlock, 0) * BSC_BLOCK_TIME, true)
+  const timeUntilStart = farm?.rewardsPerSecond
+    ? getTimePeriods(Math.max(farm?.startBlock - currentTime / 1000, 0), true)
+    : getTimePeriods(Math.max(farm?.startBlock - currentBlock, 0) * BSC_BLOCK_TIME, true)
+  const timeUntilEnd = farm?.rewardsPerSecond
+    ? getTimePeriods(Math.max(farm?.endBlock - currentTime / 1000, 0), true)
+    : getTimePeriods(Math.max(farm?.endBlock - currentBlock, 0) * BSC_BLOCK_TIME, true)
   const explorerLink = BLOCK_EXPLORER[chainId]
   const contractLink = `${explorerLink}/address/${farm?.contractAddress[chainId]}`
   const tokenContractLink = `${explorerLink}/address/${farm?.rewardToken?.address[chainId]}`
@@ -22,12 +28,26 @@ const InfoContent: React.FC<{ farm: JungleFarm }> = ({ farm }) => {
       <Flex flexDirection="column">
         {farm?.endBlock > 0 && farm?.rewardToken?.symbol !== 'BANANA' && (
           <Flex alignItems="space-between" justifyContent="space-between" style={{ width: '100%' }}>
-            <Text style={{ fontSize: '14px' }}>{farm?.startBlock > currentBlock ? 'Starts in' : 'Ends in'}</Text>
-            <Text style={{ fontSize: '16px' }} bold>
-              {farm?.startBlock > currentBlock
-                ? `${timeUntilStart.days}d, ${timeUntilStart.hours}h, ${timeUntilStart.minutes}m`
-                : `${timeUntilEnd.days}d, ${timeUntilEnd.hours}h, ${timeUntilEnd.minutes}m`}
-            </Text>
+            {farm?.rewardsPerSecond ? (
+              <Text style={{ fontSize: '14px' }}>
+                {farm?.startBlock > currentTime / 1000 ? 'Starts in' : 'Ends in'}
+              </Text>
+            ) : (
+              <Text style={{ fontSize: '14px' }}>{farm?.startBlock > currentBlock ? 'Starts in' : 'Ends in'}</Text>
+            )}
+            {farm?.rewardsPerSecond ? (
+              <Text style={{ fontSize: '16px' }} bold>
+                {farm?.startBlock > currentTime / 1000
+                  ? `${timeUntilStart.days}d, ${timeUntilStart.hours}h, ${timeUntilStart.minutes}m`
+                  : `${timeUntilEnd.days}d, ${timeUntilEnd.hours}h, ${timeUntilEnd.minutes}m`}
+              </Text>
+            ) : (
+              <Text style={{ fontSize: '16px' }} bold>
+                {farm?.startBlock > currentBlock
+                  ? `${timeUntilStart.days}d, ${timeUntilStart.hours}h, ${timeUntilStart.minutes}m`
+                  : `${timeUntilEnd.days}d, ${timeUntilEnd.hours}h, ${timeUntilEnd.minutes}m`}
+              </Text>
+            )}
           </Flex>
         )}
       </Flex>
@@ -54,7 +74,7 @@ const InfoContent: React.FC<{ farm: JungleFarm }> = ({ farm }) => {
       </Flex>
       <Flex alignItems="center" justifyContent="center" mt="15px">
         <LinkExternal href={contractLink} style={{ fontSize: '14px' }}>
-          {t('View on BscScan')}
+          {t('View Staking Contract')}
         </LinkExternal>
       </Flex>
     </>

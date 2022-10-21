@@ -9,8 +9,13 @@ import { computeTradePriceBreakdown } from 'utils/prices'
 import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import track from 'utils/track'
+import {
+  useExpertModeManager,
+  useIsModalShown,
+  useUserRecentTransactions,
+  useUserSlippageTolerance,
+} from 'state/user/hooks'
 import { CurrencyAmount, JSBI, Token, Trade } from '@ape.swap/sdk'
-import { useExpertModeManager, useUserRecentTransactions, useUserSlippageTolerance } from 'state/user/hooks'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import maxAmountSpend from 'utils/maxAmountSpend'
@@ -26,9 +31,11 @@ import LoadingBestRoute from './components/LoadingBestRoute'
 import ExpertModeRecipient from './components/ExpertModeRecipient'
 import confirmPriceImpactWithoutFee from './components/confirmPriceImpactWithoutFee'
 import RecentTransactions from '../components/RecentTransactions'
+import { useBananaAddress } from 'hooks/useAddress'
+import { showCircular } from 'utils'
 
 const Swap: React.FC = () => {
-  // modal and loading
+  const { showBuyModal } = useIsModalShown()
   const [{ tradeToConfirm, swapErrorMessage, attemptingTxn, txHash }, setSwapState] = useState<{
     tradeToConfirm: Trade | undefined
     attemptingTxn: boolean
@@ -65,6 +72,8 @@ const Swap: React.FC = () => {
   const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
 
   const [inputCurrency, outputCurrency] = [useCurrency(INPUT?.currencyId), useCurrency(OUTPUT?.currencyId)]
+  const bananaToken = useCurrency(useBananaAddress())
+  const buyingBanana = outputCurrency === bananaToken
 
   const {
     wrapType,
@@ -133,6 +142,10 @@ const Swap: React.FC = () => {
 
   const { routerType } = bestRoute
 
+  const displayBuyCircular = useCallback(
+    () => showBuyModal && showCircular(chainId, history, '?modal=circular-buy'),
+    [history, showBuyModal, chainId],
+  )
   const handleSwap = useCallback(() => {
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)) {
       return
@@ -156,6 +169,7 @@ const Swap: React.FC = () => {
             token2Amount: Number(trade?.outputAmount.toSignificant(6)),
           },
         })
+        if (buyingBanana && hash) displayBuyCircular()
       })
       .catch((error) => {
         setSwapState({
@@ -165,7 +179,18 @@ const Swap: React.FC = () => {
           txHash: undefined,
         })
       })
-  }, [priceImpactWithoutFee, swapCallback, tradeToConfirm, trade, tradeValueUsd, chainId, t, routerType])
+  }, [
+    priceImpactWithoutFee,
+    swapCallback,
+    tradeToConfirm,
+    trade,
+    tradeValueUsd,
+    chainId,
+    t,
+    routerType,
+    buyingBanana,
+    displayBuyCircular,
+  ])
 
   // token warning stuff
   const [loadedInputCurrency, loadedOutputCurrency] = [
@@ -272,6 +297,7 @@ const Swap: React.FC = () => {
             />
           )}
           <DexActions
+            inputCurrency={inputCurrency}
             trade={trade}
             wrapInputError={wrapInputError}
             swapInputError={swapInputError}

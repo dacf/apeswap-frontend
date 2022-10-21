@@ -4,25 +4,29 @@ import { Flex, Input } from '@ape.swap/uikit'
 import styled from '@emotion/styled'
 import { useTranslation } from 'contexts/Localization'
 import { Box } from 'theme-ui'
-import { ParsedFarm } from 'state/zap/reducer'
 import DisplayRows from './components/DisplayRows'
-import { useZapState } from 'state/zap/hooks'
+import { useZapOutputList } from 'state/zap/hooks'
 import { styles } from './styles'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
+import { Token } from '@ape.swap/sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface LPSearcherProps {
-  onLpSelect: (farm: ParsedFarm) => void
+  onSelect: (currencyA: Token, currencyB: Token) => void
   zapOutputList?: any
 }
 
-function LPSearcher({ onLpSelect }: LPSearcherProps) {
+function LPSearcher({ onSelect }: LPSearcherProps) {
   const { t } = useTranslation()
-  const [query, setQuery] = useState('')
-  const { zapOutputList } = useZapState()
   const { chainId } = useActiveWeb3React()
+  const [query, setQuery] = useState('')
+  const zapOutputList = useZapOutputList()
 
-  const queriedFarms = useMemo(() => {
-    return zapOutputList[chainId]?.filter((farm) => farm.lpSymbol.toUpperCase().includes(query.toUpperCase()))
+  const queriedTokens = useMemo(() => {
+    return zapOutputList?.filter(({ currencyA, currencyB }) =>
+      `${currencyA.getSymbol(chainId).toUpperCase()}${currencyB.getSymbol(chainId).toUpperCase()}`.includes(
+        query.toUpperCase(),
+      ),
+    )
   }, [chainId, query, zapOutputList])
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +47,7 @@ function LPSearcher({ onLpSelect }: LPSearcherProps) {
         />
       </Flex>
       <Box sx={styles.displayRowsContainer}>
-        <DisplayRows queriedFarms={queriedFarms} onLpSelect={onLpSelect} />
+        <DisplayRows tokens={queriedTokens} onSelect={onSelect} />
       </Box>
     </Flex>
   )

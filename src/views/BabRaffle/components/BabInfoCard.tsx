@@ -3,15 +3,31 @@ import { Button, Flex, Spinner, Text } from '@ape.swap/uikit'
 import UnlockButton from 'components/UnlockButton'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import useIsMobile from 'hooks/useIsMobile'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { useClaimRaffle, useFetchBabToken } from 'state/hooks'
+import { styles } from '../styles'
+import NumberedList from './NumberedList'
 
 const BabInfoCard: React.FC = () => {
   const { t } = useTranslation()
-  const { tokenId, loading, holdsBab } = useFetchBabToken()
-  const { claim, claiming, hasClaimed } = useClaimRaffle()
+  const { loading, holdsBab, tokenId } = useFetchBabToken()
+  const { claim, hasClaimed, claiming } = useClaimRaffle()
   const { account } = useActiveWeb3React()
+  const isMobile = useIsMobile()
+
+  // Note:
+  // -> No function for 'Show NFT' button
+  // if hasMinted is false, there is no way wonPrize can be true
+  // as you will have minted a token to win a prize
+
+  // Not connected -> Connect Wallet
+  // Connected
+  // -> No Bab Token (No Bab Token Detected)
+  // -> Holds Bab
+  // ----> Minted (Show NFT)
+  // ----> Not Minted (Mint)
 
   return (
     <Flex
@@ -22,7 +38,7 @@ const BabInfoCard: React.FC = () => {
         '@media screen and (max-width: 725px)': { flexWrap: 'wrap' },
       }}
     >
-      <Flex>
+      <Flex sx={{ borderRadius: '10px' }}>
         <ReactPlayer
           playing
           muted
@@ -37,53 +53,76 @@ const BabInfoCard: React.FC = () => {
       <Flex
         sx={{
           flexDirection: 'column',
-          padding: '20px 50px',
-          '@media screen and (max-width: 725px)': { padding: '0px 0px' },
+          justifyContent: ['', 'center'],
+          padding: [0, '0 10px 0 30px', '0 50px'],
         }}
       >
-        <Flex sx={{ flexDirection: 'column' }}>
-          <Text size="28px" mb="24px" mt="15px" weight={600} sx={{ textAlign: 'center', lineHeight: '35px' }}>
-            {t('Become Part of the ApeSwap-BAB Family')}
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            alignItems: ['center', 'flex-start'],
+            textAlign: ['center', 'start'],
+          }}
+        >
+          <Text
+            weight={700}
+            sx={{ lineHeight: '35px', fontSize: '22px', marginBottom: '6px', marginTop: '15px', fontWeight: 700 }}
+          >
+            {isMobile ? t('ApeSwap x BAB') : t('ApeSwap x Binance Account Bound Token')}
           </Text>
-          <Text size="16px" weight={500} padding="0px 20px">
-            {t(`ApeSwap is proud to be one of the premiere platforms to add Binance’s BAB (Binance Account Bound) token
-              support at its launch.`)}{' '}
-            <br />
-            <br />
-            {t(`To celebrate the launch of the BAB token, ApeSwap and Binance BNB Chain have partnered to create a unique,
-              commemorative NFT, free to mint for BAB Token holders for the month of September 2022.`)}
-            <br />
-            <br />
+          <Text sx={styles.playBody}>
+            {t(
+              `ApeSwap is proud to be one of the first platforms to add support for Binance's BAB (Binance Account Bound) token at its launch.`,
+            )}
+          </Text>
+          <Text sx={styles.playBody}>
+            {t(
+              `To celebrate the launch of the BAB token, ApeSwap and Binance BNB Chain have partnered to create a unique, commemorative NFT, free to mint for BAB Token holders for the month of September 2022.`,
+            )}
           </Text>
         </Flex>
-        <Flex sx={{ alignItems: 'center', justifyContent: 'center', mt: '20px' }}>
+        <Flex sx={{ flexDirection: 'column', gap: '10px' }}>
+          <NumberedList
+            title="1- Mint Your BAB Token ✅"
+            description="To mint an ApeSwap BAB Club NFT, you must first mint a BAB token."
+            showBtn
+            t={t}
+          />
+          <NumberedList
+            title="2- Claim Raffle NFT ✅"
+            description="Mint your ApeSwap BAB Club Token to be eligible for the Non Fungible Banana NFT giveaway."
+            t={t}
+          />
+          <NumberedList
+            title="3- Good Luck! ✅"
+            description="You are now participating in the Raffle. Visit this page each day to see if you've won!"
+            t={t}
+          />
+        </Flex>
+        <Flex sx={{ alignItems: 'center', justifyContent: 'center', marginTop: ['20px', '20px', '40px'] }}>
           {!loading ? (
-            <div>
+            <Flex sx={{ width: ['100%', '388px'] }}>
               {!account ? (
-                <UnlockButton />
+                <UnlockButton fullWidth />
               ) : (
-                <div>
-                  <Text fontSize="20px" padding="20px">
-                    {!holdsBab
-                      ? t('No BAB token found in wallet. Acquire a BAB token to continue!')
-                      : t('Your wallet holds a BAB Token')}
-                  </Text>
+                <Flex sx={{ width: ['100%', '388px'] }}>
+                  {!holdsBab && (
+                    <Button disabled fullWidth>
+                      {t('No Bab Token Detected')}
+                    </Button>
+                  )}
                   {holdsBab && (
-                    <div>
-                      {hasClaimed ? (
-                        <Text fontSize="20px" padding="20px">
-                          Raffle NFT Already Claimed! ✅
-                        </Text>
-                      ) : (
-                        <Button onClick={() => claim(tokenId)} disabled={claiming}>
-                          Claim Raffle
+                    <Flex sx={{ width: ['100%', '388px'] }}>
+                      {!hasClaimed && (
+                        <Button onClick={() => claim(tokenId)} disabled={claiming} fullWidth>
+                          {t('Mint')}
                         </Button>
                       )}
-                    </div>
+                    </Flex>
                   )}
-                </div>
+                </Flex>
               )}
-            </div>
+            </Flex>
           ) : (
             <Spinner size={130} />
           )}

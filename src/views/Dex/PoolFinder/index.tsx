@@ -18,7 +18,6 @@ import Dots from '../../../components/Loader/Dots'
 import { dexStyles } from '../styles'
 import { styles } from './styles'
 import DexNav from '../components/DexNav'
-import MyPositions from '../components/MyPositions'
 import RecentTransactions from '../components/RecentTransactions'
 import { Box } from 'theme-ui'
 
@@ -91,7 +90,6 @@ export default function PoolFinder() {
           <Flex sx={{ margin: '20px 0px 5px 0px', justifyContent: 'center', maxWidth: '100%', width: '420px' }}>
             <Text weight={700}>{t('FIND YOUR LIQUIDITY')}</Text>
           </Flex>
-          <MyPositions />
           <Box sx={{ marginTop: '20px' }}>
             <Flex sx={{ ...styles.tokenContainer }}>
               <Text sx={{ ...styles.swapDirectionText }}>{t('Token 1')}</Text>

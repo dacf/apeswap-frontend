@@ -7,7 +7,8 @@ import SwiperProvider from 'contexts/SwiperProvider'
 import Values from 'views/Homepage/components/Values/Values'
 import BabInfoCard from './components/BabInfoCard'
 import NFBGiveaway from './components/NFBGiveaway'
-import Products from './components/Products'
+import Services from 'views/Homepage/components/Services/Services'
+import NewToDeFi from './components/NewToDeFi'
 
 const Nft = () => {
   const { t } = useTranslation()
@@ -18,21 +19,29 @@ const Nft = () => {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        mb: '100px',
-        marginTop: '10px',
+        marginTop: '30px',
       }}
     >
-      <Flex sx={{ flexDirection: 'column', padding: '0px 10px', width: '100%', maxWidth: '1150px' }}>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          width: ['90%', '90%', '90%', '100%'],
+          maxWidth: '1200px',
+          gap: ['20px', '20px', '20px', '50px'],
+        }}
+      >
         <Banner
           banner="BABbanner"
           link="https://ape-swap.medium.com/apeswap-adds-launch-support-for-binances-first-soulbound-token-dbb2e0e4c263"
           title={t('ApeSwap BAB Pass')}
-          margin="0 0 20px 0"
         />
         <BabInfoCard />
         <NFBGiveaway />
+      </Flex>
+      <Flex className="services-con" sx={{ width: '100%', flexDirection: 'column' }}>
+        <NewToDeFi />
         <SwiperProvider>
-          <Products />
+          <Services bab />
         </SwiperProvider>
         <Flex sx={{ marginTop: '25px' }} />
         <SwiperProvider>

@@ -6,7 +6,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from 'contexts/Localization'
 import { RouteComponentProps } from 'react-router-dom'
 import { Currency, TokenAmount } from '@ape.swap/sdk'
-import { useSwapState } from 'state/swap/hooks'
+import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { useUserRecentTransactions } from 'state/user/hooks'
 import maxAmountSpend from 'utils/maxAmountSpend'
 import { useAppDispatch } from 'state'
@@ -20,8 +20,8 @@ import DexNav from '../components/DexNav'
 import AddLiquiditySign from './components/AddLiquiditySign'
 import PoolInfo from './components/PoolInfo'
 import AddLiquidityActions from './components/Actions'
-import MyPositions from '../components/MyPositions'
 import RecentTransactions from '../components/RecentTransactions'
+import LiquiditySubNav from '../components/LiquiditySubNav'
 
 function AddLiquidity({
   match: {
@@ -29,6 +29,7 @@ function AddLiquidity({
   },
   history,
 }: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string }>) {
+  useDefaultsFromURLSearch()
   const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const { INPUT, OUTPUT } = useSwapState()
@@ -126,7 +127,7 @@ function AddLiquidity({
       <Flex sx={{ flexDirection: 'column' }}>
         <Flex sx={{ ...dexStyles.dexContainer }}>
           <DexNav />
-          <MyPositions />
+          <LiquiditySubNav />
           {noLiquidity && (
             <Flex sx={{ ...styles.warningMessageContainer }}>
               <Text size="14px" weight={700} mb="10px" color="primaryBright">
@@ -139,20 +140,19 @@ function AddLiquidity({
               </Text>
             </Flex>
           )}
-          <Flex sx={{ marginTop: '30px' }}>
-            <DexPanel
-              value={formattedAmounts[Field.CURRENCY_A]}
-              panelText="Token 1"
-              currency={currencyA}
-              otherCurrency={currencyB}
-              setTradeValueUsd={setTradeValueUsd}
-              fieldType={Field.CURRENCY_A}
-              onCurrencySelect={handleCurrencySelect}
-              onUserInput={onUserInput}
-              handleMaxInput={handleMaxInput}
-              showCommonBases
-            />
-          </Flex>
+          <Flex sx={{ marginBottom: '30px' }} />
+          <DexPanel
+            value={formattedAmounts[Field.CURRENCY_A]}
+            panelText="Token 1"
+            currency={currencyA}
+            otherCurrency={currencyB}
+            setTradeValueUsd={setTradeValueUsd}
+            fieldType={Field.CURRENCY_A}
+            onCurrencySelect={handleCurrencySelect}
+            onUserInput={onUserInput}
+            handleMaxInput={handleMaxInput}
+            showCommonBases
+          />
           <AddLiquiditySign />
           <DexPanel
             value={formattedAmounts[Field.CURRENCY_B]}

@@ -54,6 +54,8 @@ const TrendingTokens: React.FC = () => {
   useEffect(() => {
     if (chainId === ChainId.MATIC) {
       setSelectedCat('polygon')
+    } else if (chainId === ChainId.TLOS) {
+      setSelectedCat('telos')
     } else {
       setSelectedCat(CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)])
     }

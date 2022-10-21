@@ -119,7 +119,7 @@ export const styles: Record<string, ThemeUIStyleObject> = {
   switchStyles: {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'rgba(56, 56, 56, 1)',
+    backgroundColor: 'rgba(241, 234, 218, 1)',
     height: '20px',
     width: '40px',
     '& div': {

@@ -2,6 +2,8 @@ import { ThemeUIStyleObject } from 'theme-ui'
 import { ArrowDropDownIcon, Flex, Text } from '@apeswapfinance/uikit'
 import styled, { keyframes } from 'styled-components'
 
+// TODO: Change everything to theme ui
+
 export const styles: Record<string, ThemeUIStyleObject> = {
   titleContainer: {
     alignItems: 'center',
@@ -43,14 +45,16 @@ export const ListExpandedContainer = styled(Flex)<{ size?: number; justifyConten
   }
 `
 
-export const ListCardContainer = styled(Flex)`
+export const ListCardContainer = styled(Flex)<{ backgroundColor: string }>`
   height: 130px;
   border-radius: 0;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  background: ${({ theme }) => theme.colors.white2};
-  border-bottom: 1px solid rgba(226, 226, 226, 0.2);
+  background: ${({ theme, backgroundColor }) =>
+    backgroundColor === 'white3' ? theme.colors.white3 : theme.colors.white2};
+  border-bottom: ${({ backgroundColor }) =>
+    `1px solid ${backgroundColor === 'white3' ? 'rgba(226, 226, 226, .7)' : 'rgba(226, 226, 226, .2)'}`};
   padding: 10px;
   margin: 0px 10px 0px 10px;
   max-width: 500px;

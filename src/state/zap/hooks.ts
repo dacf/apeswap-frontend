@@ -1,16 +1,14 @@
 import { parseUnits } from '@ethersproject/units'
-import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Zap, ZapType } from '@ape.swap/sdk'
-import { ParsedQs } from 'qs'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Zap, ZapType } from '@ape.swap/sdk'
+import { useCallback, useEffect, useMemo } from 'react'
 import contracts from 'config/constants/contracts'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useENS from 'hooks/ENS/useENS'
-import { useCurrency } from 'hooks/Tokens'
+import { useCurrency, useDefaultTokens } from 'hooks/Tokens'
 import { mergeBestZaps, useTradeExactIn } from 'hooks/Zap/Zap'
-import useParsedQueryString from 'hooks/useParsedQueryString'
 import { isAddress } from 'utils'
-import store, { AppDispatch, AppState, useAppDispatch } from '../index'
+import { AppState, useAppDispatch } from '../index'
 import { useCurrencyBalances } from '../wallet/hooks'
 import {
   Field,
@@ -20,28 +18,16 @@ import {
   selectOutputCurrency,
   setInputList,
   setRecipient,
-  setZapOutputList,
+  setZapNewOutputList,
   setZapType,
   typeInput,
 } from './actions'
-import { ParsedFarm, ZapState } from './reducer'
-import { useUserSlippageTolerance } from '../user/hooks'
+import { useUserSlippageTolerance, useValidTrackedTokenPairs } from '../user/hooks'
 import { usePair } from 'hooks/usePairs'
 import useTotalSupply from 'hooks/useTotalSupply'
-import { AppThunk, Farm, JungleFarm } from '../types'
-import fetchZapInputTokens from './api'
+
 import BigNumber from 'bignumber.js'
-import { useJungleFarms } from '../jungleFarms/hooks'
-import { useFarms } from '../farms/hooks'
-import { setInitialJungleFarmDataAsync } from '../jungleFarms'
-import { setInitialFarmDataAsync } from '../farms'
-import { getMasterChefAddress, getMiniChefAddress } from '../../utils/addressHelper'
-import multicall from '../../utils/multicall'
-import masterchefABI from 'config/abi/masterchef.json'
-import jungleChefABI from '../../config/abi/jungleChef.json'
-import { setInitialDualFarmDataAsync } from '../dualFarms'
-import { useDualFarms } from '../dualFarms/hooks'
-import miniApeV2 from '../../config/abi/miniApeV2.json'
+import fetchZapInputTokens from './api'
 
 export function useZapState(): AppState['zap'] {
   return useSelector<AppState, AppState['zap']>((state) => state.zap)
@@ -168,21 +154,23 @@ function involvesAddress(trade: Zap, checksummedAddress: string): boolean {
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedZapInfo(
-  typedValue,
-  inputCurrency,
-  OUTPUT: { currency1: string; currency2: string },
-  recipient,
-): {
+export function useDerivedZapInfo(): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount }
   parsedAmount: CurrencyAmount | undefined
   zap: MergedZap
   inputError?: string
 } {
-  const { account, chainId } = useActiveWeb3React()
-  const { currency1: outputCurrencyId1, currency2: outputCurrencyId2 } = OUTPUT
+  const {
+    typedValue,
+    [Field.INPUT]: { currencyId: inputCurrencyId },
+    [Field.OUTPUT]: { currency1: outputCurrencyId1, currency2: outputCurrencyId2 },
+    recipient,
+  } = useZapState()
 
+  const { account, chainId } = useActiveWeb3React()
+
+  const inputCurrency = useCurrency(inputCurrencyId)
   const out1 = useCurrency(useMemo(() => outputCurrencyId1, [outputCurrencyId1]))
   const out2 = useCurrency(useMemo(() => outputCurrencyId2, [outputCurrencyId2]))
   const outputCurrencies = useMemo(() => {
@@ -202,6 +190,7 @@ export function useDerivedZapInfo(
 
   // Change to currency amount. Divide the typed input by 2 to get correct distributions
   const halfTypedValue = new BigNumber(typedValue).div(2).toFixed(18, 5)
+
   const parsedAmount = tryParseAmount(halfTypedValue === 'NaN' ? '0' : halfTypedValue, inputCurrency ?? undefined)
 
   const bestZapOne = useTradeExactIn(parsedAmount, outputCurrencies[0] ?? undefined)
@@ -263,291 +252,80 @@ export function useDerivedZapInfo(
   }
 }
 
-function parseCurrencyFromURLParameter(urlParam: any): string {
-  if (typeof urlParam === 'string') {
-    const valid = isAddress(urlParam)
-    if (valid) return valid
-    if (urlParam.toUpperCase() === 'ETH') return 'ETH'
-    if (valid === false) return 'ETH'
-  }
-  return 'ETH' ?? ''
-}
-
-function parseTokenAmountURLParameter(urlParam: any): string {
-  // eslint-disable-next-line no-restricted-globals
-  return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : ''
-}
-
-function parseIndependentFieldURLParameter(urlParam: any): Field {
-  return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field.OUTPUT : Field.INPUT
-}
-
-const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
-const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
-
-function validatedRecipient(recipient: any): string | null {
-  if (typeof recipient !== 'string') return null
-  const address = isAddress(recipient)
-  if (address) return address
-  if (ENS_NAME_REGEX.test(recipient)) return recipient
-  if (ADDRESS_REGEX.test(recipient)) return recipient
-  return null
-}
-
-export function queryParametersToZapState(parsedQs: ParsedQs, chainId: ChainId): ZapState {
-  let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
-  let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
-
-  const chainAddress = contracts.banana[chainId]
-
-  if (inputCurrency === outputCurrency) {
-    if (typeof parsedQs.outputCurrency === 'string') {
-      inputCurrency = ''
-    } else {
-      outputCurrency = chainAddress
-    }
-  }
-
-  const recipient = validatedRecipient(parsedQs.recipient)
-
-  return {
-    [Field.INPUT]: {
-      currencyId: inputCurrency,
-    },
-    [Field.OUTPUT]: {
-      currency1: '',
-      currency2: '',
-    },
-    shareOfPool: '',
-    typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
-    independentField: parseIndependentFieldURLParameter(parsedQs.exactField),
-    zapType: ZapType.ZAP,
-    recipient,
-    zapOutputList: null,
-    zapInputList: null,
-    zapSlippage: null,
-  }
-}
-
-// updates the swap state to use the defaults for a given network
-export function useDefaultsFromURLSearch():
-  | {
-      inputCurrencyId: string | undefined
-      outputCurrencies: { currency1: string | undefined; currency2: string | undefined }
-    }
-  | undefined {
-  const { chainId } = useActiveWeb3React()
-  const dispatch = useDispatch<AppDispatch>()
-  const parsedQs = useParsedQueryString()
-  const [result, setResult] = useState<
-    | {
-        inputCurrencyId: string | undefined
-        outputCurrencies: { currency1: string | undefined; currency2: string | undefined }
-      }
-    | undefined
-  >()
-
+// Set default currencies for zap state
+export function useDefaultCurrencies() {
+  const { chainId, account } = useActiveWeb3React()
+  const dispatch = useAppDispatch()
   useEffect(() => {
-    if (!chainId) return
-    const parsed = queryParametersToZapState(parsedQs, chainId)
-
+    const outputCurrencies = { currency1: 'ETH', currency2: contracts.banana[chainId] }
+    const inputCurrency = 'ETH'
     dispatch(
       replaceZapState({
-        typedValue: parsed.typedValue,
-        field: parsed.independentField,
-        inputCurrencyId: parsed[Field.INPUT].currencyId,
-        outputCurrencyId: parsed[Field.OUTPUT],
-        recipient: parsed.recipient,
-        zapType: parsed.zapType,
+        typedValue: '',
+        field: '',
+        inputCurrencyId: inputCurrency,
+        outputCurrencyId: outputCurrencies,
+        recipient: account,
+        zapType: ZapType.ZAP,
       }),
     )
-
-    setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencies: parsed[Field.OUTPUT] })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, chainId])
-
-  return result
+  }, [dispatch, chainId, account])
 }
 
+// Set zap output list. Keep this pretty simple to allow multiple products to use it
+// This will be mostly used by products rather than the dex
+export function useSetZapOutputList(currencyIds: { currencyIdA: string; currencyIdB: string }[]) {
+  const dispatch = useAppDispatch()
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useMemo(() => dispatch(setZapNewOutputList({ zapNewOutputList: currencyIds })), [currencyIds.length, dispatch])
+}
+
+// Hook to set the dex output list.
+// Since we want to use multiple token pairs that exists this hook is a bit more involved than the simple setOutputList
+export function useSetZapDexOutputList() {
+  // Get default token list and pinned pair tokens and create valid pairs
+  const trackedTokenPairs = useValidTrackedTokenPairs()
+  useSetZapOutputList(
+    useMemo(() => {
+      return trackedTokenPairs?.map(([token1, token2]) => {
+        return { currencyIdA: token1.address, currencyIdB: token2.address }
+      })
+    }, [trackedTokenPairs]),
+  )
+}
+
+// Hook to return the output token list to be used in the search modal
+export const useZapOutputList = (): { currencyA: Token; currencyB: Token }[] => {
+  const { zapNewOutputList: currencyIds } = useZapState()
+  const tokens = useDefaultTokens()
+  const filteredTokens = useMemo(
+    () =>
+      currencyIds.map(({ currencyIdA, currencyIdB }) => {
+        const checkedCurrencyIdA = isAddress(currencyIdA)
+        const checkedCurrencyIdB = isAddress(currencyIdB)
+        if (!checkedCurrencyIdA || !checkedCurrencyIdB) return null
+        return { currencyA: tokens[checkedCurrencyIdA], currencyB: tokens[checkedCurrencyIdB] }
+      }),
+    [currencyIds, tokens],
+  )
+  return filteredTokens
+}
+
+// Hook to set the zap input list
+export function useSetZapInputList() {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    const getZapInputList = async () => {
+      const resp: { [symbol: string]: Token } = await fetchZapInputTokens()
+      dispatch(setInputList({ zapInputList: resp }))
+    }
+    getZapInputList()
+  }, [dispatch])
+}
+
+// Hook to use the input list
 export function useZapInputList(): { [address: string]: Token } {
   const { zapInputList } = useZapState()
   if (!zapInputList) return
   return zapInputList
-}
-
-export const useSetInitialZapData = () => {
-  const { chainId } = useActiveWeb3React()
-  const dispatch = useAppDispatch()
-  const { onSetZapType } = useZapActionHandlers()
-  const { zapInputList, zapType, zapOutputList } = useZapState()
-  const farms = useFarms(null)
-  const jungleFarms = useJungleFarms(null)
-  const dualFarms = useDualFarms(null)
-  if (zapType !== ZapType.ZAP) onSetZapType(ZapType.ZAP)
-
-  useEffect(() => {
-    if (!zapInputList) {
-      dispatch(getZapInputList())
-    }
-  }, [dispatch, zapInputList])
-
-  useEffect(() => {
-    if (jungleFarms.length === 0 && chainId === ChainId.BSC) {
-      dispatch(setInitialJungleFarmDataAsync())
-    }
-  }, [chainId, dispatch, jungleFarms.length])
-
-  useEffect(() => {
-    if (farms.length === 0 && chainId === ChainId.BSC) {
-      dispatch(setInitialFarmDataAsync())
-    }
-  }, [chainId, dispatch, farms.length])
-
-  useEffect(() => {
-    if (zapOutputList[chainId].length === 0 && chainId === ChainId.BSC) {
-      dispatch(fetchActiveFarms(farms, jungleFarms, chainId))
-    }
-  }, [chainId, dispatch, farms, jungleFarms, zapOutputList])
-
-  // fetch polygon data
-
-  useEffect(() => {
-    if (dualFarms.length === 0 && chainId === ChainId.MATIC) {
-      dispatch(setInitialDualFarmDataAsync())
-    }
-  }, [chainId, dispatch, dualFarms.length])
-
-  useEffect(() => {
-    if (zapOutputList[chainId].length === 0 && chainId === ChainId.MATIC) {
-      dispatch(fetchActivePolyFarms(dualFarms, chainId))
-    }
-  }, [chainId, dispatch, dualFarms, farms, jungleFarms, zapOutputList])
-}
-
-export const fetchActivePolyFarms =
-  (dualFarms, chainId): AppThunk =>
-  async (dispatch) => {
-    try {
-      const activeDualFarms: any[] = await getActivePolyFarms(dualFarms, chainId)
-      const zapOutputList: ParsedFarm[] = parsePolyFarms(activeDualFarms)
-      dispatch(setZapOutputList({ zapOutputList, chainId }))
-    } catch (e) {
-      console.warn(e)
-    }
-  }
-
-export const parsePolyFarms = (dualFarms) => {
-  return dualFarms.map((farm) => {
-    return {
-      lpSymbol: `${farm.stakeTokens.token1.symbol}-${farm.stakeTokens.token0.symbol}`,
-      lpAddress: farm.stakeTokenAddress,
-      currency1: farm.stakeTokens.token1.address[ChainId.MATIC],
-      currency1Symbol: farm.stakeTokens.token1.symbol,
-      currency2: farm.stakeTokens.token0.address[ChainId.MATIC],
-      currency2Symbol: farm.stakeTokens.token0.symbol,
-    }
-  })
-}
-
-export const getActivePolyFarms = async (dualFarms, chainId) => {
-  const miniChefAddress = getMiniChefAddress(chainId)
-  const farmCalls = dualFarms.map((farm) => {
-    return {
-      address: miniChefAddress,
-      name: 'poolInfo',
-      params: [farm.pid],
-    }
-  })
-  const vals = await multicall(chainId, miniApeV2, farmCalls)
-  const farmsWithMultiplier = dualFarms.map((farm, i) => {
-    return { ...farm, alloc: vals[i].allocPoint.toString() }
-  })
-  return farmsWithMultiplier.filter((farm) => farm.alloc !== '0')
-}
-
-export const fetchActiveFarms =
-  (farms, jungleFarms, chainId): AppThunk =>
-  async (dispatch) => {
-    try {
-      const allActiveFarms = await getActiveFarms(chainId, farms, jungleFarms)
-      if (allActiveFarms.length === 0) return
-      const zapOutputList = getZapOutputList(allActiveFarms, chainId)
-      dispatch(setZapOutputList({ zapOutputList, chainId }))
-    } catch (e) {
-      console.warn(e)
-    }
-  }
-
-export const getActiveFarms = async (chainId, farms: Farm[], jungleFarms?: JungleFarm[]) => {
-  // fetch data & filter active farms
-  const masterChefAddress = getMasterChefAddress(chainId)
-  const farmCalls = farms.map((farm) => {
-    return {
-      address: masterChefAddress,
-      name: 'poolInfo',
-      params: [farm.pid],
-    }
-  })
-  const vals: any[] = await multicall(chainId, masterchefABI, farmCalls)
-
-  const farmsWithMultiplier = farms.map((farm, i) => {
-    return { ...farm, alloc: vals[i].allocPoint.toString() }
-  })
-  const activeFarms = farmsWithMultiplier.filter((farm, i) => i !== 0 && farm.alloc !== '0')
-
-  const jungleCalls = jungleFarms.map((farm) => {
-    return {
-      address: farm.contractAddress[chainId],
-      name: 'bonusEndBlock',
-    }
-  })
-  const jungleValues: any[] = await multicall(chainId, jungleChefABI, jungleCalls)
-  const jungleFarmsWithEndBlock = jungleFarms.map((farm, i) => {
-    return { ...farm, endBlock: jungleValues[i][0].toString() }
-  })
-  const currentBlock = store?.getState()?.block?.currentBlock
-  const currJungleFarms = jungleFarmsWithEndBlock?.map((farm) => {
-    return { ...farm, isFinished: farm.isFinished || currentBlock > farm.endBlock }
-  })
-
-  const activeJungleFarms = currJungleFarms?.filter((farm) => {
-    return !farm.isFinished
-  })
-  return [activeFarms, activeJungleFarms]
-}
-
-export const getZapOutputList = (allFarms, chainId) => {
-  const [farms, jungleFarms] = allFarms
-
-  const parsedFarms: ParsedFarm[] = farms?.map((farm) => {
-    return {
-      lpSymbol: farm.lpSymbol,
-      lpAddress: farm.lpAddresses[chainId],
-      currency1: farm.tokenAddresses[chainId],
-      currency1Symbol: farm.tokenSymbol,
-      currency2: farm.quoteTokenAdresses[chainId],
-      currency2Symbol: farm.quoteTokenSymbol,
-    }
-  })
-
-  const parsedJungleFarms: ParsedFarm[] = jungleFarms?.map((farm) => {
-    return {
-      lpSymbol: farm.tokenName,
-      lpAddress: farm.stakingToken.address[chainId],
-      currency1: farm.lpTokens.token.address[chainId],
-      currency1Symbol: farm.lpTokens.token.symbol,
-      currency2: farm.lpTokens.quoteToken.address[chainId],
-      currency2Symbol: farm.lpTokens.quoteToken.symbol,
-    }
-  })
-  return [...parsedFarms, ...parsedJungleFarms]
-}
-
-export const getZapInputList = (): AppThunk => async (dispatch) => {
-  try {
-    const resp: { [symbol: string]: Token } = await fetchZapInputTokens()
-    if (resp) dispatch(setInputList({ zapInputList: resp }))
-  } catch (error) {
-    console.error(error)
-  }
 }

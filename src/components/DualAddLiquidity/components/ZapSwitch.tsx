@@ -6,8 +6,8 @@ import { useTranslation } from 'contexts/Localization'
 import track from 'utils/track'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import MoonPayModal from 'views/Topup/MoonpayModal'
-import SettingsModal from '../../Menu/GlobalSettings/SettingsModal'
 import { styles } from '../styles'
+import SettingsModal from 'components/Menu/GlobalSettings/SettingsModal'
 import { TitleText } from '../../ListViewContent/styles'
 
 interface ZapSwitchProps {
@@ -20,7 +20,7 @@ const ZapSwitch: React.FC<ZapSwitchProps> = ({ handleZapSwitch, goZap }) => {
   const { chainId } = useActiveWeb3React()
 
   const [onPresentModal] = useModal(<MoonPayModal />)
-  const [onPresentSettingsModal] = useModal(<SettingsModal zapSettings />)
+  const [onPresentSettingsModal] = useModal(<SettingsModal zapSettings={goZap} />)
 
   return (
     <Flex sx={{ margin: '15px 0', justifyContent: 'space-between', alignItems: 'center' }}>

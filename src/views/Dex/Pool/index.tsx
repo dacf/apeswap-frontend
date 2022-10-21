@@ -14,6 +14,7 @@ import { dexStyles } from '../styles'
 import DexNav from '../components/DexNav'
 import { styles } from './styles'
 import RecentTransactions from '../components/RecentTransactions'
+import LiquiditySubNav from '../components/LiquiditySubNav'
 
 export default function Pool() {
   const { account } = useActiveWeb3React()
@@ -82,6 +83,7 @@ export default function Pool() {
       <Flex sx={{ flexDirection: 'column' }}>
         <Flex sx={{ ...dexStyles.dexContainer }}>
           <DexNav />
+          <LiquiditySubNav />
           <Flex sx={{ flexDirection: 'column', maxWidth: '100%', width: '420px' }}>
             <Flex sx={{ ...styles.topContainer }}>
               <Text weight={700} sx={{ textTransform: 'uppercase' }}>

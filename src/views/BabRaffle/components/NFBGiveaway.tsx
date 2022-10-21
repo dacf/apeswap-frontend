@@ -1,95 +1,104 @@
 /** @jsxImportSource theme-ui */
-import { Flex, Link, Text } from '@ape.swap/uikit'
+import { Button, Flex, Link, Text } from '@ape.swap/uikit'
 import { useTranslation } from 'contexts/Localization'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React from 'react'
 import ReactPlayer from 'react-player'
+import { useFetchBabToken, useWonRaffles } from 'state/hooks'
+import { styles } from '../styles'
 
 const BabInfoCard: React.FC = () => {
   const { t } = useTranslation()
+  const { holdsBab } = useFetchBabToken()
+  const {
+    claim: claimWin,
+    claiming: winClaiming,
+    userWins,
+    userWon: wonPrize,
+    userClaimed: hasClaimed,
+  } = useWonRaffles()
+  const { account } = useActiveWeb3React()
+
+  const nfbNumber = userWins[0]?.prizeTokenId
+
+  // wonPrize
+  // -> Congratulations Text, New Description with NFB #number
+
+  // wonPrize
+  // -> !hasClaimed -> Claim NFB button
+  // -> hasClaimed (wonPrize also true) -> Claimed button (disabled)
 
   return (
-    <Flex
-      sx={{
-        background: 'white2',
-        padding: '20px',
-        borderRadius: '10px',
-        mt: '25px',
-        minHeight: '400px',
-        width: '100%',
-        alignItems: 'center',
-        '@media screen and (max-width: 725px)': { flexWrap: 'wrap-reverse' },
-      }}
-    >
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          padding: '20px 10px 0px 0px',
-        }}
-      >
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            padding: '0px 20px 0px 30px',
-            mr: '30px',
-            '@media screen and (max-width: 725px)': {
-              padding: '0px 0px',
-              alignItems: 'center',
-              justifyContent: 'center',
-              mr: '0px',
-            },
-          }}
-        >
-          <Text
-            size="28px"
-            mb="24px"
-            weight={600}
-            sx={{
-              textAlign: 'left',
-              lineHeight: '35px',
-              '@media screen and (max-width: 725px)': { textAlign: 'center' },
-            }}
-          >
-            {t('Join the 30-day Non-fungible Banana NFT Raffle')}
+    <Flex sx={styles.nfb}>
+      <Flex sx={styles.nfbCon}>
+        <Flex sx={styles.nfbTextCon}>
+          <Text sx={styles.nfbHeader}>
+            {!holdsBab
+              ? t('The 30-Day ApeSwap BAB NFB Raffle')
+              : wonPrize && account
+              ? t("Congratulations, You've Won!")
+              : t('You are not a winner... yet! Check back tomorrow.')}
           </Text>
-          <Text
-            size="16px"
-            weight={500}
-            sx={{ textAlign: 'left', '@media screen and (max-width: 725px)': { textAlign: 'center' } }}
-          >
-            {t(`During the month of October the big 30-day ApeSwapNFT raffle will start.`)}
-            <br />
-            <br />
-            {t(
-              `Holders of an ApeSwap BAB NFT automatically participate in the daily raffles. Make sure to come back to this page daily in October to see if you have won a Non-fungible Banana NFT.`,
+          <Text sx={styles.nfbDescription}>
+            {wonPrize && account && (
+              <Text sx={{ fontWeight: 700, margin: 0, lineHeight: 0 }}>
+                {t(`NFB #${nfbNumber} is ready to be in your wallet!`)}
+                <br />
+                <br />
+              </Text>
             )}
+            {wonPrize && account
+              ? t('Thank you for joining the ApeSwap BAB Club and participating in our BAB Launch Raffle!')
+              : t(
+                  `From October 1st through October 31st, all holders of an ApeSwap BAB NFT will be eligible to participate in a daily raffle to win a Non Fungible Banana NFT.`,
+                )}
             <br />
             <br />
+            {wonPrize && account
+              ? t('Look forward to more BAB token initiatives in the future.')
+              : t(`Make sure to return to this page daily in October to see if you have won an NFB!`)}
           </Text>
-          <Text
-            size="20px"
-            style={{ textDecoration: 'underline', marginTop: '25px', alignSelf: 'center', textAlign: 'center' }}
-          >
-            <Link
-              href="https://ape-swap.medium.com/apeswap-adds-launch-support-for-binances-first-soulbound-token-dbb2e0e4c263"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t('Learn more at our medium article')}
-            </Link>
+          <Text sx={styles.nfbBottom}>
+            {holdsBab && wonPrize && account ? (
+              <>
+                {hasClaimed ? (
+                  <Button disabled sx={{ width: ['100%', '300px', '388px'] }}>
+                    {t('Claimed')}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => claimWin(userWins[0].id)}
+                    disabled={winClaiming}
+                    sx={{ width: ['100%', '300px', '388px'] }}
+                  >
+                    {t('Claim NFB')}
+                  </Button>
+                )}
+              </>
+            ) : (
+              <Link
+                href="https://ape-swap.medium.com/apeswap-adds-launch-support-for-binances-first-soulbound-token-dbb2e0e4c263"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'underline' }}
+              >
+                {t('Read our Medium article >')}
+              </Link>
+            )}
           </Text>
         </Flex>
       </Flex>
-      <Flex>
-        <ReactPlayer
-          playing
-          muted
-          loop
-          url="videos/bab-nfb.mp4"
-          height="100%"
-          borderRadius="10px"
-          width="100%"
-          playsInline
-        />
+      <Flex sx={{ width: ['240px', '414px'], height: ['240px', '414px'] }}>
+        {wonPrize ? (
+          <Flex
+            sx={{
+              ...styles.nfbImage,
+              backgroundImage: `url(https://apeswap.mypinata.cloud/ipfs/QmYhuJnr3GGUnDGtg6rmSXTgo7FzaWgrriqikfgn5SkXhZ/${nfbNumber}.png)`,
+            }}
+          />
+        ) : (
+          <ReactPlayer playing muted loop url="videos/bab-nfb.mp4" height="100%" width="100%" playsInline />
+        )}
       </Flex>
     </Flex>
   )

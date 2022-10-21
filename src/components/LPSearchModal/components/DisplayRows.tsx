@@ -1,17 +1,17 @@
 /** @jsxImportSource theme-ui */
+import { Token } from '@ape.swap/sdk'
 import React, { useCallback } from 'react'
-import { ParsedFarm } from 'state/zap/reducer'
 import LpList from './LpList'
 
 interface DisplayRowsProps {
-  queriedFarms?: ParsedFarm[]
-  onLpSelect?: (farm: ParsedFarm) => void
+  tokens?: { currencyA: Token; currencyB: Token }[]
+  onSelect: (currencyA: Token, currencyB: Token) => void
 }
 
-const DisplayRows: React.FC<DisplayRowsProps> = ({ queriedFarms, onLpSelect }) => {
+const DisplayRows: React.FC<DisplayRowsProps> = ({ tokens, onSelect }) => {
   const getLPListRows = useCallback(() => {
-    return <LpList lps={queriedFarms} onLpSelect={onLpSelect} />
-  }, [onLpSelect, queriedFarms])
+    return <LpList tokens={tokens} onSelect={onSelect} />
+  }, [onSelect, tokens])
 
   return <>{getLPListRows()}</>
 }

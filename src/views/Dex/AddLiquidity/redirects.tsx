@@ -1,15 +1,12 @@
 import React from 'react'
 import { Redirect, RouteComponentProps } from 'react-router-dom'
 import AddLiquidity from './index'
-import RegularLiquidityWrapper from './RegularLiquidityWrapper'
-import ZapLiquidityWrapper from './ZapLiquidityWrapper'
 
 export function RedirectToAddLiquidity() {
   return <Redirect to="/add-liquidity/" />
 }
 
 const OLD_PATH_STRUCTURE = /^(0x[a-fA-F0-9]{40}|BNB)-(0x[a-fA-F0-9]{40}|BNB)$/
-
 export function RedirectOldAddLiquidityPathStructure(props: RouteComponentProps<{ currencyIdA: string }>) {
   const {
     match: {
@@ -18,7 +15,7 @@ export function RedirectOldAddLiquidityPathStructure(props: RouteComponentProps<
   } = props
   const match = currencyIdA.match(OLD_PATH_STRUCTURE)
   if (match?.length) {
-    return <Redirect to={`/oldAdd/${match[1]}/${match[2]}`} />
+    return <Redirect to={`/add-liquidity/${match[1]}/${match[2]}`} />
   }
 
   return <AddLiquidity {...props} />
@@ -31,61 +28,7 @@ export function RedirectDuplicateTokenIds(props: RouteComponentProps<{ currencyI
     },
   } = props
   if (currencyIdA.toLowerCase() === currencyIdB.toLowerCase()) {
-    return <Redirect to={`/oldAdd/${currencyIdA}`} />
+    return <Redirect to={`/add-liquidity/${currencyIdA}`} />
   }
   return <AddLiquidity {...props} />
-}
-
-export function RedirectRegularLiquidityPathStructure(props: RouteComponentProps<{ currencyIdA: string }>) {
-  const {
-    match: {
-      params: { currencyIdA },
-    },
-  } = props
-  const match = currencyIdA.match(OLD_PATH_STRUCTURE)
-  if (match?.length) {
-    return <Redirect to={`/add/${match[1]}/${match[2]}`} />
-  }
-
-  return <RegularLiquidityWrapper {...props} />
-}
-
-export function RedirectRegularDuplicateTokenIds(
-  props: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>,
-) {
-  const {
-    match: {
-      params: { currencyIdA, currencyIdB },
-    },
-  } = props
-  if (currencyIdA.toLowerCase() === currencyIdB.toLowerCase()) {
-    return <Redirect to={`/add/${currencyIdA}`} />
-  }
-  return <RegularLiquidityWrapper {...props} />
-}
-
-export function RedirectZapLiquidityPathStructure(props: RouteComponentProps<{ currencyIdA: string }>) {
-  const {
-    match: {
-      params: { currencyIdA },
-    },
-  } = props
-  const match = currencyIdA.match(OLD_PATH_STRUCTURE)
-  if (match?.length) {
-    return <Redirect to={`/zap/${match[1]}/${match[2]}`} />
-  }
-
-  return <ZapLiquidityWrapper {...props} />
-}
-
-export function RedirectZapDuplicateTokenIds(props: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
-  const {
-    match: {
-      params: { currencyIdA, currencyIdB },
-    },
-  } = props
-  if (currencyIdA.toLowerCase() === currencyIdB.toLowerCase()) {
-    return <Redirect to={`/zap/${currencyIdA}`} />
-  }
-  return <ZapLiquidityWrapper {...props} />
 }
