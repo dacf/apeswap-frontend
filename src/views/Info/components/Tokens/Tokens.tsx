@@ -275,9 +275,11 @@ const Tokens: React.FC<TokensProps> = (props) => {
                     </Column>
                     <Column width="18px">{index + 1}</Column>
                     <Column flex="2">
+                      <img src={`/images/chains/${token.chain}.png`} width="24px" className="logo" alt="Chain" />
                       <img
                         width="24px"
                         className="logo"
+                        alt={token.name}
                         src={`https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/${token.symbol}.svg`}
                         onError={(e) => {
                           e.currentTarget.src = `/images/info/unknownToken.svg`
