@@ -256,37 +256,38 @@ const Pairs: React.FC<PairsProps> = (props) => {
               <Column>{t('Liquidity')}</Column>
               <Column>{t('Volume (24h)')}</Column>
             </Row>
-            {processPairs().map((pair: InfoPair, index: number) => {
-              return (
-                <Row key={pair.id} background={index % 2 === 0}>
-                  <Column width="35px">
-                    <img className="fav" width="16px" src={getFavIcon(pair.id)} onClick={() => toggleFav(pair.id)} />{' '}
-                  </Column>
-                  <Column width="18px">{index + 1}</Column>
-                  <Column flex="2">
-                    <img
-                      width="24px"
-                      className="logo"
-                      src={`https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/${pair.token0.symbol}.svg`}
-                      onError={(e) => {
-                        e.currentTarget.src = `/images/info/unknownToken.svg`
-                      }}
-                    />
-                    <img
-                      width="24px"
-                      className="logo logo-right"
-                      src={`https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/${pair.token1.symbol}.svg`}
-                      onError={(e) => {
-                        e.currentTarget.src = `/images/info/unknownToken.svg`
-                      }}
-                    />
-                    {pair.token0.name}-{pair.token1.name}
-                  </Column>
-                  <Column>${Math.round(pair.reserveUSD).toLocaleString()}</Column>
-                  <Column>${Math.round(pair.volumeUSD - get24HourVolume(pair.id)).toLocaleString()}</Column>
-                </Row>
-              )
-            })}
+            {checkDatasInitialized() === true &&
+              processPairs().map((pair: InfoPair, index: number) => {
+                return (
+                  <Row key={pair.id} background={index % 2 === 0}>
+                    <Column width="35px">
+                      <img className="fav" width="16px" src={getFavIcon(pair.id)} onClick={() => toggleFav(pair.id)} />{' '}
+                    </Column>
+                    <Column width="18px">{index + 1}</Column>
+                    <Column flex="2">
+                      <img
+                        width="24px"
+                        className="logo"
+                        src={`https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/${pair.token0.symbol}.svg`}
+                        onError={(e) => {
+                          e.currentTarget.src = `/images/info/unknownToken.svg`
+                        }}
+                      />
+                      <img
+                        width="24px"
+                        className="logo logo-right"
+                        src={`https://raw.githubusercontent.com/ApeSwapFinance/apeswap-token-lists/main/assets/${pair.token1.symbol}.svg`}
+                        onError={(e) => {
+                          e.currentTarget.src = `/images/info/unknownToken.svg`
+                        }}
+                      />
+                      {pair.token0.name}-{pair.token1.name}
+                    </Column>
+                    <Column>${Math.round(pair.reserveUSD).toLocaleString()}</Column>
+                    <Column>${Math.round(pair.volumeUSD - get24HourVolume(pair.id)).toLocaleString()}</Column>
+                  </Row>
+                )
+              })}
           </BodyWrapper>
         </FiguresWrapper>
       </Container>
