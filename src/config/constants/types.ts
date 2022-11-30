@@ -1,4 +1,5 @@
 import { ChainId } from '@ape.swap/sdk'
+import { BillVersion, LpType } from 'state/bills/types'
 
 export type IfoStatus = 'coming_soon' | 'live' | 'finished'
 
@@ -161,6 +162,8 @@ export interface Token {
   lpToken?: boolean
   price?: number
   active?: boolean
+  token0?: Token
+  token1?: Token
 }
 
 export type Images = {
@@ -323,6 +326,8 @@ export interface BillsConfig {
   quoteToken: Token
   lpToken: Token
   earnToken: Token
+  lpType: LpType
+  version: BillVersion
   inactive?: boolean
   projectLink?: string
   twitter?: string

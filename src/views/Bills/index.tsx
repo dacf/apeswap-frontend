@@ -2,8 +2,8 @@
 import { Flex } from '@ape.swap/uikit'
 import { useLocation } from 'react-router-dom'
 import React, { useState } from 'react'
-import { usePollBills, useBills, usePollUserBills, useSetBills } from 'state/bills/hooks'
-import { Bills as BillType } from 'state/types'
+import { usePollBills, useBills, usePollUserBills, useSetBills, useBillsTokenPrices } from 'state/bills/hooks'
+import { Bills as BillType } from 'state/bills/types'
 import ListViewLayout from 'components/layout/ListViewLayout'
 import Banner from 'components/Banner'
 import { useTranslation } from 'contexts/Localization'
@@ -20,6 +20,7 @@ const Bills: React.FC = () => {
   useSetBills()
   usePollBills()
   usePollUserBills()
+  useBillsTokenPrices()
   const { chainId } = useActiveWeb3React()
   const bills = useBills()
   const { t } = useTranslation()

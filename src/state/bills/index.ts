@@ -5,12 +5,13 @@ import {
   fetchUserOwnedBills,
   fetchUserOwnedBillNftData,
 } from './fetchBillsUser'
-import { TokenPrices, AppThunk, BillsState, Bills } from '../types'
+import { TokenPrices, AppThunk } from '../types'
+import { BillsState, Bills } from './types'
 import fetchBills from './fetchBills'
 import { getNewBillNftData } from './getBillNftData'
 import fetchBillsConfig from './api'
 
-const initialState: BillsState = { data: [] }
+const initialState: BillsState = { data: [], tokenPrices: [] }
 
 export const billsSlice = createSlice({
   name: 'Bills',

@@ -59,10 +59,10 @@
     eslint-plugin-react-hooks "^4.0.0"
     typescript "4.4.3"
 
-"@apeswapfinance/token-lists@1.0.324":
-  version "1.0.324"
-  resolved "https://npm.pkg.github.com/download/@ApeSwapFinance/token-lists/1.0.324/077adab882bd25ec651f88457635ce699724e4de#077adab882bd25ec651f88457635ce699724e4de"
-  integrity sha512-YyEZ5Z7CfqBTKld2W3YqiOvTs9/XZTA+8mBO6v5wvZAxXnYxqiO+xSNO++69U88XW5T0/xbcRh0ZbmJHAJOB3g==
+"@apeswapfinance/token-lists@1.0.326":
+  version "1.0.326"
+  resolved "https://npm.pkg.github.com/download/@ApeSwapFinance/token-lists/1.0.326/b938b866b160bd44744bc3993998aec30b5b4ecb#b938b866b160bd44744bc3993998aec30b5b4ecb"
+  integrity sha512-2JkY7HecF9mCc6snpdnGLF/x/n8M+ZGpwWkPbiUBvIMAoeQTlUtbmZaJ4z7uEGWe6Zqa3qRfI8FzZgsuxwkMug==
 
 "@apeswapfinance/uikit@0.11.3":
   version "0.11.3"

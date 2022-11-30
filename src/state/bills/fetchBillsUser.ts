@@ -3,7 +3,7 @@ import billAbi from 'config/abi/bill.json'
 import { BillsConfig } from 'config/constants/types'
 import multicall from 'utils/multicall'
 import BigNumber from 'bignumber.js'
-import { UserBill } from 'state/types'
+import { UserBill } from './types'
 import getBillNftData from './getBillNftData'
 
 export const fetchBillsAllowance = async (chainId: number, account: string, bills: BillsConfig[]) => {

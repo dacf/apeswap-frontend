@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ArrowDropLeftIcon, ArrowDropRightIcon, Checkbox, Flex, Text } from '@apeswapfinance/uikit'
 import SwiperProvider from 'contexts/SwiperProvider'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from 'contexts/Localization'
 import BillCard from './BillCard'

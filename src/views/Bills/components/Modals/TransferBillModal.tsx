@@ -2,7 +2,7 @@ import { Checkbox, Flex, Input, Modal, ModalFooter, Text } from '@apeswapfinance
 import BigNumber from 'bignumber.js'
 import ServiceTokenDisplay from 'components/ServiceTokenDisplay'
 import React, { useState } from 'react'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useTranslation } from 'contexts/Localization'
 import Transfer from '../Actions/Transfer'

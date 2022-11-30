@@ -1,6 +1,6 @@
 import React from 'react'
 import { useModal } from '@ape.swap/uikit'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import BuyBillModalView from './BuyBillModalView'
 import { StyledButton } from '../styles'
 import UserBillModalView from './UserBillModalView'

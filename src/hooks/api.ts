@@ -15,7 +15,8 @@ const EXCHANGE_POLYGON_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/a
 
 // TODO: Switch this back to main
 export const apeswapListUrl =
-  process.env.REACT_APP_LISTS_CONFIG_URL || 'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-lists/main/config'
+  process.env.REACT_APP_LISTS_CONFIG_URL ||
+  'https://raw.githubusercontent.com/ApeSwapFinance/apeswap-lists/feat/ubiq-bills/config'
 /* eslint-disable camelcase */
 
 export interface TradePair {

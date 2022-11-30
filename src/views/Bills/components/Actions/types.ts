@@ -1,4 +1,4 @@
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import { Currency } from '@ape.swap/sdk'
 import { MergedZap } from 'state/zap/actions'
 

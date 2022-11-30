@@ -2,7 +2,7 @@
 import React from 'react'
 import { Flex, TooltipBubble, Text, InfoIcon, useMatchBreakpoints } from '@ape.swap/uikit'
 import ListView from 'components/ListView'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import UnlockButton from 'components/UnlockButton'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ExtendedListViewProps } from 'components/ListView/types'

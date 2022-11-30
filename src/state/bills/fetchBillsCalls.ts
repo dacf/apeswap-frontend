@@ -1,5 +1,6 @@
 import { BillsConfig } from 'config/constants/types'
 import { Call } from 'utils/multicall'
+import { BillVersion } from './types'
 
 const fetchBillsCalls = (bill: BillsConfig, chainId: number): Call[] => {
   const standardCalls = [
@@ -56,7 +57,7 @@ const fetchBillsCalls = (bill: BillsConfig, chainId: number): Call[] => {
     },
     {
       address: bill.contractAddress[chainId],
-      name: 'maxTotalPayout',
+      name: bill.version === BillVersion.V2 ? 'getMaxTotalPayout' : 'maxTotalPayout',
     },
   ]
 

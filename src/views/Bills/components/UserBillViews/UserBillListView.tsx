@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, useMatchBreakpoints } from '@apeswapfinance/uikit'
 import ListView from 'components/ListView'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import { ExtendedListViewProps } from 'components/ListView/types'
 import ListViewContent from 'components/ListViewContent'
 import { getBalanceNumber } from 'utils/formatBalance'

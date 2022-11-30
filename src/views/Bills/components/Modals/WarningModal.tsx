@@ -1,7 +1,7 @@
 import { useModal, WarningIcon } from '@ape.swap/uikit'
 import { Checkbox, Flex, Modal, ModalFooter, Text } from '@apeswapfinance/uikit'
 import React, { useState } from 'react'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import { useTranslation } from 'contexts/Localization'
 import { StyledButton } from '../styles'
 import BuyBillModalView from './BuyBillModalView'

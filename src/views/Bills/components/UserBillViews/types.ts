@@ -1,4 +1,4 @@
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import { TranslateFunction } from 'contexts/Localization'
 
 export interface BillCardProps {
