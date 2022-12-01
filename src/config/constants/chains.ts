@@ -368,7 +368,7 @@ export const INFO_PAGE_CHAIN_PARAMS: Partial<
     color: '#637DEA',
   },
   [ChainId.TLOS]: {
-    graphAddress: 'https://telos.apeswapgraphs.com/subgraphs/name/ape-swap/apeswap-subgraph-telos',
+    graphAddress: 'https://telos.apeswapgraphs.com/subgraphs/name/ape-swap/apeswap-graph',
     explorer: BLOCK_EXPLORER[ChainId.TLOS],
     blockGraph: 'https://telos.apeswapgraphs.com/subgraphs/name/ape-swap/telos-blocks',
     id: '0x411172Dfcd5f68307656A1ff35520841C2F7fAec',

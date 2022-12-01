@@ -53,15 +53,15 @@ const cleanDualFarmData = (
 
     // Total value in pool in quote token value
     const totalInQuoteToken = new BigNumber(quoteTokenBalanceLP)
-      .div(new BigNumber(10).pow(quoteToken?.decimals as number))
+      .div(new BigNumber(10).pow(quoteToken?.decimals[chainId]))
       .times(new BigNumber(2))
 
     // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
     const tokenAmount = new BigNumber(tokenBalanceLP)
-      .div(new BigNumber(10).pow(token1?.decimals as number))
+      .div(new BigNumber(10).pow(token1?.decimals[chainId]))
       .times(lpTokenRatio)
     const quoteTokenAmount = new BigNumber(quoteTokenBalanceLP)
-      .div(new BigNumber(10).pow(quoteToken?.decimals as number))
+      .div(new BigNumber(10).pow(quoteToken?.decimals[chainId]))
       .times(lpTokenRatio)
 
     let alloc = null
@@ -72,14 +72,14 @@ const cleanDualFarmData = (
     const poolWeight = allocPoint.div(new BigNumber(totalAllocPoint))
     miniChefPoolRewardPerSecond = getBalanceNumber(
       poolWeight.times(miniChefRewardsPerSecond),
-      miniChefRewarderToken?.decimals as number,
+      miniChefRewarderToken?.decimals[chainId],
     )
     alloc = poolWeight.toJSON()
     multiplier = `${allocPoint.div(100).toString()}X`
 
     const totalStaked = quoteTokenAmount.times(new BigNumber(2)).times(quoteToken?.price)
     const totalValueInLp = new BigNumber(quoteTokenBalanceLP)
-      .div(new BigNumber(10).pow(quoteToken?.decimals as number))
+      .div(new BigNumber(10).pow(quoteToken?.decimals[chainId]))
       .times(new BigNumber(2))
       .times(quoteToken?.price)
     const stakeTokenPrice = totalValueInLp.div(new BigNumber(getBalanceNumber(lpTotalSupply))).toNumber()
@@ -94,7 +94,7 @@ const cleanDualFarmData = (
     }
     const rewarderPoolRewardPerSecond = getBalanceNumber(
       rewarderPoolWeight.times(rewardsPerSecond),
-      rewarderToken?.decimals as number,
+      rewarderToken?.decimals[chainId],
     )
     const apr = getDualFarmApr(
       totalStaked?.toNumber(),

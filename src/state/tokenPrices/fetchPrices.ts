@@ -1,5 +1,4 @@
 import apePriceGetterABI from 'config/abi/apePriceGetter.json'
-import erc20ABI from 'config/abi/erc20.json'
 import { Token } from 'config/constants/types'
 import multicall from 'utils/multicall'
 import { getApePriceGetterAddress } from 'utils/addressHelper'
@@ -7,26 +6,21 @@ import { getBalanceNumber } from 'utils/formatBalance'
 
 const fetchPrices = async (chainId: number, tokens: Token[]) => {
   const apePriceGetterAddress = getApePriceGetterAddress(chainId)
-  const tokensToCall = Object.fromEntries(Object.entries(tokens).filter(([, values]) => values.address[chainId]))
-  const erc20Calls = Object.values(tokensToCall).map((token) => {
-    return {
-      address: token.address[chainId],
-      name: 'decimals',
-    }
-  })
-  const tokenDecimals = await multicall(chainId, erc20ABI, erc20Calls)
+  const tokensToCall = Object.fromEntries(
+    Object.entries(tokens).filter(([, values]) => values.address[chainId] && values.decimals[chainId]),
+  )
   const calls = Object.values(tokensToCall).map((token, i) => {
     if (token.lpToken) {
       return {
         address: apePriceGetterAddress,
         name: 'getLPPrice',
-        params: [token.address[chainId], tokenDecimals[i][0]],
+        params: [token.address[chainId], token.decimals[chainId]],
       }
     }
     return {
       address: apePriceGetterAddress,
       name: 'getPrice',
-      params: [token.address[chainId], tokenDecimals[i][0]],
+      params: [token.address[chainId], token.decimals[chainId]],
     }
   })
   const tokenPrices = await multicall(chainId, apePriceGetterABI, calls)
@@ -38,9 +32,9 @@ const fetchPrices = async (chainId: number, tokens: Token[]) => {
       address: token.address,
       price:
         token.symbol === 'GNANA'
-          ? getBalanceNumber(tokenPrices[0], tokenDecimals[i][0]) * 1.389
-          : getBalanceNumber(tokenPrices[i], tokenDecimals[i][0]),
-      decimals: tokenDecimals[i][0],
+          ? getBalanceNumber(tokenPrices[0], token.decimals[chainId]) * 1.389
+          : getBalanceNumber(tokenPrices[i], token.decimals[chainId]),
+      decimals: token.decimals,
     }
   })
   return mappedTokenPrices

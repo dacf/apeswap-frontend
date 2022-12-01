@@ -7,13 +7,13 @@ import {
   tokensQuery,
   transactionsQuery,
   uniswapFactoriesQuery,
+  daysDataQuery,
 } from './queries'
 import { ChainId } from '@ape.swap/sdk'
 import { INFO_PAGE_CHAIN_PARAMS } from 'config/constants/chains'
 import axiosRetry from 'axios-retry'
 import axios from 'axios'
 import { Block, DaysData, NativePrice, Pairs, Token, TokenDaysData, Transactions } from './types'
-import { daysDataQuery } from 'views/Info/queries'
 
 export const getInfoPairs = async (chainId: ChainId, amount: number, block: string): Promise<Pairs[]> => {
   const { graphAddress } = INFO_PAGE_CHAIN_PARAMS[chainId]

@@ -2,24 +2,31 @@
 import { Flex, Text } from '@ape.swap/uikit'
 import { orderBy } from 'lodash'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useFetchInfoPairs } from 'state/info/hooks'
+import { useFetchActiveChains, useFetchInfoPairs } from 'state/info/hooks'
 import ReactPaginate from 'react-paginate'
 import Rows from './Rows'
 import styled from 'styled-components'
+import useIsMobile from '../../../../hooks/useIsMobile'
 
 const ROWS_PER_PAGE = 10
 
 const Pairs = () => {
+  const mobile = useIsMobile()
+  const [activeChains] = useFetchActiveChains()
+
   const [pageCount, setPageCount] = useState(0)
   const [dataOffset, setDataOffset] = useState(0)
   const pairs = useFetchInfoPairs(20, 0)
   const flattenedPairs = Object.values(pairs).flatMap((row) => (row.initialized ? row.data : []))
-  // const tokensInitialized = Object.values(pairs)
-  //   .flatMap((row) => row.initialized)
-  //   ?.includes(true)
+
   const sortedPairs = useMemo(
-    () => orderBy(flattenedPairs, ({ volumeUSD }) => parseFloat(volumeUSD), 'desc'),
-    [flattenedPairs],
+    () =>
+      orderBy(
+        flattenedPairs.filter((x) => activeChains === null || activeChains.includes(x.chainId)),
+        ({ volumeUSD }) => parseFloat(volumeUSD),
+        'desc',
+      ),
+    [flattenedPairs, activeChains],
   )
   const handlePageClick = (event) => {
     const newOffset = (event.selected * ROWS_PER_PAGE) % sortedPairs.length
@@ -30,7 +37,7 @@ const Pairs = () => {
   }, [sortedPairs.length, dataOffset])
 
   return (
-    <Flex sx={{ flexDirection: 'column', width: '100%', mt: '20px' }}>
+    <Flex sx={{ flexDirection: 'column', width: `${mobile ? '95vw' : '100%'}`, mt: '20px' }}>
       <Text size="18px" weight={700}>
         Top Pairs
       </Text>

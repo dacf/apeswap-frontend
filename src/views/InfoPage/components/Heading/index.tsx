@@ -3,13 +3,16 @@ import { Flex, Text } from '@ape.swap/uikit'
 import ServiceTokenDisplay from 'components/ServiceTokenDisplay'
 import { CHAIN_PARAMS, MAINNET_CHAINS, NETWORK_INFO_LINK } from 'config/constants/chains'
 import React from 'react'
+import useIsMobile from '../../../../hooks/useIsMobile'
 
 const Heading = () => {
+  const mobile = useIsMobile()
+
   return (
     <Flex
       sx={{
-        maxWidth: '100%',
-        width: '1200px',
+        width: `${mobile ? '95vw' : '100%'}`,
+        maxWidth: '1200px',
         height: 'fit-content',
         padding: '50px',
         background: 'white2',

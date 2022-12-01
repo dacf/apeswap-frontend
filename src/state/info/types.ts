@@ -29,14 +29,20 @@ export interface Swaps {
   amount0Out: string
   amount1In: string
   amount1Out: string
+  amount0: string
+  amount1: string
   amountUSD: string
   pair: { token0: SwapToken; token1: SwapToken }
   to: string
+  sender: string
   transaction: SwapTransaction
   chainId: ChainId
+  transactionType: string
 }
 
 export interface Transactions {
+  mints: Swaps[]
+  burns: Swaps[]
   swaps: Swaps[]
   chainId: ChainId
 }
@@ -117,4 +123,5 @@ export interface InfoState {
   tokensDayOld: Record<ChainId, { data: Token[]; loading: boolean; initialized: boolean }>
   tokenDaysData: Record<ChainId, { data: TokenDaysData[]; loading: boolean; initialized: boolean }>
   dayOldPairs: Record<ChainId, { data: TokenDaysData[]; loading: boolean; initialized: boolean }>
+  activeChains: number[]
 }

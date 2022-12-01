@@ -2,20 +2,27 @@
 import { Flex, Text } from '@ape.swap/uikit'
 import { orderBy } from 'lodash'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useFetchInfoTransactions } from 'state/info/hooks'
+import { useFetchActiveChains, useFetchInfoTransactions } from 'state/info/hooks'
 import ReactPaginate from 'react-paginate'
 import Rows from './Rows'
 import styled from 'styled-components'
 import { Swaps } from 'state/info/types'
+import useIsMobile from '../../../../hooks/useIsMobile'
+import { RangeSelectorsWrapper } from '../styles'
 
 const ROWS_PER_PAGE = 10
 
 const Transactions = () => {
+  const mobile = useIsMobile()
+
   const [pageCount, setPageCount] = useState(0)
   const [dataOffset, setDataOffset] = useState(0)
   const transactions = useFetchInfoTransactions(50)
+  const [transactionType, setTransactionType] = useState('all')
 
-  const flattenedTransactions = Object.values(transactions).flatMap((row) =>
+  const [activeChains] = useFetchActiveChains()
+
+  const flattenedSwaps = Object.values(transactions).flatMap((row) =>
     row.initialized
       ? row.data?.flatMap(({ swaps, chainId }) =>
           swaps.map((swap) => {
@@ -24,13 +31,48 @@ const Transactions = () => {
         )
       : [],
   ) as Swaps[]
-  // const transactionsInitialized = Object.values(tokens)
-  //   .flatMap((row) => row.initialized)
-  //   ?.includes(true)
+
+  const flattenedMints = Object.values(transactions).flatMap((row) =>
+    row.initialized
+      ? row.data?.flatMap(({ mints, chainId }) =>
+          mints.map((mint) => {
+            return { ...mint, chainId }
+          }),
+        )
+      : [],
+  ) as Swaps[]
+
+  const flattenedBurns = Object.values(transactions).flatMap((row) =>
+    row.initialized
+      ? row.data?.flatMap(({ burns, chainId }) =>
+          burns.map((burn) => {
+            return { ...burn, chainId }
+          }),
+        )
+      : [],
+  ) as Swaps[]
+
+  const getTransactions = useMemo(() => {
+    if (transactionType === 'all') {
+      return flattenedSwaps.concat(flattenedMints).concat(flattenedBurns)
+    } else if (transactionType === 'swaps') {
+      return flattenedSwaps
+    } else if (transactionType === 'mints') {
+      return flattenedMints
+    }
+    return flattenedBurns
+  }, [flattenedSwaps, flattenedMints, flattenedBurns, transactionType])
+
   const sortedTransactions = useMemo(
-    () => orderBy(flattenedTransactions, ({ transaction }) => parseFloat(transaction.timestamp), 'desc'),
-    [flattenedTransactions],
+    () =>
+      orderBy(
+        getTransactions.filter((x) => activeChains === null || activeChains.includes(x.chainId)),
+        ({ transaction }) => parseFloat(transaction.timestamp),
+        'desc',
+      ),
+    [activeChains, getTransactions],
   )?.slice(0, 50)
+
   const handlePageClick = (event) => {
     const newOffset = (event.selected * ROWS_PER_PAGE) % sortedTransactions.length
     setDataOffset(newOffset)
@@ -40,7 +82,7 @@ const Transactions = () => {
   }, [sortedTransactions.length, dataOffset])
 
   return (
-    <Flex sx={{ flexDirection: 'column', width: '100%', mt: '20px' }}>
+    <Flex sx={{ flexDirection: 'column', width: `${mobile ? '95vw' : '100%'}`, mt: '20px' }}>
       <Text size="18px" weight={700}>
         Recent Transactions
       </Text>
@@ -55,16 +97,44 @@ const Transactions = () => {
           mt: '20px',
         }}
       >
-        <Rows transactions={sortedTransactions.slice(dataOffset, dataOffset + ROWS_PER_PAGE)} />
-        <Flex sx={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-          <Pagination
-            previousLabel="<"
-            nextLabel=">"
-            pageCount={pageCount}
-            renderOnZeroPageCount={null}
-            onPageChange={handlePageClick}
-          />
-        </Flex>
+        <RangeSelectorsWrapper className="transctionSelector">
+          <ul>
+            <li className={transactionType === 'all' ? 'active' : ''} onClick={() => setTransactionType('all')}>
+              <Text size="14px" weight={700}>
+                All
+              </Text>
+            </li>
+            <li className={transactionType === 'swaps' ? 'active' : ''} onClick={() => setTransactionType('swaps')}>
+              <Text size="14px" weight={700}>
+                Swaps
+              </Text>
+            </li>
+            <li className={transactionType === 'mints' ? 'active' : ''} onClick={() => setTransactionType('mints')}>
+              <Text size="14px" weight={700}>
+                Adds
+              </Text>
+            </li>
+            <li className={transactionType === 'burns' ? 'active' : ''} onClick={() => setTransactionType('burns')}>
+              <Text size="14px" weight={700}>
+                Removes
+              </Text>
+            </li>
+          </ul>
+        </RangeSelectorsWrapper>
+        {sortedTransactions && (
+          <>
+            <Rows transactions={sortedTransactions.slice(dataOffset, dataOffset + ROWS_PER_PAGE)} />
+            <Flex sx={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+              <Pagination
+                previousLabel="<"
+                nextLabel=">"
+                pageCount={pageCount}
+                renderOnZeroPageCount={null}
+                onPageChange={handlePageClick}
+              />
+            </Flex>
+          </>
+        )}
       </Flex>
     </Flex>
   )

@@ -42,11 +42,10 @@ const Rows = ({ pairs, activeIndex }: { pairs: Pairs[]; activeIndex: number }) =
     >
       <Grid
         gap="0px"
-        columns={[`.35fr .25fr ${mobile ? '1.5fr' : '3fr'} 1.25fr 1.5fr 1.5fr`]}
+        columns={[`.25fr ${mobile ? '1.5fr' : '3fr'} 1.25fr 1.5fr 1.5fr`]}
         sx={{ minHeight: '40px', alignItems: 'center', minWidth: '700px' }}
       >
-        <span />
-        <Text>#</Text>
+        <Text pl={3}>#</Text>
         <Text size="14px" weight={700} sx={{ alignSelf: 'center' }}>
           {t('Pair')}
         </Text>{' '}
@@ -67,7 +66,7 @@ const Rows = ({ pairs, activeIndex }: { pairs: Pairs[]; activeIndex: number }) =
             <Grid
               key={id}
               gap="0px"
-              columns={[`.35fr .25fr ${mobile ? '1.5fr' : '3fr'} 1.25fr 1.5fr 1.5fr`]}
+              columns={[`.25fr ${mobile ? '2.0fr' : '3.5fr'} 1.25fr 1.5fr 1.5fr`]}
               sx={{
                 background: index % 2 === 0 ? 'white3' : 'white2',
                 height: '40px',
@@ -76,16 +75,27 @@ const Rows = ({ pairs, activeIndex }: { pairs: Pairs[]; activeIndex: number }) =
                 minWidth: '700px',
               }}
             >
-              <Flex sx={{ ml: '5px' }}>
-                <ServiceTokenDisplay token1={CHAIN_PARAMS[chainId].nativeCurrency.symbol} size={20} />
-              </Flex>{' '}
               <Flex>
-                <Text size="14px" weight={400}>
+                <Text size="14px" weight={400} pl={4}>
                   {index + 1 + activeIndex}
                 </Text>
               </Flex>
               <Flex sx={{ alignItems: 'center' }}>
-                <ServiceTokenDisplay token1={token0.symbol} token2={token1.symbol} noEarnToken size={20} />
+                <ServiceTokenDisplay
+                  token1={token0.symbol}
+                  token2={token1.symbol}
+                  noEarnToken
+                  size={20}
+                  tokensMargin={-10}
+                />
+                <Flex
+                  sx={{
+                    marginLeft: '-7px',
+                    marginTop: '-12px',
+                  }}
+                >
+                  <ServiceTokenDisplay token1={CHAIN_PARAMS[chainId].nativeCurrency.symbol} size={12} />
+                </Flex>
                 <Text size="14px" weight={400} ml="10px">
                   {token0.symbol} - {token1.symbol}
                 </Text>

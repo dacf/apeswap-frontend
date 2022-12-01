@@ -49,7 +49,7 @@ const ServiceTokenDisplay: React.FC<ServiceTokenDisplayProps> = ({
       <TokenWrapper size={size} zIndex={5}>
         <TokenContainer zIndex={1} srcs={token1Urls} size={size} />
       </TokenWrapper>
-      <TokenWrapper ml={-15} size={size}>
+      <TokenWrapper ml={tokensMargin ? tokensMargin : -15} size={size}>
         <TokenContainer srcs={token2Urls} size={size} />
       </TokenWrapper>
     </Flex>

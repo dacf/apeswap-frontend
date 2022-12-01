@@ -1,10 +1,11 @@
 import { MAINNET_CHAINS } from 'config/constants/chains'
 import useRefresh from 'hooks/useRefresh'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { State } from 'state/types'
 import {
+  fetchActiveChains,
   fetchBlock,
   fetchChartData,
   fetchDaysData,
@@ -15,6 +16,7 @@ import {
   fetchTransactions,
   fetchUniswapFactories,
   setLoading,
+  updateActiveChains,
 } from '.'
 import { InfoStateTypes } from './types'
 
@@ -124,14 +126,30 @@ export const useFetchInfoBlock = () => {
 
 export const useFetchChartData = (amount: number) => {
   const dispatch = useAppDispatch()
-  const { slowRefresh } = useRefresh()
   useEffect(() => {
     MAINNET_CHAINS.forEach((chainId) => {
       dispatch(setLoading({ stateType: InfoStateTypes.CHARTDATA, chainId, loading: true }))
       dispatch(fetchChartData(chainId, amount))
     })
-  }, [slowRefresh, dispatch, amount])
+  }, [dispatch, amount])
   return useSelector((state: State) => state.info.chartData)
+}
+
+export const useFetchActiveChains = (): [number[], (chainId: number) => void] => {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(fetchActiveChains())
+  }, [dispatch])
+
+  const activeChains = useSelector((state: State) => state.info.activeChains)
+  const toggleChain = useCallback(
+    (chainId: number) => {
+      dispatch(updateActiveChains(chainId, activeChains))
+    },
+    [dispatch, activeChains],
+  )
+
+  return [activeChains, toggleChain]
 }
 
 export const useFetchInfoUniswapFactories = (current?: boolean) => {

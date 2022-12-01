@@ -9,6 +9,7 @@ import CountUp from 'react-countup'
 import { Swaps } from 'state/info/types'
 import { Grid } from 'theme-ui'
 import getTimePeriods from 'utils/getTimePeriods'
+import { StyledLink } from '../styles'
 
 const Rows = ({ transactions }: { transactions: Swaps[] }) => {
   const { t } = useTranslation()
@@ -36,32 +37,54 @@ const Rows = ({ transactions }: { transactions: Swaps[] }) => {
         sx={{ minHeight: '40px', alignItems: 'center', minWidth: '850px' }}
       >
         <span />
-        <Text size="14px" weight={700} sx={{ alignSelf: 'center' }}>
-          {t('Swaps')}
-        </Text>
-        <Text size="14px" weight={700} sx={{ alignSelf: 'center' }}>
+        <Text size="14px" weight={700} sx={{ alignSelf: 'center', zIndex: '999' }}></Text>
+        <Text size="14px" weight={700} sx={{ alignSelf: 'center', backgroundColor: 'white2', zIndex: '999' }}>
           {t('Total Value')}
         </Text>
-        <Text size="14px" weight={700} sx={{ alignSelf: 'center' }}>
+        <Text size="14px" weight={700} sx={{ alignSelf: 'center', backgroundColor: 'white2', zIndex: '999' }}>
           {t('Token 1')}
         </Text>
-        <Text size="14px" weight={700} sx={{ alignSelf: 'center' }}>
+        <Text size="14px" weight={700} sx={{ alignSelf: 'center', backgroundColor: 'white2', zIndex: '999' }}>
           {t('Token 2')}
         </Text>
-        <Text size="14px" weight={700} sx={{ alignSelf: 'center' }}>
+        <Text size="14px" weight={700} sx={{ alignSelf: 'center', backgroundColor: 'white2', zIndex: '999' }}>
           {t('Address')}
         </Text>
-        <Text size="14px" weight={700} sx={{ alignSelf: 'center' }}>
+        <Text size="14px" weight={700} sx={{ alignSelf: 'center', backgroundColor: 'white2', zIndex: '999' }}>
           {t('Time')}
         </Text>
       </Grid>
       <Flex sx={{ flexDirection: 'column', height: '500px' }}>
         {transactions.map(
-          ({ amount0In, amount0Out, amount1In, amount1Out, amountUSD, pair, to, transaction, chainId }, index) => {
+          (
+            {
+              amount0In,
+              amount0Out,
+              amount1In,
+              amount1Out,
+              amount0,
+              amount1,
+              amountUSD,
+              pair,
+              to,
+              transaction,
+              chainId,
+              sender,
+            },
+            index,
+          ) => {
             const { id, timestamp } = transaction
             const { token0, token1 } = pair
-            const token0Amount = Math.abs(parseFloat(amount0In) - parseFloat(amount0Out))
-            const token1Amount = Math.abs(parseFloat(amount1In) - parseFloat(amount1Out))
+            const tranType = parseFloat(amount0In) > 0 || parseFloat(amount0Out) > 0 ? 'Swap' : to ? 'Add' : 'Remove'
+            const address = tranType !== 'Remove' ? to : sender
+            const token0Amount =
+              parseFloat(amount0In) > 0 || parseFloat(amount0Out) > 0
+                ? Math.abs(parseFloat(amount0In) - parseFloat(amount0Out))
+                : parseFloat(amount0)
+            const token1Amount =
+              parseFloat(amount1In) > 0 || parseFloat(amount1Out) > 0
+                ? Math.abs(parseFloat(amount1In) - parseFloat(amount1Out))
+                : parseFloat(amount1)
             const transactionTime = getTimePeriods(currentTime / 1000 - parseFloat(timestamp))
             const timeToDisplay = () => {
               if (transactionTime.days > 0) {
@@ -95,7 +118,7 @@ const Rows = ({ transactions }: { transactions: Swaps[] }) => {
                 <Flex sx={{ alignItems: 'center' }}>
                   <ServiceTokenDisplay token1={CHAIN_PARAMS[chainId]?.nativeCurrency.symbol} size={20} />
                   <Text size="14px" weight={400} ml="10px">
-                    Swap {`${token0.symbol} > ${token1.symbol}`}
+                    {tranType} {`${token0.symbol} ${tranType === 'Swap' ? '>' : 'and'} ${token1.symbol}`}
                   </Text>
                 </Flex>
                 <Flex>
@@ -139,7 +162,12 @@ const Rows = ({ transactions }: { transactions: Swaps[] }) => {
                 </Flex>
                 <Flex>
                   <Text size="14px" weight={400}>
-                    {`${to.slice(0, 4)}...${to.slice(to.length - 4, to.length)}`}
+                    {address && (
+                      <StyledLink
+                        href={`${CHAIN_PARAMS[chainId]?.blockExplorerUrls}/address/${address}`}
+                        target="_blank"
+                      >{`${address.slice(0, 4)}...${address.slice(address.length - 4, address.length)}`}</StyledLink>
+                    )}
                   </Text>
                 </Flex>
                 <Flex>

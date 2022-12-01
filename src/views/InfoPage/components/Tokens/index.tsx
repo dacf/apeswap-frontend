@@ -2,31 +2,33 @@
 import { Flex, Text } from '@ape.swap/uikit'
 import { orderBy } from 'lodash'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useFetchInfoNativePrice, useFetchInfoTokensData } from 'state/info/hooks'
+import { useFetchActiveChains, useFetchInfoNativePrice, useFetchInfoTokensData } from 'state/info/hooks'
 import ReactPaginate from 'react-paginate'
 import Rows from './Rows'
 import styled from 'styled-components'
+import useIsMobile from '../../../../hooks/useIsMobile'
 
 const ROWS_PER_PAGE = 10
 
 const Tokens = () => {
+  const mobile = useIsMobile()
+  const [activeChains] = useFetchActiveChains()
+
   const [pageCount, setPageCount] = useState(0)
   const [dataOffset, setDataOffset] = useState(0)
   const tokens = useFetchInfoTokensData(20, true)
   const nativePrice = useFetchInfoNativePrice()
+
   const flattenedTokens = Object.values(tokens).flatMap((row) => (row.initialized ? row.data : []))
-  // const tokensInitialized = Object.values(tokens)
-  //   .flatMap((row) => row.initialized)
-  //   ?.includes(true)
   const sortedTokens = useMemo(
     () =>
       orderBy(
-        flattenedTokens,
+        flattenedTokens.filter((x) => activeChains === null || activeChains.includes(x.chainId)),
         ({ totalLiquidity, chainId, derivedETH }) =>
           parseFloat(totalLiquidity) * (parseFloat(nativePrice[chainId]?.data?.ethPrice) || 0) * parseFloat(derivedETH),
         'desc',
       ),
-    [flattenedTokens, nativePrice],
+    [flattenedTokens, nativePrice, activeChains],
   )
   const handlePageClick = (event) => {
     const newOffset = (event.selected * ROWS_PER_PAGE) % sortedTokens.length
@@ -37,10 +39,11 @@ const Tokens = () => {
   }, [sortedTokens.length, dataOffset])
 
   return (
-    <Flex sx={{ flexDirection: 'column', width: '100%', mt: '20px' }}>
+    <Flex sx={{ flexDirection: 'column', width: `${mobile ? '95vw' : '100%'}`, mt: '20px' }}>
       <Text size="18px" weight={700}>
         Top Tokens
       </Text>
+
       <Flex
         sx={{
           width: '100%',

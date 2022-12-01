@@ -47,6 +47,49 @@ export const transactionsQuery = (amount: number) => {
       '        amountUSD' +
       '        to' +
       '      }' +
+      'mints(orderBy: timestamp, orderDirection: desc) {\n' +
+      '      transaction {\n' +
+      '        id\n' +
+      '        timestamp\n' +
+      '      }\n' +
+      '      pair {\n' +
+      '        token0 {\n' +
+      '          id\n' +
+      '          symbol\n' +
+      '        }\n' +
+      '        token1 {\n' +
+      '          id\n' +
+      '          symbol\n' +
+      '        }\n' +
+      '      }\n' +
+      '      to\n' +
+      '      liquidity\n' +
+      '      amount0\n' +
+      '      amount1\n' +
+      '      amountUSD\n' +
+      '      __typename\n' +
+      '    }\n' +
+      '    burns(orderBy: timestamp, orderDirection: desc) {\n' +
+      '      transaction {\n' +
+      '        id\n' +
+      '        timestamp\n' +
+      '      }\n' +
+      '      pair {\n' +
+      '        token0 {\n' +
+      '          id\n' +
+      '          symbol\n' +
+      '        }\n' +
+      '        token1 {\n' +
+      '          id\n' +
+      '          symbol\n' +
+      '        }\n' +
+      '      }\n' +
+      '      sender\n' +
+      '      liquidity\n' +
+      '      amount0\n' +
+      '      amount1\n' +
+      '      amountUSD\n' +
+      '    }' +
       '    }' +
       '  }',
   }
