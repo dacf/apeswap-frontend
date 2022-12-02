@@ -10,6 +10,7 @@ import { BillsState, Bills } from './types'
 import fetchBills from './fetchBills'
 import { getNewBillNftData } from './getBillNftData'
 import fetchBillsConfig from './api'
+import fetchBillsTokenPrices from './fetchBillsTokenPrices'
 
 const initialState: BillsState = { data: [], tokenPrices: [] }
 
@@ -33,6 +34,16 @@ export const billsSlice = createSlice({
         const userBillData = userData.find((entry) => entry.index === bill.index)
         return { ...bill, userData: userBillData }
       })
+    },
+    setBillTokenPrices: (state, action) => {
+      const tokenPricesData: TokenPrices[] = action.payload
+      state.tokenPrices =
+        state.tokenPrices.length === 0
+          ? tokenPricesData
+          : state.tokenPrices.map((tokenPrice) => {
+              const liveTokenPriceData = tokenPricesData.find((entry) => entry.address === tokenPrice.address)
+              return { ...tokenPrice, ...liveTokenPriceData }
+            })
     },
     setUserOwnedBillsData: (state, action) => {
       const userData = action.payload
@@ -72,6 +83,7 @@ export const {
   setUserOwnedBillsData,
   setUserOwnedBillsNftData,
   updateBillsUserData,
+  setBillTokenPrices,
 } = billsSlice.actions
 
 // Thunks
@@ -93,10 +105,11 @@ export const setInitialBillsDataAsync = (chainId: number) => async (dispatch, ge
 }
 
 export const fetchBillsPublicDataAsync =
-  (chainId: number, tokenPrices: TokenPrices[]): AppThunk =>
+  (chainId: number): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const bills = getState().bills.data
+      const { data: bills, tokenPrices } = getState().bills
+      console.log(tokenPrices)
       const returnedBills = await fetchBills(chainId, tokenPrices, bills)
       dispatch(setBillsPublicData(returnedBills))
     } catch (error) {
@@ -160,6 +173,14 @@ export const fetchUserOwnedBillsDataAsync =
     } catch (error) {
       console.warn(error)
     }
+  }
+
+export const fetchBillTokenPricesAsync =
+  (chainId: number): AppThunk =>
+  async (dispatch, getState) => {
+    const bills = getState().bills.data
+    const tokenPrices = await fetchBillsTokenPrices(chainId, bills)
+    dispatch(setBillTokenPrices(tokenPrices))
   }
 
 export const updateUserAllowance =

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Flex } from '@apeswapfinance/uikit'
 import { Modal, ModalProvider } from '@ape.swap/uikit'
 import ServiceTokenDisplay from 'components/ServiceTokenDisplay'
-import { Bills } from 'state/bills/types'
+import { Bills, LpType } from 'state/bills/types'
 import getTimePeriods from 'utils/getTimePeriods'
 import ReactPlayer from 'react-player'
 import { useTranslation } from 'contexts/Localization'
@@ -20,6 +20,7 @@ import {
 import UserBillModalView from './UserBillModalView'
 import { getFirstNonZeroDigits } from 'utils/roundNumber'
 import Buy from '../Actions/Buy'
+import { BuyNonApeLp } from '../Actions/NonApeLp/BuyNonApeLp'
 
 interface BillModalProps {
   onDismiss: () => void
@@ -95,11 +96,19 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill }) => {
               </Flex>
               <Flex flexDirection="column">
                 <ActionButtonsContainer>
-                  <Buy
-                    bill={bill}
-                    onBillId={onHandleReturnedBillId}
-                    onTransactionSubmited={(trxSent) => setLoading(trxSent)}
-                  />
+                  {bill.lpType === LpType.APESWAP ? (
+                    <Buy
+                      bill={bill}
+                      onBillId={onHandleReturnedBillId}
+                      onTransactionSubmited={(trxSent) => setLoading(trxSent)}
+                    />
+                  ) : (
+                    <BuyNonApeLp
+                      bill={bill}
+                      onBillId={onHandleReturnedBillId}
+                      onTransactionSubmited={(trxSent) => setLoading(trxSent)}
+                    />
+                  )}
                 </ActionButtonsContainer>
               </Flex>
             </BillDescriptionContainer>

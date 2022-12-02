@@ -20,7 +20,6 @@ const Bills: React.FC = () => {
   useSetBills()
   usePollBills()
   usePollUserBills()
-  useBillsTokenPrices()
   const { chainId } = useActiveWeb3React()
   const bills = useBills()
   const { t } = useTranslation()

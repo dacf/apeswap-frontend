@@ -31,6 +31,7 @@ const cleanBillsData = (
     ] = chunk
     const [controlVariable, vestingTerm, minimumPrice, maxPayout, maxDebt] = terms
     const priceUsd = getBalanceNumber(trueBillPrice) * lpPrice
+    console.log(priceUsd)
     const discount = ((earnTokenPrice - priceUsd) / earnTokenPrice) * 100
     const formatedPrice = priceUsd ? getFirstNonZeroDigits(priceUsd) : undefined
     return {

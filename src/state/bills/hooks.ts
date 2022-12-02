@@ -3,24 +3,25 @@ import useRefresh from 'hooks/useRefresh'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useFetchTokenPrices, useTokenPrices } from 'state/tokenPrices/hooks'
+import { useFetchTokenPrices } from 'state/tokenPrices/hooks'
 import { State } from 'state/types'
 import {
   fetchBillsPublicDataAsync,
   fetchBillsUserDataAsync,
+  fetchBillTokenPricesAsync,
   fetchUserOwnedBillsDataAsync,
   setInitialBillsDataAsync,
 } from '.'
-import fetchBillsTokenPrices from './fetchBillsTokenPrices'
 import { Bills } from './types'
 
 export const usePollBills = () => {
   const { chainId } = useActiveWeb3React()
+  const { slowRefresh } = useRefresh()
   const dispatch = useAppDispatch()
-  const { tokenPrices } = useTokenPrices()
+  const tokenPrices = useBillsTokenPrices()
   useEffect(() => {
-    dispatch(fetchBillsPublicDataAsync(chainId, tokenPrices))
-  }, [dispatch, tokenPrices, chainId])
+    dispatch(fetchBillsPublicDataAsync(chainId))
+  }, [dispatch, slowRefresh, tokenPrices.length, chainId])
 }
 
 export const usePollUserBills = (): Bills[] => {
@@ -61,13 +62,13 @@ export const useSetBills = () => {
 
 export const useBillsTokenPrices = () => {
   const { chainId } = useActiveWeb3React()
+  const { slowRefresh } = useRefresh()
   const dispatch = useAppDispatch()
   const bills = useBills()
-  const tokenPrice = fetchBillsTokenPrices(chainId, bills)
+  const billsLoaded = bills.length
   useEffect(() => {
-    if (bills.length === 0 || prevChainId !== chainId) {
-      dispatch(setInitialBillsDataAsync(chainId))
-      prevChainId = chainId
-    }
-  }, [chainId, bills.length, dispatch])
+    dispatch(fetchBillTokenPricesAsync(chainId))
+  }, [chainId, billsLoaded, slowRefresh, dispatch])
+  const tokenPrices = useSelector((state: State) => state.bills.tokenPrices)
+  return tokenPrices
 }

@@ -1,4 +1,5 @@
 import { BillsConfig } from 'config/constants/types'
+import { TokenPrices } from 'state/types'
 
 export interface UserBillNft {
   image: string
@@ -53,7 +54,7 @@ export interface Bills extends BillsConfig {
 
 export interface BillsState {
   data: Bills[]
-  tokenPrices: any
+  tokenPrices: TokenPrices[]
 }
 
 export enum LpType {
