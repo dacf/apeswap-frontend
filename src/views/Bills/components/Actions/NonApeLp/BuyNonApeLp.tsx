@@ -38,7 +38,7 @@ export const BuyNonApeLp = ({ bill, onBillId, onTransactionSubmited }: BuyProps)
   const threshold = new BigNumber(10).div(earnTokenPrice)
   const safeAvailable = available.minus(threshold)
 
-  const [onPresentBuyBillsModal] = useModal(<GetLp />, true, true, `getLpModal${index}`)
+  const [onPresentBuyBillsModal] = useModal(<GetLp bill={bill} />, true, true, `getLpModal${index}`)
 
   return (
     <Flex sx={styles.buyContainer}>

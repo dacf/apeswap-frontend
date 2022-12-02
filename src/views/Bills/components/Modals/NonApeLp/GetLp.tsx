@@ -1,18 +1,32 @@
 /** @jsxImportSource theme-ui */
 import { Flex, ModalProvider, Modal, Text, Link, Button } from '@ape.swap/uikit'
+import BigNumber from 'bignumber.js'
+import ERC20_INTERFACE, { ERC20_ABI } from 'config/abi/erc20'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useERC20 } from 'hooks/useContract'
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import React from 'react'
-import { createTrue } from 'typescript'
+import { Bills } from 'state/bills/types'
+import { getBalanceNumber } from 'utils/formatBalance'
 import { SlideTemplate } from './SlideTemplate'
 
-// {tokenBalance,
-// quoteTokenBalance,
-// lpBalance,
-// }: {
-// tokenBalance: string
-// quoteTokenBalance: string
-// lpBalance: string
-// }
-export const GetLp = () => {
+export const GetLp = ({ bill }: { bill: Bills }) => {
+  const { chainId, account } = useActiveWeb3React()
+  const [tokenBalanceResp, quoteTokenBalanceResp] = useMultipleContractSingleData(
+    [bill.token.address[chainId], bill.quoteToken.address[chainId]],
+    ERC20_INTERFACE,
+    'balanceOf',
+    [account],
+  )
+  const tokenBalance = getBalanceNumber(
+    new BigNumber(tokenBalanceResp.result?.toString()),
+    bill.token.decimals[chainId],
+  )
+  const quoteTokenBalance = getBalanceNumber(
+    new BigNumber(quoteTokenBalanceResp.result?.toString()),
+    bill.quoteToken.decimals[chainId],
+  )
+  console.log(tokenBalance, quoteTokenBalance)
   return (
     <ModalProvider>
       <Modal onDismiss={null} title="How to get liquidity">
@@ -63,7 +77,7 @@ export const GetLp = () => {
             title={'Step 3'}
             description={'Go back to ApeSwap Bills page, and buy the Treasury Bill.'}
             action={
-              <Button fullWidth disabled={true}>
+              <Button fullWidth disabled={true} onClick={null}>
                 Buy a Bill
               </Button>
             }
