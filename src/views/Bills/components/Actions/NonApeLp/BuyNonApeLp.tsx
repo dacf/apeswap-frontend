@@ -72,7 +72,12 @@ export const BuyNonApeLp = ({ bill, onBillId, onTransactionSubmited }: BuyProps)
             </GetLPButton>
           </Box>
           <Box sx={styles.buyButtonContainer}>
-            <BillActionsNonApeLp bill={bill} buyAmount={value} />
+            <BillActionsNonApeLp
+              bill={bill}
+              buyAmount={value}
+              onBillId={onBillId}
+              onTransactionSubmited={onTransactionSubmited}
+            />
           </Box>
         </Flex>
       </Flex>

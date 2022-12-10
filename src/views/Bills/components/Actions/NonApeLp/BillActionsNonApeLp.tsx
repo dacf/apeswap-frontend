@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { AutoRenewIcon } from '@apeswapfinance/uikit'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useToast } from 'state/hooks'
@@ -13,7 +13,17 @@ import BigNumber from 'bignumber.js'
 import { Bills } from 'state/bills/types'
 import useBuyBill from 'views/Bills/hooks/useBuyBill'
 
-export const BillActions = ({ bill, buyAmount }: { bill: Bills; buyAmount: string }) => {
+export const BillActions = ({
+  bill,
+  buyAmount,
+  onBillId,
+  onTransactionSubmited,
+}: {
+  bill: Bills
+  buyAmount: string
+  onBillId: (billId: string, transactionHash: string) => void
+  onTransactionSubmited: (trxSent: boolean) => void
+}) => {
   const {
     lpToken,
     contractAddress,
@@ -25,6 +35,7 @@ export const BillActions = ({ bill, buyAmount }: { bill: Bills; buyAmount: strin
     earnToken,
     earnTokenPrice,
     userData,
+    billNftAddress,
   } = bill
   const showApproveBillFlow = !new BigNumber(bill?.userData?.allowance).gt(0)
   const { stakingTokenBalance } = userData
@@ -66,9 +77,15 @@ export const BillActions = ({ bill, buyAmount }: { bill: Bills; buyAmount: strin
 
   const handleBuyBill = async () => {
     setPendingTx(true)
+    onTransactionSubmited(true)
     await onBuyBill()
       .then((resp) => {
         const trxHash = resp.transactionHash
+        const { logs } = resp
+        const findBillNftLog = logs.find((log) => log.address.toLowerCase() === billNftAddress.toLowerCase())
+        const getBillNftIndex = findBillNftLog.topics[findBillNftLog.topics.length - 1]
+        const convertHexId = parseInt(getBillNftIndex, 16)
+        onBillId(convertHexId.toString(), trxHash)
         toastSuccess(t('Buy Bill Successful'), {
           text: t('View Transaction'),
           url: getEtherscanLink(trxHash, 'transaction', chainId),
@@ -76,6 +93,7 @@ export const BillActions = ({ bill, buyAmount }: { bill: Bills; buyAmount: strin
       })
       .catch((e) => {
         console.error(e)
+        onTransactionSubmited(false)
         toastError(e?.data?.message || t('Error: Please try again.'))
         setPendingTx(false)
       })
@@ -101,7 +119,7 @@ export const BillActions = ({ bill, buyAmount }: { bill: Bills; buyAmount: strin
           endIcon={pendingTx && <AutoRenewIcon spin color="currentColor" />}
           disabled={
             billValue === 'NaN' ||
-            parseFloat(billValue) < 0.01 ||
+            // parseFloat(billValue) < 0.01 ||
             parseFloat(billValue) > parseFloat(safeAvailable.toString()) ||
             parseFloat(stakingTokenBalance) < parseFloat(buyAmount) ||
             pendingTx ||

@@ -30,7 +30,7 @@ export const GetLp = ({ bill }: { bill: Bills }) => {
   return (
     <ModalProvider>
       <Modal onDismiss={null} title="How to get liquidity">
-        <Flex sx={{ justifyContent: 'space-between', maxWidth: '100%', width: '800px' }}>
+        <Flex sx={{ justifyContent: 'space-between', maxWidth: '100%', width: '750px' }}>
           <SlideTemplate
             image={'images/eth-bill-step-2.svg'}
             title={'Step 1'}
