@@ -4,7 +4,7 @@ import { Bills } from 'state/bills/types'
 import BuyBillModalView from './BuyBillModalView'
 import { StyledButton } from '../styles'
 import UserBillModalView from './UserBillModalView'
-import { BillsImage } from '../UserBillViews/styles'
+import { BillsImage } from '../UserBillsView/styles'
 import WarningModal from './WarningModal'
 
 interface BillModalProps {
@@ -12,7 +12,7 @@ interface BillModalProps {
   buttonText?: string
   id?: number
   billId?: string
-  buttonSize?: number
+  buttonSize?: string
   buyFlag?: boolean
   billCardImage?: string
   disabled?: boolean

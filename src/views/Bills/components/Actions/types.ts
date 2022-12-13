@@ -6,7 +6,8 @@ export interface ClaimProps {
   billAddress: string
   pendingRewards: string
   billIds: string[]
-  buttonSize?: number
+  buttonSize?: string
+  margin: string
 }
 
 export interface TransferProps {
@@ -29,9 +30,10 @@ export interface BillActionsProps {
   handleBuy: () => void
   billValue: string
   value: string
-  safeAvailable: string
+  purchaseLimit: string
   balance: string
   pendingTrx: boolean
+  errorMessage: string
 }
 
 export interface DualCurrencySelector {

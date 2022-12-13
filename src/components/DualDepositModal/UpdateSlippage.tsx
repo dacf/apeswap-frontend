@@ -23,20 +23,18 @@ const UpdateSlippage: React.FC<UpdateSlippageProps> = ({ priceImpact, updateSlip
         alignItems: 'center',
       }}
     >
-      <Flex sx={{ flexDirection: 'column' }}>
-        <Text size="12px" sx={{ lineHeight: '18px' }}>
-          {t('This transaction requires a slippage tolerance of ')}
-          <FormattedPriceImpact priceImpact={new Percent(JSBI.BigInt(priceImpact + 5), JSBI.BigInt(10000))} />
-          {'. '}
-          {t('After this transaction, slippage tolerance will be reset to ')}
-          {zapSlippage / 100} {'%.'}
+      <Text size="12px" sx={{ lineHeight: '18px' }}>
+        {t('This transaction requires a slippage tolerance of ')}
+        <FormattedPriceImpact priceImpact={new Percent(JSBI.BigInt(priceImpact + 5), JSBI.BigInt(10000))} />
+        {'. '}
+        {t('After this transaction, slippage tolerance will be reset to ')}
+        {zapSlippage / 100} {'%.'}
+      </Text>
+      {priceImpact + 5 > 500 && (
+        <Text color="error" size="12px">
+          {t('Beware: your transaction may be frontrun')}
         </Text>
-        {priceImpact + 5 > 500 && (
-          <Text color="error" size="12px">
-            {t('Beware: your transaction may be frontrun')}
-          </Text>
-        )}
-      </Flex>
+      )}
       <Button onClick={updateSlippage} sx={{ minWidth: '100px', marginLeft: '5px' }}>
         {t('Update')}
       </Button>

@@ -45,3 +45,15 @@ export const StyledHeading = styled(Heading)`
     max-width: 600px !important;
   }
 `
+
+export const styles = {
+  billsViewContainer: {
+    position: 'relative',
+    top: '30px',
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItem: 'center',
+    marginBottom: '80px',
+  },
+}

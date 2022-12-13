@@ -36,24 +36,24 @@ const MarketingModalCheck = () => {
   useMemo(() => {
     localStorage.removeItem(SHOW_DEFAULT_MODAL_KEY) // remove old key
     localStorage.removeItem(SET_DEFAULT_MODAL_KEY) // remove old key
-    const onHomepage = history.location.pathname === '/'
+    //const onHomepage = history.location.pathname === '/'
     const sdmk = localStorage.getItem(SET_DEF_MOD_KEY)
-    const isdm = localStorage.getItem(SHOW_DEF_MOD_KEY)
+    //const isdm = localStorage.getItem(SHOW_DEF_MOD_KEY)
 
     // This needs to be fixed but I didnt want to reset users local storage keys
     // Basically first land users wont get the modal until they refresh so I added a showDefaultModalFlag variable
     const isDefaultModalSet = JSON.parse(sdmk)
-    const isShowDefaultModal = JSON.parse(isdm)
-    const showDefaultModalFlag = isShowDefaultModal || (!isShowDefaultModal && !isDefaultModalSet)
+    /*const isShowDefaultModal = JSON.parse(isdm)
+    const showDefaultModalFlag = isShowDefaultModal || (!isShowDefaultModal && !isDefaultModalSet)*/
 
     if (!isDefaultModalSet) {
       localStorage.setItem(SHOW_DEF_MOD_KEY, JSON.stringify('SHOW'))
     }
 
-    if (showDefaultModalFlag && onHomepage) {
+    /*if (showDefaultModalFlag && onHomepage) {
       history.push({ search: '?modal=tutorial' })
-    }
-  }, [history])
+    }*/
+  }, [])
 
   const farmsRoute = location.search.includes('modal=1')
   const poolsRoute = location.search.includes('modal=2')

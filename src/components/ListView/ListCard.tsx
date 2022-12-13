@@ -43,8 +43,8 @@ const ListCard: React.FC<ListCardProps> = ({
         </Flex>
         <ContentContainer>{cardContent}</ContentContainer>
         {expandedContent && (
-          <span style={{ marginRight: '30px' }}>
-            <Svg icon="caret" direction={expanded ? 'up' : 'down'} width="15px" />
+          <span style={{ marginRight: '30px', transform: 'translate(0, -3px)' }}>
+            <Svg icon="caret" direction={expanded ? 'up' : 'down'} width="10px" />
           </span>
         )}
         {infoContent && (

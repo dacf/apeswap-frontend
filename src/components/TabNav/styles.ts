@@ -12,10 +12,10 @@ export const Container = styled.div`
   }
 `
 
-export const StyledTabNavStats = styled.div`
+export const StyledTabNavStats = styled.div<{ columns: number }>`
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: ${({ columns }) => `repeat(${columns}, 1fr)`};
   margin: 0 auto;
   width: 100%;
 `

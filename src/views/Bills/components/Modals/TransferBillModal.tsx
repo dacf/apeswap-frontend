@@ -1,4 +1,4 @@
-import { Checkbox, Flex, Input, Modal, ModalFooter, Text } from '@apeswapfinance/uikit'
+import { Checkbox, Flex, Input, Modal, Text } from '@apeswapfinance/uikit'
 import BigNumber from 'bignumber.js'
 import ServiceTokenDisplay from 'components/ServiceTokenDisplay'
 import React, { useState } from 'react'
@@ -69,15 +69,15 @@ const TransferBillModal: React.FC<TransferBillModalProps> = ({ onDismiss, bill, 
         </Text>
         {t('When transfering the NFT all pending rewards will also be transfered to the receiver address.')}
       </Text>
-      <Flex mt="20px" alignItems="center">
-        <Checkbox onClick={() => setConfirmSend((prev) => !prev)} />
+      <Flex mt="20px" alignItems="center" onClick={() => setConfirmSend((prev) => !prev)} style={{ cursor: 'pointer' }}>
+        <Checkbox checked={confirmSend} />
         <Text ml="10px" fontSize="12px">
           {t('I understand the new wallet gains ownership of all unclaimed assets.')}
         </Text>
       </Flex>
-      <ModalFooter onDismiss={onDismiss}>
+      <Flex justifyContent="center" mt="15px">
         <Transfer billNftAddress={billNftAddress} billId={billId} toAddress={toAddress} disabled={!confirmSend} />
-      </ModalFooter>
+      </Flex>
     </Modal>
   )
 }

@@ -28,6 +28,7 @@ const cleanBillsData = (
       billNft,
       terms,
       maxTotalPayout,
+      maxPayoutTokens,
     ] = chunk
     const [controlVariable, vestingTerm, minimumPrice, maxPayout, maxDebt] = terms
     const priceUsd = getBalanceNumber(trueBillPrice) * lpPrice
@@ -56,6 +57,7 @@ const cleanBillsData = (
       billNftAddress: billNft.toString(),
       earnTokenPrice,
       lpPrice,
+      maxPayoutTokens: maxPayoutTokens.toString(),
     }
   })
   return data

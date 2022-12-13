@@ -1,11 +1,10 @@
 /** @jsxImportSource theme-ui */
 import React, { useState } from 'react'
 import { Flex } from '@apeswapfinance/uikit'
-import { Modal, ModalProvider } from '@ape.swap/uikit'
+import { IconButton, Modal, ModalProvider } from '@ape.swap/uikit'
 import ServiceTokenDisplay from 'components/ServiceTokenDisplay'
 import { Bills, LpType } from 'state/bills/types'
 import getTimePeriods from 'utils/getTimePeriods'
-import ReactPlayer from 'react-player'
 import { useTranslation } from 'contexts/Localization'
 import {
   ActionButtonsContainer,
@@ -13,7 +12,6 @@ import {
   BillsImage,
   BillTitleContainer,
   ModalBodyContainer,
-  StyledExit,
   StyledHeadingText,
   TopDescriptionText,
 } from './styles'
@@ -21,6 +19,22 @@ import UserBillModalView from './UserBillModalView'
 import { getFirstNonZeroDigits } from 'utils/roundNumber'
 import Buy from '../Actions/Buy'
 import { BuyNonApeLp } from '../Actions/NonApeLp/BuyNonApeLp'
+
+const modalProps = {
+  sx: {
+    zIndex: 98,
+    overflowY: 'auto',
+    maxHeight: 'calc(100% - 30px)',
+    width: ['90%'],
+    minWidth: 'unset',
+    '@media screen and (min-width: 1180px)': {
+      maxWidth: '1200px',
+      minWidth: '1200px',
+      overflow: 'inherit',
+    },
+    maxWidth: '350px',
+  },
+}
 
 interface BillModalProps {
   onDismiss: () => void
@@ -42,19 +56,25 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill }) => {
 
   return (
     <ModalProvider>
-      <Modal onDismiss={onDismiss} maxWidth="1200px" minWidth="350px" zIndex={98}>
-        {billId ? (
-          <UserBillModalView bill={bill} billId={billId} onDismiss={onDismiss} />
-        ) : (
+      {billId ? (
+        <UserBillModalView bill={bill} billId={billId} onDismiss={onDismiss} />
+      ) : (
+        <Modal onDismiss={onDismiss} {...modalProps}>
           <ModalBodyContainer>
-            <StyledExit onClick={onDismiss}>x</StyledExit>
+            <IconButton
+              icon="close"
+              color="text"
+              variant="transparent"
+              onClick={onDismiss}
+              sx={{ position: 'absolute', right: '20px', top: '25px', zIndex: 50 }}
+            />
             <Flex alignItems="center" justifyContent="center">
               {loading && !billId ? (
                 <BillsImage>
-                  <ReactPlayer playing muted loop url="videos/bills-video.mp4" height="100%" width="100%" playsInline />
+                  <img src={'images/bills/bill-nfts.gif'} alt="bill-img" />
                 </BillsImage>
               ) : (
-                <BillsImage image="images/hidden-bill.png" />
+                <BillsImage image="images/bills/hidden-bill.jpg" />
               )}
             </Flex>
             <BillDescriptionContainer p="0">
@@ -79,7 +99,7 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill }) => {
                     </Flex>
                   </Flex>
                 </BillTitleContainer>
-                <Flex flexDirection="column" my={10}>
+                <Flex flexDirection="column" mb={10}>
                   <Flex style={{ width: '250px' }}>
                     <TopDescriptionText>
                       {earnToken.symbol} {t('Market Price')}{' '}
@@ -113,8 +133,8 @@ const BuyBillModalView: React.FC<BillModalProps> = ({ onDismiss, bill }) => {
               </Flex>
             </BillDescriptionContainer>
           </ModalBodyContainer>
-        )}
-      </Modal>
+        </Modal>
+      )}
     </ModalProvider>
   )
 }

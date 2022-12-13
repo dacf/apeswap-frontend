@@ -1,20 +1,24 @@
 /** @jsxImportSource theme-ui */
 import { Flex } from '@ape.swap/uikit'
-import { useLocation } from 'react-router-dom'
-import React, { useState } from 'react'
-import { usePollBills, useBills, usePollUserBills, useSetBills, useBillsTokenPrices } from 'state/bills/hooks'
-import { Bills as BillType } from 'state/bills/types'
+import React, { useCallback, useState } from 'react'
+import { usePollBills, useBills, usePollUserBills, useSetBills } from 'state/bills/hooks'
 import ListViewLayout from 'components/layout/ListViewLayout'
 import Banner from 'components/Banner'
 import { useTranslation } from 'contexts/Localization'
-import BillsListView from './components/BillsListView'
-import UserBillViews from './components/UserBillViews'
-import BillMenu from './components/Menu'
+import UserBillsView from './components/UserBillsView'
 import { BannerTypes } from 'components/Banner/types'
-import { useSetZapOutputList } from 'state/zap/hooks'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import ListView404 from 'components/ListView404'
 import { AVAILABLE_CHAINS_ON_LIST_VIEW_PRODUCTS, LIST_VIEW_PRODUCTS } from 'config/constants/chains'
+import FirstTimeCard from './components/UserBillsView/components/FirstTimeCard'
+import BillsNav from './components/BillsNav'
+import BillsListView from './components/BillsListView'
+import { styles } from './styles'
+
+export enum BillsView {
+  AVAILABLE_BILLS = 'Available Bills',
+  YOUR_BILLS = 'Your Bills',
+}
 
 const Bills: React.FC = () => {
   useSetBills()
@@ -23,63 +27,22 @@ const Bills: React.FC = () => {
   const { chainId } = useActiveWeb3React()
   const bills = useBills()
   const { t } = useTranslation()
-  const [query, setQuery] = useState('')
-  const [sortOption, setSortOption] = useState('all')
-  const location = useLocation()
-
-  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value)
-  }
-
-  const renderBills = (showNonPurchaseable: boolean): BillType[] => {
-    let billsToReturn = []
-    bills?.forEach((bill) => {
-      if (bill.inactive && !showNonPurchaseable) return
-      if (location.search.includes(`id=${bill.index}`)) {
-        billsToReturn.unshift(bill)
-      } else {
-        billsToReturn.push(bill)
-      }
-    })
-
-    if (query) {
-      billsToReturn = billsToReturn?.filter((bill) => {
-        return bill.lpToken.symbol.toUpperCase().includes(query.toUpperCase())
-      })
+  const [billsView, setBillsView] = useState<string>(BillsView.AVAILABLE_BILLS)
+  const [loaded, setLoaded] = useState<boolean>(false)
+  const ownedBillsAmount = bills?.flatMap((bill) => {
+    if (bill?.userOwnedBillsData !== undefined && !loaded) {
+      setLoaded(true)
     }
+    return bill?.userOwnedBillsData ? bill?.userOwnedBillsData : []
+  }).length
 
-    if (sortOption === 'bananaBill') {
-      billsToReturn = billsToReturn?.filter((bill) => bill.billType === 'BANANA Bill')
-    }
-    if (sortOption === 'jungleBill') {
-      billsToReturn = billsToReturn?.filter((bill) => bill.billType === 'JUNGLE Bill')
-    }
-
-    return billsToReturn
-  }
-  // Set zap output list to match dual farms
-  useSetZapOutputList(
-    renderBills(false)?.map((bill) => {
-      return {
-        currencyIdA: bill?.token.address[chainId],
-        currencyIdB: bill?.quoteToken.address[chainId],
-      }
-    }),
-  )
+  const handleBillsViewChange = useCallback((newBillsView: string) => {
+    setBillsView(newBillsView)
+  }, [])
 
   return (
     <>
-      <Flex
-        mb="80px"
-        sx={{
-          position: 'relative',
-          top: '30px',
-          width: '100%',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItem: 'center',
-        }}
-      >
+      <Flex sx={styles.billsViewContainer}>
         <ListViewLayout>
           <Banner
             banner={`${chainId}-treasury-bills` as BannerTypes}
@@ -89,21 +52,23 @@ const Bills: React.FC = () => {
             maxWidth={1130}
             titleColor="primaryBright"
           />
-          <BillMenu
-            bills={bills}
-            onHandleQueryChange={handleChangeQuery}
-            onSetSortOption={setSortOption}
-            activeOption={sortOption}
-            query={query}
-          />
           {!AVAILABLE_CHAINS_ON_LIST_VIEW_PRODUCTS[LIST_VIEW_PRODUCTS.BILLS].includes(chainId) ? (
             <Flex sx={{ mt: '20px' }}>
               <ListView404 product={LIST_VIEW_PRODUCTS.BILLS} />
             </Flex>
           ) : (
             <>
-              <UserBillViews bills={renderBills(true)} />
-              <BillsListView bills={renderBills(false)} />
+              <FirstTimeCard ownedBillsAmount={ownedBillsAmount} loaded={loaded} />
+              <BillsNav
+                billsView={billsView}
+                setBillsView={handleBillsViewChange}
+                ownedBillsAmount={ownedBillsAmount}
+              />
+              {billsView === BillsView.AVAILABLE_BILLS ? (
+                <BillsListView />
+              ) : (
+                <UserBillsView handleBillsViewChange={handleBillsViewChange} />
+              )}
             </>
           )}
         </ListViewLayout>

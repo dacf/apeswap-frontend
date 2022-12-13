@@ -23,13 +23,13 @@ export const Container = styled.div`
 `
 
 export const BillsImage = styled.div<{ image?: string }>`
-  width: 250px;
+  width: 300px;
+  height: 168px;
   align-self: center;
-  height: 141px;
   background-image: ${({ image }) => `url(${image});`}
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  margin-top: 30px;
+  margin-top: 20px;
   @media screen and (min-width: 1180px) {
     min-width: 606px;
     height: 341px;
@@ -50,9 +50,9 @@ export const ImageSkeleton = styled(Skeleton)`
   }
 `
 
-export const BillDescriptionContainer = styled(Flex)<{ p?: string; minHeight?: number }>`
+export const BillDescriptionContainer = styled(Flex)<{ p?: string; minHeight?: number; width?: string }>`
   position: relative;
-  width: 310px;
+  width: ${({ width }) => width || '310px'};
   min-height: ${({ minHeight }) => minHeight}px;
   height: fit-content;
   flex-direction: column;
@@ -74,7 +74,7 @@ export const TopDescriptionText = styled(Text)<{ width?: string }>`
 
 export const BillTitleContainer = styled(Flex)`
   flex-direction: column;
-  margin: 10px 0;
+  margin: 10px 0 5px 0;
 `
 
 export const GridTextValContainer = styled(Flex)`
@@ -82,7 +82,7 @@ export const GridTextValContainer = styled(Flex)`
   align-items: center;
   height: 15px;
   width: 100%;
-  margin: 5px 0px;
+  margin: 3px 0px;
   @media screen and (min-width: 1180px) {
     margin: 8px 0px;
   }
@@ -109,7 +109,7 @@ export const ActionButtonsContainer = styled(Flex)`
 `
 
 export const UserActionButtonsContainer = styled(ActionButtonsContainer)`
-  height: 110px;
+  width: 100%;
   justify-content: space-between;
   @media screen and (min-width: 1180px) {
     transform: translate(0px, 25px);
@@ -117,7 +117,8 @@ export const UserActionButtonsContainer = styled(ActionButtonsContainer)`
 `
 
 export const StyledHeadingText = styled(Text)`
-  font-size: 16px;
+  font-size: 12px;
+  align-self: center;
   @media screen and (min-width: 1180px) {
     font-size: 22px;
   }
@@ -131,7 +132,9 @@ export const BillsFooterContainer = styled(Flex)`
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  display: none;
   @media screen and (min-width: 1180px) {
+    display: flex;
     flex-direction: row;
     height: 100px;
     margin-bottom: 0px;
@@ -153,7 +156,7 @@ export const BillFooterContentContainer = styled(Flex)`
 export const BillValueContainer = styled('div')`
   display: flex;
   width: 100%;
-  padding: 10px 0;
+  padding-top: 10px;
   flex-wrap: wrap;
 `
 
@@ -163,5 +166,25 @@ export const TextWrapper = styled('div')`
   justify-content: center;
   @media screen and (min-width: 1180px) {
     width: 50%;
+  }
+`
+
+export const MobileFooterContainer = styled(Flex)`
+  margin-top: 5px;
+
+  @media screen and (min-width: 1180px) {
+    display: none;
+  }
+`
+
+export const MobileFooterContentContainer = styled(Flex)`
+  flex-wrap: wrap;
+  background: ${({ theme }) => theme.colors.white3};
+  width: 100%;
+  border-radius: 10px;
+  align-items: center;
+  @media screen and (min-width: 1180px) {
+    width: 351px;
+    height: 82px;
   }
 `

@@ -52,6 +52,7 @@ export const styles = {
     '@media screen and (min-width: 1180px)': {
       flexWrap: 'wrap',
       flexDirection: 'row',
+      marginTop: '10px',
     },
   },
   getLpContainer: {
@@ -68,6 +69,19 @@ export const styles = {
     '@media screen and (min-width: 1180px)': {
       width: '50%',
       padding: '0 20px',
+    },
+  },
+  updateSlippage: {
+    '@media screen and (min-width: 1180px)': {
+      '& div': {
+        position: 'absolute',
+        top: '360px',
+        left: '0px',
+        background: 'lvl1',
+        padding: '10px',
+        borderRadius: '10px',
+        width: '552px',
+      },
     },
   },
 }

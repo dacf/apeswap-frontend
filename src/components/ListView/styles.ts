@@ -30,7 +30,6 @@ export const ListExpandedContainer = styled(Flex)<{ size?: number; justifyConten
 `
 
 export const ListCardContainer = styled(Flex)<{ backgroundColor: string; forMigrationList?: boolean }>`
-  height: ${({ forMigrationList }) => (forMigrationList ? '75px' : '130px')};
   border-radius: 0;
   flex-direction: column;
   align-items: center;
@@ -39,7 +38,8 @@ export const ListCardContainer = styled(Flex)<{ backgroundColor: string; forMigr
     backgroundColor === 'white3' ? theme.colors.white3 : theme.colors.white2};
   border-bottom: ${({ backgroundColor }) =>
     `1px solid ${backgroundColor === 'white3' ? 'rgba(226, 226, 226, .7)' : 'rgba(226, 226, 226, .2)'}`};
-  padding: 10px;
+  padding: 10px 20px 10px 20px;
+  margin: 0px 10px 0px 10px;
   max-width: 500px;
   min-width: 300px;
   width: 100%;
@@ -55,6 +55,7 @@ export const ListViewContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  z-index: 1;
   & ${ListCardContainer}:first-child {
     border-radius: 10px 10px 0px 0px;
   }
@@ -69,7 +70,7 @@ export const ListViewContainer = styled.div`
 `
 
 export const DropDownIcon = styled(ArrowDropDownIcon)<{ open: boolean; width?: string }>`
-  width: ${({ width }) => width || '15px'};
+  width: ${({ width }) => width || '10px'};
   transform: ${({ open }) => (open ? 'rotate(-180deg)' : '')};
   transition: transform 0.3s ease;
   right: 0;
@@ -92,7 +93,6 @@ export const TagContainer = styled(Flex)<{ backgroundColor: string }>`
 export const ContentContainer = styled(Flex)`
   position: relative;
   width: 100%;
-  height: 62.5px;
   align-items: flex-end;
   justify-content: space-between;
   ${({ theme }) => theme.mediaQueries.md} {

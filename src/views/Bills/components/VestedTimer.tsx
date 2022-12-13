@@ -5,13 +5,15 @@ import useCurrentTime from 'hooks/useTimer'
 import React from 'react'
 import getTimePeriods from 'utils/getTimePeriods'
 import { StyledHeadingText } from './Modals/styles'
+import ListViewContentMobile from '../../../components/ListViewV2/ListViewContentMobile'
 
 const VestedTimer: React.FC<{
   lastBlockTimestamp: string
   vesting: string
   userModalFlag?: boolean
   transferModalFlag?: boolean
-}> = ({ lastBlockTimestamp, vesting, userModalFlag, transferModalFlag }) => {
+  mobileFlag?: boolean
+}> = ({ lastBlockTimestamp, vesting, userModalFlag, transferModalFlag, mobileFlag }) => {
   const { isXl, isLg, isXxl } = useMatchBreakpoints()
   const { t } = useTranslation()
   const isMobile = !isLg && !isXl && !isXxl
@@ -30,6 +32,14 @@ const VestedTimer: React.FC<{
         <Skeleton width="150px" height="32.5px" animation="waves" />
       )}
     </StyledHeadingText>
+  ) : mobileFlag ? (
+    <ListViewContentMobile
+      title={'Fully Vested'}
+      value={`${vestingTime.days}d, ${vestingTime.hours}h, ${vestingTime.minutes}m`}
+      toolTip={`This is the time remaining until all tokens from the bill are available to claim.`}
+      toolTipPlacement={'bottomLeft'}
+      toolTipTransform={'translate(34%, 0%)'}
+    />
   ) : (
     <ListViewContent
       title={t('Fully Vested')}
@@ -38,7 +48,7 @@ const VestedTimer: React.FC<{
       height={52.5}
       toolTip={t('This is the time remaining until all tokens from the bill are available to claim.')}
       toolTipPlacement={isMobile ? 'bottomRight' : 'bottomLeft'}
-      toolTipTransform={isMobile ? 'translate(-75%, 65%)' : 'translate(0%, 65%)'}
+      toolTipTransform={isMobile ? 'translate(-75%, 65%)' : 'translate(34%, -4%)'}
     />
   )
 }

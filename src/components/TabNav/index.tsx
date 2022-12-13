@@ -6,9 +6,10 @@ interface TabNavProps {
   activeTab: string
   tabOptions: string[]
   onChangeActiveTab: (tab: string) => void
+  ownedBillsAmount?: number
 }
 
-export const TabNav: React.FC<TabNavProps> = ({ tabOptions, activeTab, onChangeActiveTab }) => {
+export const TabNav: React.FC<TabNavProps> = ({ tabOptions, activeTab, onChangeActiveTab, ownedBillsAmount }) => {
   const [width, setWidth] = useState(0)
   const [left, setLeft] = useState(0)
   const refs = useRef([])
@@ -28,7 +29,7 @@ export const TabNav: React.FC<TabNavProps> = ({ tabOptions, activeTab, onChangeA
   return (
     <>
       <Container>
-        <StyledTabNavStats>
+        <StyledTabNavStats columns={tabOptions.length}>
           <Indicator style={{ left, width }} />
           {tabOptions.map((tab, index) => (
             <Tab
@@ -60,6 +61,7 @@ export const TabNav: React.FC<TabNavProps> = ({ tabOptions, activeTab, onChangeA
                     </Text>
                   </Flex>
                 )}
+                {tab === 'Your Bills' && ` (${ownedBillsAmount})`}
               </Flex>
             </Tab>
           ))}

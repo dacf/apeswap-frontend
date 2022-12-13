@@ -11,7 +11,7 @@ export const ControlContainer = styled(Flex)`
   flex-direction: row;
   margin: 20px 0px 20px 0px;
   padding: 15px;
-  z-index: 1;
+  z-index: 2;
   background-color: ${({ theme }) => theme.colors.white2};
   min-width: 300px;
   max-width: 500px;

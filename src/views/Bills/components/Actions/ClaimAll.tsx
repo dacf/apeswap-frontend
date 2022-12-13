@@ -12,7 +12,7 @@ import { StyledButton } from '../styles'
 const ClaimAll: React.FC<{
   userOwnedBills: { billAddress: string; billIds: string[] }[]
   ownedBillsAmount: number
-  buttonSize?: number
+  buttonSize?: string
 }> = ({ userOwnedBills, ownedBillsAmount, buttonSize }) => {
   const { onClaimBill } = useClaimAll(userOwnedBills)
   const { chainId, account } = useActiveWeb3React()

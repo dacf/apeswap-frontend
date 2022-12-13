@@ -59,6 +59,10 @@ const fetchBillsCalls = (bill: BillsConfig, chainId: number): Call[] => {
       address: bill.contractAddress[chainId],
       name: bill.version === BillVersion.V2 ? 'getMaxTotalPayout' : 'maxTotalPayout',
     },
+    {
+      address: bill.contractAddress[chainId],
+      name: 'maxPayout',
+    },
   ]
 
   return standardCalls

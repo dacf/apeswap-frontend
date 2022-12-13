@@ -9,7 +9,9 @@ const SuccessfulMigrationModal: React.FC<{ migrationCompleteLog: MigrationComple
     <Modal maxWidth="400px" minWidth="350px" zIndex={98} title="Successful Migration!" onDismiss={null}>
       <Flex sx={{ background: 'white2', flexDirection: 'column', width: '100%' }}>
         <Flex sx={{ margin: '10px 0px' }}>
-          <Text size="14px">You are no longer a virgin, congratulations. Heres a summary of your migration:</Text>
+          <Text size="14px">
+            You have successfully migrated LPs, congratulations! Here is a summary of your migration:
+          </Text>
         </Flex>
         <Flex
           sx={{
