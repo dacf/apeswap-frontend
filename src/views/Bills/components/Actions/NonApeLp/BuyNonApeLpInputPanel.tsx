@@ -41,7 +41,7 @@ export const BuyNonAPeLpInputPanel = ({
         />
         <Flex sx={{ padding: '5px 10px', background: 'white4', borderRadius: '10px' }}>
           <ServiceTokenDisplay token1={token.symbol} token2={quoteToken.symbol} noEarnToken size={20} />
-          <Text ml="5px" weight={700} size="12px">
+          <Text ml="5px" weight={700} size="12px" sx={{ whiteSpace: 'nowrap' }}>
             {token.symbol}-{quoteToken.symbol}
           </Text>
         </Flex>
