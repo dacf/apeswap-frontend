@@ -18,7 +18,7 @@ export const SlideTemplate = ({
 }) => {
   return (
     <Flex key={title} sx={{ width: '250px', flexDirection: 'column', alignItems: 'center' }}>
-      <Image src={image} sx={{ borderRadius: '10px' }} margin="10px 0px" width="200px" />
+      <Image src={image} sx={{ height: '200px' }} margin="10px 0px" width="200px" />
       <Flex sx={{ flexDirection: 'column', alignItems: 'center', width: '230px', height: '100px' }}>
         <Text size="18px" weight={700} mt="5px">
           {title}
