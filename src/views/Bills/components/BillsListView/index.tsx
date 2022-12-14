@@ -1,7 +1,7 @@
 /** @jsxImportSource theme-ui */
 import React, { useCallback, useMemo, useState } from 'react'
 import { Flex } from '@ape.swap/uikit'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import BigNumber from 'bignumber.js'
 import { MainContainer } from './styles'

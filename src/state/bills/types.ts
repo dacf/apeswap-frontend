@@ -32,6 +32,7 @@ export interface Bills extends BillsConfig {
   debtDecay?: string
   debtRatio?: string
   totalDebt?: string
+  maxPayoutTokens?: string
   totalPayoutGiven?: string
   totalPrincipleBilled?: string
   controlVariable?: string

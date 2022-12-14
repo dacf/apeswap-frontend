@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useMemo, useState } from 'react'
-import { Bills } from 'state/types'
+import { Bills } from 'state/bills/types'
 import { Container } from '../styles'
 import UserBillsRows from './components/UserBillsRows'
 import UserBillsMenu from './components/UserBillsMenu'

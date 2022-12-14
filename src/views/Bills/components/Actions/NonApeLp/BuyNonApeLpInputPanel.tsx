@@ -26,7 +26,7 @@ export const BuyNonAPeLpInputPanel = ({
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
   const { token, quoteToken, lpPrice, userData } = bill
-  const { stakingTokenBalance } = userData
+  const stakingTokenBalance = userData?.stakingTokenBalance
   const parsedStakingBalance = getFullDisplayBalance(new BigNumber(stakingTokenBalance), 18)
   return (
     <Flex sx={styles.dexPanelContainer}>

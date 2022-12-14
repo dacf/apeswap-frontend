@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react'
 import { Flex, useMatchBreakpoints } from '@ape.swap/uikit'
 import ListView from 'components/ListView'
-import { Bills, UserBill } from 'state/types'
+import { Bills, UserBill } from 'state/bills/types'
 import { ExtendedListViewProps } from 'components/ListView/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

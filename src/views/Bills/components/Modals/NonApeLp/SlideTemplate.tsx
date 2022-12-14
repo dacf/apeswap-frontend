@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import { Button, Flex, Text } from '@ape.swap/uikit'
+import { Flex, Text } from '@ape.swap/uikit'
 import React from 'react'
 import { Image } from 'theme-ui'
 

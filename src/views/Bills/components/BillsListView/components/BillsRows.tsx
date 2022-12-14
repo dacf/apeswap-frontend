@@ -14,6 +14,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from 'contexts/Localization'
 import ListView from 'components/ListViewV2'
 import EmptyListComponent, { EmptyComponentType } from '../../EmptyListComponent/EmptyList'
+import { Bills, LpType } from 'state/bills/types'
 
 interface BillsRowsProps {
   billsToRender: any
@@ -27,8 +28,8 @@ const BillsRows: React.FC<BillsRowsProps> = ({ billsToRender, noResults }) => {
   const isSmall = !isXxl
   const isMobile = !isLg && !isXl && !isXxl
 
-  const billsListView = billsToRender.map((bill) => {
-    const { earnToken, token, quoteToken, maxTotalPayOut, totalPayoutGiven, earnTokenPrice } = bill
+  const billsListView = billsToRender.map((bill: Bills) => {
+    const { earnToken, token, quoteToken, maxTotalPayOut, totalPayoutGiven, earnTokenPrice, lpType } = bill
     const vestingTime = getTimePeriods(parseInt(bill.vestingTime), true)
     const available = new BigNumber(maxTotalPayOut)
       ?.minus(new BigNumber(totalPayoutGiven))
@@ -44,7 +45,15 @@ const BillsRows: React.FC<BillsRowsProps> = ({ billsToRender, noResults }) => {
       stakeLp: true,
       id: bill.index,
       billArrow: true,
-      title: <ListViewContent tag={LpTypeVariants.APE} value={bill.lpToken.symbol} width={150} height={45} ml={0} />,
+      title: (
+        <ListViewContent
+          tag={lpType === LpType.ARRAKIS ? LpTypeVariants.UNI : LpTypeVariants.APE}
+          value={bill.lpToken.symbol}
+          width={150}
+          height={45}
+          ml={0}
+        />
+      ),
       infoContent: isSmall && <ProjectLinks website={bill?.projectLink} twitter={bill?.twitter} t={t} isMobile />,
       ttWidth: isSmall && '200px',
       toolTipIconWidth: '15px',

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { AutoRenewIcon } from '@apeswapfinance/uikit'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useToast } from 'state/hooks'
@@ -38,7 +38,7 @@ export const BillActions = ({
     billNftAddress,
   } = bill
   const showApproveBillFlow = !new BigNumber(bill?.userData?.allowance).gt(0)
-  const { stakingTokenBalance } = userData
+  const stakingTokenBalance = userData?.stakingTokenBalance
   const { chainId, account } = useActiveWeb3React()
   const { onApprove } = useApproveBill(lpToken.address[chainId], contractAddress[chainId])
   const { onBuyBill } = useBuyBill(contractAddress[chainId], buyAmount, lpPrice, price)

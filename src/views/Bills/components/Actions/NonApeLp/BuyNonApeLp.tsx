@@ -13,19 +13,7 @@ import BillActionsNonApeLp from './BillActionsNonApeLp'
 import { GetLp } from '../../Modals/NonApeLp/GetLp'
 
 export const BuyNonApeLp = ({ bill, onBillId, onTransactionSubmited }: BuyProps) => {
-  const {
-    token,
-    quoteToken,
-    contractAddress,
-    price,
-    lpPrice,
-    earnToken,
-    earnTokenPrice,
-    maxTotalPayOut,
-    totalPayoutGiven,
-    billNftAddress,
-    index,
-  } = bill
+  const { price, earnToken, earnTokenPrice, maxTotalPayOut, totalPayoutGiven, index } = bill
   const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
   const [value, setValue] = useState('')
@@ -38,7 +26,7 @@ export const BuyNonApeLp = ({ bill, onBillId, onTransactionSubmited }: BuyProps)
   const threshold = new BigNumber(10).div(earnTokenPrice)
   const safeAvailable = available.minus(threshold)
 
-  const [onPresentBuyBillsModal] = useModal(<GetLp bill={bill} />, true, true, `getLpModal${index}`)
+  const [onPresentBuyBillsModal] = useModal(<GetLp bill={bill} onDismiss={null} />, true, true, `getLpModal${index}`)
 
   return (
     <Flex sx={styles.buyContainer}>
