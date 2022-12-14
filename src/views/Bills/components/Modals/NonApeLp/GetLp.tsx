@@ -33,7 +33,7 @@ export const GetLp = ({ bill, onDismiss }: { bill: Bills; onDismiss: () => void 
     bill.quoteToken.decimals[chainId],
   )
 
-  const bigValue = new BigNumber(bill?.userData.stakingTokenBalance)
+  const bigValue = new BigNumber(bill?.userData?.stakingTokenBalance)
   const billValue = bigValue.div(new BigNumber(bill?.price))?.toFixed(6)
 
   const slides: React.ReactNode[] = [
@@ -106,9 +106,9 @@ export const GetLp = ({ bill, onDismiss }: { bill: Bills; onDismiss: () => void 
           </Flex>
           <Flex>
             <ServiceTokenDisplay token1={bill.token.symbol} token2={bill.quoteToken.symbol} noEarnToken size={20} />
-            {bill?.userData.stakingTokenBalance ? (
+            {bill?.userData?.stakingTokenBalance ? (
               <Text ml="5px" size="14px" weight={400}>
-                {getBalanceNumber(new BigNumber(bill?.userData.stakingTokenBalance), 18).toFixed(6)}
+                {getBalanceNumber(new BigNumber(bill?.userData?.stakingTokenBalance), 18).toFixed(6)}
               </Text>
             ) : (
               <Skeleton width="35px" animation="waves" />
@@ -123,7 +123,7 @@ export const GetLp = ({ bill, onDismiss }: { bill: Bills; onDismiss: () => void 
       title={'Step 3'}
       description={'Go back to ApeSwap Bills page, and buy the Treasury Bill.'}
       action={
-        <Button fullWidth disabled={parseFloat(bill?.userData.stakingTokenBalance) === 0} onClick={onDismiss}>
+        <Button fullWidth disabled={parseFloat(bill?.userData?.stakingTokenBalance) === 0} onClick={onDismiss}>
           {t('Buy a Bill')}
         </Button>
       }
