@@ -11,9 +11,7 @@ const MobileListCard: React.FC<ListCardProps> = ({
   cardContent,
   expandedContent,
   infoContent,
-  infoContentPosition,
   expandedContentSize,
-  ttWidth,
 }) => {
   const [expanded, setExpanded] = useState(false)
   return (
@@ -27,17 +25,13 @@ const MobileListCard: React.FC<ListCardProps> = ({
           <Flex sx={{ alignItems: 'center' }}>
             {infoContent && (
               <div style={{ display: 'inline-block' }}>
-                <TooltipBubble
-                  body={infoContent}
-                  transformTip={infoContentPosition || 'translate(0%, 0%)'}
-                  width={ttWidth || '200px'}
-                >
+                <TooltipBubble body={infoContent} transformTip="translate(11%, 0%)" width="200px">
                   <InfoIcon width={'18px'} />
                 </TooltipBubble>
               </div>
             )}
             {expandedContent && (
-              <span style={{ marginLeft: '20px', transform: 'translate(0, -2px)' }}>
+              <span style={{ marginLeft: '20px', transform: 'translate(0, -3px)' }}>
                 <Svg icon="caret" direction={expanded ? 'up' : 'down'} width="10px" />
               </span>
             )}

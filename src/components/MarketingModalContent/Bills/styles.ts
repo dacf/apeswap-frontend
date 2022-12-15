@@ -13,16 +13,6 @@ export const Description = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 0em 1.5em;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 5em;
-    margin-right: 5em;
-  }
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    margin-left: 12em;
-    margin-right: 12em;
-  } ;
 `
 export const StyledText = styled(Text)`
   font-size: 12px;
@@ -63,39 +53,8 @@ export const MainContentBody = styled.div`
   display: flex;
   padding-left: 2em;
   padding-right: 2em;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding-left: 10em;
-    padding-right: 10em;
-  }
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    margin-top: 0;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    padding-left: 13em;
-    padding-right: 13em;
-  } ;
 `
-export const Surround = styled.div`
-  @media screen and (max-width: 280px) {
-    background-position: 10%;
-  }
 
-  display: flex;
-  align-self: center;
-  flex-direction: column;
-  background-image: ${({ theme }) =>
-    theme.isDark ? 'url(/images/banners/line-bg-white.svg)' : 'url(/images/banners/line-bg.svg)'};
-  background-repeat: no-repeat;
-  background-position: 7%;
-  width: 100%;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    background-position: 5%;
-  }
-`
 export const Content = styled.div`
   display: flex;
   align-items: center;

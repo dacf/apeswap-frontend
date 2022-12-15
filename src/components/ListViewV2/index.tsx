@@ -9,7 +9,7 @@ import { ListViewProps } from './types'
 
 const ListView: React.FC<{ listViews: ListViewProps[] }> = ({ listViews }) => {
   const isMobile = useIsMobile()
-  // TODO: This file needs to be refactored. Too many props got added
+
   return (
     <ListViewContainer>
       {listViews.map((view) => {
@@ -28,17 +28,13 @@ const ListView: React.FC<{ listViews: ListViewProps[] }> = ({ listViews }) => {
                 noEarnToken={view?.noEarnToken}
               />
             }
-            title={view.title} //
-            cardContent={view.cardContent} //
-            expandedContent={view.expandedContent} //
-            infoContent={view.infoContent} //
-            infoContentPosition={view?.infoContentPosition} //
-            key={view.id} //
-            expandedContentSize={view?.expandedContentSize} //
-            titleContainerWidth={view?.titleContainerWidth} //
-            toolTipIconWidth={view?.toolTipIconWidth} //
-            toolTipStyle={view?.toolTipStyle} //
-            ttWidth={view?.ttWidth} //
+            title={view.title}
+            cardContent={view.cardContent}
+            expandedContent={view.expandedContent}
+            infoContent={view.infoContent}
+            key={view.id}
+            expandedContentSize={view?.expandedContentSize}
+            titleContainerWidth={view?.titleContainerWidth}
           />
         ) : (
           <ListCard
@@ -55,17 +51,13 @@ const ListView: React.FC<{ listViews: ListViewProps[] }> = ({ listViews }) => {
                 noEarnToken={view?.noEarnToken}
               />
             }
-            title={view.title} //
-            cardContent={view.cardContent} //
-            expandedContent={view.expandedContent} //
-            infoContent={view.infoContent} //
-            infoContentPosition={view?.infoContentPosition} //
-            key={view.id} //
-            expandedContentSize={view?.expandedContentSize} //
-            titleContainerWidth={view?.titleContainerWidth} //
-            toolTipIconWidth={view?.toolTipIconWidth} //
-            toolTipStyle={view?.toolTipStyle} //
-            ttWidth={view?.ttWidth} //
+            title={view.title}
+            cardContent={view.cardContent}
+            expandedContent={view.expandedContent}
+            infoContent={view.infoContent}
+            key={view.id}
+            expandedContentSize={view?.expandedContentSize}
+            titleContainerWidth={view?.titleContainerWidth}
           />
         )
       })}

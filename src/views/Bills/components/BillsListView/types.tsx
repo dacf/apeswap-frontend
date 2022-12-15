@@ -34,10 +34,6 @@ export const SORT_OPTIONS: Option[] = [
     value: 'vesting',
   },
   {
-    label: 'Price',
-    value: 'price',
-  },
-  {
     label: 'New',
     value: 'new',
   },

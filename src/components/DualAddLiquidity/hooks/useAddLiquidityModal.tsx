@@ -1,5 +1,6 @@
+/** @jsxImportSource theme-ui */
 import React, { useCallback, useState } from 'react'
-import { useModal } from '@apeswapfinance/uikit'
+import { useModal } from '@ape.swap/uikit'
 import DualLiquidityModal from '../DualLiquidityModal'
 import { Field, selectCurrency } from 'state/swap/actions'
 import { selectOutputCurrency } from 'state/zap/actions'

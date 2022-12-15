@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React, { useCallback, useMemo, useState } from 'react'
-import { Flex, Svg, Text, Text as StyledText, useModal } from '@ape.swap/uikit'
+import { Flex, Svg, Text, Text as StyledText } from '@ape.swap/uikit'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useBuyBill from 'views/Bills/hooks/useBuyBill'
 import BigNumber from 'bignumber.js'
@@ -8,12 +8,10 @@ import { useToast } from 'state/hooks'
 import { getEtherscanLink } from 'utils'
 import { useAppDispatch } from 'state'
 import { fetchBillsUserDataAsync, fetchUserOwnedBillsDataAsync } from 'state/bills'
-import { Field, selectCurrency } from 'state/swap/actions'
+import { Field } from 'state/swap/actions'
 import { useTranslation } from 'contexts/Localization'
 import { BuyProps, DualCurrencySelector } from './types'
 import { GetLPButton, styles } from './styles'
-import DualLiquidityModal from 'components/DualAddLiquidity/DualLiquidityModal'
-import { selectOutputCurrency } from 'state/zap/actions'
 import { BillValueContainer, TextWrapper } from '../Modals/styles'
 import DualCurrencyPanel from 'components/DualCurrencyPanel/DualCurrencyPanel'
 import { usePair } from 'hooks/usePairs'
@@ -30,6 +28,7 @@ import track from 'utils/track'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useBillType } from '../../hooks/useBillType'
 import UpdateSlippage from 'components/DualDepositModal/UpdateSlippage'
+import useAddLiquidityModal from 'components/DualAddLiquidity/hooks/useAddLiquidityModal'
 
 const Buy: React.FC<BuyProps> = ({ bill, onBillId, onTransactionSubmited }) => {
   const {
@@ -53,6 +52,7 @@ const Buy: React.FC<BuyProps> = ({ bill, onBillId, onTransactionSubmited }) => {
   const [pendingTrx, setPendingTrx] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
+  const onAddLiquidityModal = useAddLiquidityModal()
 
   const billsCurrencies: DualCurrencySelector = {
     currencyA: useCurrency(token.address[chainId]),
@@ -223,31 +223,6 @@ const Buy: React.FC<BuyProps> = ({ bill, onBillId, onTransactionSubmited }) => {
     setZapSlippage,
   ])
 
-  // would love to create a function on the near future to avoid the same code repeating itself along several parts of the repo
-  const [onPresentAddLiquidityModal] = useModal(<DualLiquidityModal />, true, true, 'liquidityWidgetModal')
-
-  const showLiquidity = () => {
-    dispatch(
-      selectCurrency({
-        field: Field.INPUT,
-        currencyId: token.symbol === 'BNB' ? 'ETH' : token.address[chainId],
-      }),
-    )
-    dispatch(
-      selectCurrency({
-        field: Field.OUTPUT,
-        currencyId: quoteToken.symbol === 'BNB' ? 'ETH' : quoteToken.address[chainId],
-      }),
-    )
-    dispatch(
-      selectOutputCurrency({
-        currency1: token.address[chainId],
-        currency2: quoteToken.address[chainId],
-      }),
-    )
-    onPresentAddLiquidityModal()
-  }
-
   const handleMaxInput = useCallback(() => {
     onHandleValueChange(maxAmountSpend(selectedCurrencyBalance).toExact())
   }, [onHandleValueChange, selectedCurrencyBalance])
@@ -301,7 +276,7 @@ const Buy: React.FC<BuyProps> = ({ bill, onBillId, onTransactionSubmited }) => {
         </BillValueContainer>
         <Flex sx={{ ...styles.buttonsContainer }}>
           <Box sx={styles.getLpContainer}>
-            <GetLPButton variant="secondary" onClick={showLiquidity}>
+            <GetLPButton variant="secondary" onClick={() => onAddLiquidityModal(token, quoteToken, null, null, null)}>
               <StyledText sx={{ marginRight: '5px' }}>{t('Get LP')}</StyledText>
               <Svg icon="ZapIcon" color="yellow" />
             </GetLPButton>

@@ -1,9 +1,10 @@
 /** @jsxImportSource theme-ui */
 import React from 'react'
-import { Flex, HelpIcon, Text } from '@ape.swap/uikit'
+import { Flex, HelpIcon, Skeleton, Text } from '@ape.swap/uikit'
 import { TooltipBubble } from '@ape.swap/uikit'
 import { TitleText, ValueSkeleton } from '../ListViewContent/styles'
 import { useTranslation } from '../../contexts/Localization'
+import { styles } from './styles'
 
 interface ListViewContentMobileProps {
   title: string
@@ -12,6 +13,8 @@ interface ListViewContentMobileProps {
   toolTip?: string
   toolTipPlacement?: 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft'
   toolTipTransform?: string
+  value2?: string
+  value2Secondary?: boolean
 }
 
 const ListViewContentMobile: React.FC<ListViewContentMobileProps> = ({
@@ -21,6 +24,8 @@ const ListViewContentMobile: React.FC<ListViewContentMobileProps> = ({
   toolTip,
   toolTipPlacement,
   toolTipTransform,
+  value2,
+  value2Secondary,
 }) => {
   const { t } = useTranslation()
   return (
@@ -36,9 +41,20 @@ const ListViewContentMobile: React.FC<ListViewContentMobileProps> = ({
           <HelpIcon width="12px" ml="5px" />
         </TitleText>
       </TooltipBubble>
-      <Text sx={{ color: valueColor }} weight={700} size="12px">
-        {value.includes('NaN') || value.includes('undefined') || value.includes('null') ? <ValueSkeleton /> : value}
-      </Text>
+      <Flex>
+        <Text sx={{ ...styles.valueText, color: valueColor, mr: '5px' }}>
+          {value.includes('NaN') || value.includes('undefined') || value.includes('null') ? <ValueSkeleton /> : value}
+        </Text>
+        {value2 && (
+          <Text sx={value2Secondary ? styles.secondaryText : styles.valueText}>
+            {value2.includes('NaN') || value2.includes('undefined') || value.includes('null') ? (
+              <Skeleton sx={styles.skeleton} />
+            ) : (
+              value2
+            )}
+          </Text>
+        )}
+      </Flex>
     </Flex>
   )
 }

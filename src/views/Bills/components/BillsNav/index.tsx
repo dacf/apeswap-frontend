@@ -2,14 +2,18 @@
 import React from 'react'
 import { Container } from './styles'
 import { TabNav } from 'components/TabNav'
+import { useBills } from 'state/bills/hooks'
 
 interface BillsNavProps {
   billsView: string
   setBillsView: (newBillsView: string) => void
-  ownedBillsAmount: number
 }
 
-const BillsNav: React.FC<BillsNavProps> = ({ billsView, setBillsView, ownedBillsAmount }) => {
+const BillsNav: React.FC<BillsNavProps> = ({ billsView, setBillsView }) => {
+  const bills = useBills()
+  const ownedBillsAmount = bills?.flatMap((bill) => {
+    return bill?.userOwnedBillsData ? bill?.userOwnedBillsData : []
+  }).length
   return (
     <Container>
       <TabNav

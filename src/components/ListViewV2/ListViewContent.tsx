@@ -1,8 +1,7 @@
 /** @jsxImportSource theme-ui */
 import React from 'react'
-import { Flex, HelpIcon } from '@apeswapfinance/uikit'
-import { LpTag, TooltipBubble } from '@ape.swap/uikit'
-import { TitleContentText, ListViewContentContainer, ValueText, ValueSkeleton } from './styles'
+import { LpTag, TooltipBubble, Flex, HelpIcon, Text, Skeleton } from '@ape.swap/uikit'
+import { styles } from './styles'
 import { ListViewContentProps } from './types'
 
 const ListViewContent: React.FC<ListViewContentProps> = ({
@@ -13,21 +12,17 @@ const ListViewContent: React.FC<ListViewContentProps> = ({
   value2Secondary,
   valueIcon,
   value2Icon,
-  mb,
-  ml,
-  width,
-  height,
   valueColor,
-  lineHeight,
   toolTip,
   aprCalculator,
   toolTipPlacement,
   toolTipTransform,
-  justifyContent,
+  style,
+  valuesDirection = 'column',
 }) => {
   return (
-    <ListViewContentContainer mb={mb} ml={ml} width={width} height={height}>
-      <Flex alignItems="center">
+    <Flex sx={{ ...style, ...styles.listViewContainer }}>
+      <Flex>
         {toolTip ? (
           <Flex alignItems="flex-start">
             <div style={{ display: 'inline-block' }}>
@@ -37,10 +32,10 @@ const ListViewContent: React.FC<ListViewContentProps> = ({
                 body={<Flex>{toolTip}</Flex>}
                 width="180px"
               >
-                <TitleContentText lineHeight={lineHeight}>
+                <Text sx={styles.titleText}>
                   {title}
                   <HelpIcon width="12px" ml="5px" />
-                </TitleContentText>
+                </Text>
               </TooltipBubble>
             </div>
             <div style={{ marginLeft: '5px' }} />
@@ -48,32 +43,36 @@ const ListViewContent: React.FC<ListViewContentProps> = ({
           </Flex>
         ) : (
           <Flex>
-            <TitleContentText lineHeight={lineHeight}>{tag ? <LpTag variant={tag} /> : title}</TitleContentText>
+            {tag ? <LpTag variant={tag} /> : <Text sx={styles.titleText}>{title}</Text>}
             {aprCalculator}
           </Flex>
         )}
       </Flex>
-
-      <Flex alignItems="center" justifyContent={justifyContent}>
-        {valueIcon && valueIcon}
-        <ValueText bold lineHeight={lineHeight} valueColor={valueColor}>
-          {value.includes('NaN') || value.includes('undefined') || value.includes('null') ? <ValueSkeleton /> : value}
-        </ValueText>
-      </Flex>
-
-      <Flex alignItems="center" justifyContent={justifyContent}>
-        {value2Icon && value2Icon}
-        {value2 && (
-          <ValueText bold={!value2Secondary} value2Secondary={value2Secondary} lineHeight={lineHeight}>
-            {value2.includes('NaN') || value2.includes('undefined') || value.includes('null') ? (
-              <ValueSkeleton />
+      <Flex sx={{ flexDirection: valuesDirection }}>
+        <Flex>
+          {valueIcon && valueIcon}
+          <Text sx={{ ...styles.valueText, color: valueColor }}>
+            {value.includes('NaN') || value.includes('undefined') || value.includes('null') ? (
+              <Skeleton sx={styles.skeleton} />
             ) : (
-              value2
+              value
             )}
-          </ValueText>
-        )}
+          </Text>
+        </Flex>
+        <Flex sx={{ ml: valuesDirection === 'row' ? '5px' : 0 }}>
+          {value2Icon && value2Icon}
+          {value2 && (
+            <Text sx={value2Secondary ? styles.secondaryText : styles.valueText}>
+              {value2.includes('NaN') || value2.includes('undefined') || value.includes('null') ? (
+                <Skeleton sx={styles.skeleton} />
+              ) : (
+                value2
+              )}
+            </Text>
+          )}
+        </Flex>
       </Flex>
-    </ListViewContentContainer>
+    </Flex>
   )
 }
 

@@ -12,10 +12,7 @@ const ListCard: React.FC<ListCardProps> = ({
   cardContent,
   expandedContent,
   infoContent,
-  infoContentPosition,
   titleContainerWidth,
-  toolTipIconWidth,
-  ttWidth,
 }) => {
   const [expanded, setExpanded] = useState(false)
   return (
@@ -33,13 +30,8 @@ const ListCard: React.FC<ListCardProps> = ({
         )}
         {infoContent && (
           <div style={{ display: 'inline-block' }}>
-            <TooltipBubble
-              placement="bottomRight"
-              body={infoContent}
-              transformTip={infoContentPosition || 'translate(-82%, 40%)'}
-              width={ttWidth || '200px'}
-            >
-              <InfoIcon width={toolTipIconWidth || '25px'} />
+            <TooltipBubble placement="bottomRight" body={infoContent} transformTip="translate(11%, 0%)" width="200px">
+              <InfoIcon width="15px" />
             </TooltipBubble>
           </div>
         )}
