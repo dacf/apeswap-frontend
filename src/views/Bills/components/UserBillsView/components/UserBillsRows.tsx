@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react'
 import { Flex, useMatchBreakpoints } from '@ape.swap/uikit'
 import ListView from 'components/ListView'
-import { Bills, UserBill } from 'state/bills/types'
+import { Bills, LpType, UserBill } from 'state/bills/types'
 import { ExtendedListViewProps } from 'components/ListView/types'
 import { getBalanceNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -62,7 +62,7 @@ const UserBillsRows: React.FC<{
 
   const billsListView = bills.flatMap((bill) => {
     const ownedBills = bill?.userOwnedBillsData
-    const { token, quoteToken, earnToken } = bill
+    const { token, quoteToken, earnToken, lpType } = bill
     return ownedBills.flatMap((ownedBill) => {
       if (!showClaimed && parseFloat(ownedBill.pendingRewards) === 0 && parseFloat(ownedBill.payout) === 0) {
         return []
@@ -80,7 +80,7 @@ const UserBillsRows: React.FC<{
         billArrow: true,
         title: (
           <ListViewContent
-            tag={LpTypeVariants.APE}
+            tag={lpType === LpType.ARRAKIS ? LpTypeVariants.ARK : LpTypeVariants.APE}
             value={bill.lpToken.symbol}
             width={isMobile ? 150 : 150}
             height={45}

@@ -48,4 +48,5 @@ export interface ListViewContentProps {
 export enum LpTypeVariants {
   APE = 'ape',
   UNI = 'uni',
+  ARK = 'ark',
 }

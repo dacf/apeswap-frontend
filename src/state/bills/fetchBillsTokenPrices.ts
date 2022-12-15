@@ -65,13 +65,13 @@ const fetchBillsTokenPrices = async (chainId: number, bills: Bills[]) => {
   const uniV2TokenCalls = uniV2Tokens.map(({ address, decimals, isLp, lpType }) => {
     if (isLp) {
       return {
-        address: PRICE_GETTERS[chainId][lpType],
+        address: PRICE_GETTERS[chainId][lpType || LpType.APESWAP],
         name: 'getLPPrice',
         params: [address[chainId], decimals[chainId]],
       }
     }
     return {
-      address: PRICE_GETTERS[chainId][lpType],
+      address: PRICE_GETTERS[chainId][lpType || LpType.APESWAP],
       name: 'getPrice',
       params: [address[chainId], decimals[chainId]],
     }

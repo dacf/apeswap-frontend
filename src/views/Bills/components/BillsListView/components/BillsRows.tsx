@@ -47,7 +47,7 @@ const BillsRows: React.FC<BillsRowsProps> = ({ billsToRender, noResults }) => {
       billArrow: true,
       title: (
         <ListViewContent
-          tag={lpType === LpType.ARRAKIS ? LpTypeVariants.UNI : LpTypeVariants.APE}
+          tag={lpType === LpType.ARRAKIS ? LpTypeVariants.ARK : LpTypeVariants.APE}
           value={bill.lpToken.symbol}
           width={150}
           height={45}
