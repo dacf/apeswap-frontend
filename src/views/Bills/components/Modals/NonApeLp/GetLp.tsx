@@ -45,7 +45,13 @@ export const GetLp = ({ bill, onDismiss }: { bill: Bills; onDismiss: () => void 
       action={
         <Button
           fullWidth
-          onClick={() => window.open('https://app.uniswap.org/#/swap', '_blank', 'noopener,noreferrer')}
+          onClick={() =>
+            window.open(
+              `https://app.uniswap.org/#/swap?outputCurrency=${bill.token.address[chainId]}`,
+              '_blank',
+              'noopener,noreferrer',
+            )
+          }
         >
           {t('Buy Tokens')}
         </Button>

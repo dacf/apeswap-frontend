@@ -15,6 +15,7 @@ import { BillsToRender } from '../types'
 import { ExtendedListViewProps } from 'components/ListView/types'
 import { formatNumberSI } from 'utils/formatNumber'
 import ListView from '../../../../../components/ListViewV2'
+import { LpType } from 'state/bills/types'
 
 const UserBillsRows: React.FC<{ billsToRender: BillsToRender[] }> = ({ billsToRender }) => {
   const { isXl, isLg, isXxl } = useMatchBreakpoints()
@@ -25,7 +26,7 @@ const UserBillsRows: React.FC<{ billsToRender: BillsToRender[] }> = ({ billsToRe
   const billsListView = billsToRender?.flatMap((billToRender) => {
     if (!billToRender) return []
     const { bill } = billToRender
-    const { token, quoteToken, earnToken } = bill
+    const { token, quoteToken, earnToken, lpType } = bill
     const pending = getBalanceNumber(new BigNumber(billToRender.payout), bill?.earnToken?.decimals[chainId])
     const claimable = getBalanceNumber(new BigNumber(billToRender.pendingRewards), bill?.earnToken?.decimals[chainId])
     return {
@@ -33,7 +34,13 @@ const UserBillsRows: React.FC<{ billsToRender: BillsToRender[] }> = ({ billsToRe
       stakeLp: true,
       id: billToRender.id,
       billArrow: true,
-      title: <ListViewContent tag="ape" value={bill.lpToken.symbol} style={{ maxWidth: '150px', height: '45px' }} />,
+      title: (
+        <ListViewContent
+          tag={lpType === LpType.ARRAKIS ? 'ark' : 'ape'}
+          value={bill.lpToken.symbol}
+          style={{ maxWidth: '150px', height: '45px' }}
+        />
+      ),
       titleContainerWidth: 260,
       cardContent: isMobile ? (
         <ListViewContentMobile

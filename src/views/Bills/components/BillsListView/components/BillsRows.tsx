@@ -13,7 +13,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from 'contexts/Localization'
 import ListView from 'components/ListViewV2'
 import EmptyListComponent, { EmptyComponentType } from '../../EmptyListComponent/EmptyList'
-import { Bills } from 'state/bills/types'
+import { Bills, LpType } from 'state/bills/types'
 import { formatNumberSI } from 'utils/formatNumber'
 import DiscountContent from './DiscountContent'
 
@@ -45,7 +45,13 @@ const BillsRows: React.FC<BillsRowsProps> = ({ billsToRender, noResults }) => {
       stakeLp: true,
       id: bill.index,
       billArrow: true,
-      title: <ListViewContent tag="ape" value={bill.lpToken.symbol} style={{ maxWidth: '150px', height: '45px' }} />,
+      title: (
+        <ListViewContent
+          tag={lpType === LpType.ARRAKIS ? 'ark' : 'ape'}
+          value={bill.lpToken.symbol}
+          style={{ maxWidth: '150px', height: '45px' }}
+        />
+      ),
       infoContent: <ProjectLinks website={bill?.projectLink} twitter={bill?.twitter} t={t} isMobile />,
       titleContainerWidth: 275,
       cardContent: isMobile ? (

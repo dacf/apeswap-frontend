@@ -178,8 +178,10 @@ export const fetchBillTokenPricesAsync =
   (chainId: number): AppThunk =>
   async (dispatch, getState) => {
     const bills = getState().bills.data
-    const tokenPrices = await fetchBillsTokenPrices(chainId, bills)
-    dispatch(setBillTokenPrices(tokenPrices))
+    try {
+      const tokenPrices = await fetchBillsTokenPrices(chainId, bills)
+      dispatch(setBillTokenPrices(tokenPrices))
+    } catch {}
   }
 
 export const updateUserAllowance =
