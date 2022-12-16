@@ -38,7 +38,7 @@ export const billsSlice = createSlice({
     setBillTokenPrices: (state, action) => {
       const tokenPricesData: TokenPrices[] = action.payload
       state.tokenPrices =
-        state.tokenPrices.length === 0
+        state.tokenPrices.length === 0 || state.tokenPrices.length !== tokenPricesData.length
           ? tokenPricesData
           : state.tokenPrices.map((tokenPrice) => {
               const liveTokenPriceData = tokenPricesData.find((entry) => entry.address === tokenPrice.address)
@@ -176,12 +176,17 @@ export const fetchUserOwnedBillsDataAsync =
 
 export const fetchBillTokenPricesAsync =
   (chainId: number): AppThunk =>
-  async (dispatch, getState) => {
-    const bills = getState().bills.data
-    try {
-      const tokenPrices = await fetchBillsTokenPrices(chainId, bills)
-      dispatch(setBillTokenPrices(tokenPrices))
-    } catch {}
+  async (dispatch) => {
+    const initialBillState: Bills[] = await fetchBillsConfig()
+    // Becuase the chainId sets before the filtered bills we need to add a safety filter to grab the correct bills
+    const filterBillsByChainId = initialBillState.filter(
+      (bill) =>
+        bill.contractAddress?.[chainId] !== '' &&
+        bill.contractAddress?.[chainId] !== null &&
+        bill.contractAddress?.[chainId] !== undefined,
+    )
+    const tokenPrices = await fetchBillsTokenPrices(chainId, filterBillsByChainId)
+    dispatch(setBillTokenPrices(tokenPrices))
   }
 
 export const updateUserAllowance =
