@@ -78,7 +78,7 @@ const DualCurrencyDropdown: React.FC<{
       })
     return [lpList[0], { currencyA: Currency.ETHER, currencyB: null }, parsedList].flat()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zapInputList, searchQuery])
+  }, [zapInputList, lpList, searchQuery])
 
   const handleCurrencyDynamic = useCallback(
     (currency: DualCurrencySelector) => {

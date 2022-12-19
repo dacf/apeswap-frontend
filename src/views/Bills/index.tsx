@@ -22,8 +22,8 @@ export enum BillsView {
 
 const Bills: React.FC = () => {
   useSetBills()
-  usePollBills()
   usePollUserBills()
+  usePollBills()
   const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
   const [billsView, setBillsView] = useState<string>(BillsView.AVAILABLE_BILLS)

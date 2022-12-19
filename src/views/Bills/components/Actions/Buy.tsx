@@ -60,7 +60,16 @@ const Buy: React.FC<BuyProps> = ({ bill, onBillId, onTransactionSubmited }) => {
   }
   const [currencyA, setCurrencyA] = useState(billsCurrencies.currencyA)
   const [currencyB, setCurrencyB] = useState(billsCurrencies.currencyB)
-  const inputCurrencies = [currencyA, currencyB]
+
+  useMemo(() => {
+    setCurrencyA(billsCurrencies.currencyA)
+  }, [billsCurrencies.currencyA])
+
+  useMemo(() => {
+    setCurrencyB(billsCurrencies.currencyB)
+  }, [billsCurrencies.currencyB])
+
+  const inputCurrencies = useMemo(() => [currencyA, currencyB], [currencyA, currencyB])
 
   // We want to find the pair (if any) to get its balance, if there's no pair use currencyA
   const [, pair] = usePair(inputCurrencies[0], inputCurrencies[1])

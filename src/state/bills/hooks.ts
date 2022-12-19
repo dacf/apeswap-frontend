@@ -19,9 +19,12 @@ export const usePollBills = () => {
   const { slowRefresh } = useRefresh()
   const dispatch = useAppDispatch()
   const tokenPrices = useBillsTokenPrices()
+  const bills = useSelector((state: State) => state.bills.data)
+  // When the length of bills change data will be reloaded. Need for cross chain and pulling bills data
+  const billsLoaded = bills.length
   useEffect(() => {
     dispatch(fetchBillsPublicDataAsync(chainId))
-  }, [dispatch, slowRefresh, tokenPrices.length, chainId])
+  }, [dispatch, slowRefresh, billsLoaded, tokenPrices.length, chainId])
 }
 
 export const usePollUserBills = (): Bills[] => {
@@ -29,14 +32,15 @@ export const usePollUserBills = (): Bills[] => {
   const dispatch = useAppDispatch()
   const { chainId, account } = useActiveWeb3React()
   const bills = useSelector((state: State) => state.bills.data)
+  const tokenPrices = useBillsTokenPrices()
   // When the length of bills change data will be reloaded. Need for cross chain and pulling bills data
   const billsLoaded = bills.length
   useEffect(() => {
     if (account) {
-      dispatch(fetchBillsUserDataAsync(chainId, account))
       dispatch(fetchUserOwnedBillsDataAsync(chainId, account))
+      dispatch(fetchBillsUserDataAsync(chainId, account))
     }
-  }, [account, dispatch, slowRefresh, billsLoaded, chainId])
+  }, [account, dispatch, slowRefresh, billsLoaded, tokenPrices.length, chainId])
   return bills
 }
 
