@@ -9,6 +9,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { UAuthConnector } from '@uauth/web3-react'
 import UAuth from '@uauth/js'
 import { ChainId } from '@ape.swap/sdk'
+import { LedgerHQFrameConnector } from 'web3-ledgerhq-frame-connector'
 
 const POLLING_INTERVAL = 15000
 
@@ -55,6 +56,8 @@ export const uauth = new UAuthConnector({
   connectors: { injected, walletconnect },
 })
 
+export const ledgerConnector = new LedgerHQFrameConnector()
+
 export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
   [ConnectorNames.Injected]: injected,
   [ConnectorNames.WalletConnect]: walletconnect,
@@ -62,9 +65,11 @@ export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
   [ConnectorNames.Walletlink]: walletlink,
   [ConnectorNames.Torus]: torus,
   [ConnectorNames.Unstoppable]: uauth,
+  [ConnectorNames.LEDGER_HQ_LIVE]: ledgerConnector,
 }
 
 export const getLibrary = (provider: any): Web3Provider => {
+  console.log(provider)
   const library = new Web3Provider(provider, 'any')
   library.pollingInterval = 15000
   return library

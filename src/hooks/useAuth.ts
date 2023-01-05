@@ -26,8 +26,11 @@ const useAuth = () => {
   const { t } = useTranslation()
 
   const login = useCallback((connectorID: ConnectorNames) => {
+    console.log(connectorID)
     const connector = connectorsByName[connectorID]
     if (connector) {
+      console.log(connector)
+      if (connectorID === 'Ledger Live') console.log(connector?.isLedgerApp())
       activate(connector, async (error: Error) => {
         if (error instanceof UnsupportedChainIdError) {
           const hasSetup = await setupNetwork(chainId)
@@ -51,6 +54,7 @@ const useAuth = () => {
             }
             toastError(t('Wallet Connection Error: Please complete the authorization using your wallet.'))
           } else {
+            console.log('asd')
             toastError(`${error.name}, ${error.message}`)
           }
         }
