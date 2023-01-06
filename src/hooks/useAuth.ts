@@ -30,7 +30,7 @@ const useAuth = () => {
     const connector = connectorsByName[connectorID]
     if (connector) {
       console.log(connector)
-      if (connectorID === 'Ledger Live') console.log(connector?.isLedgerApp())
+      connector.supportedChainIds = [1, 56, 137]
       activate(connector, async (error: Error) => {
         if (error instanceof UnsupportedChainIdError) {
           const hasSetup = await setupNetwork(chainId)

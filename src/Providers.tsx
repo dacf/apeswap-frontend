@@ -84,10 +84,7 @@ const Providers: React.FC = ({ children }) => {
                         <RefreshContextProvider>
                           <ModalProvider>
                             <OldModalProvider>
-                              <QueryClientProvider client={queryClient}>
-                                <AutoConnect connectors={connectors} />
-                                {children}
-                              </QueryClientProvider>
+                              <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
                             </OldModalProvider>
                           </ModalProvider>
                         </RefreshContextProvider>
