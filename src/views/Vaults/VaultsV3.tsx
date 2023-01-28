@@ -148,6 +148,30 @@ const VaultsV3: React.FC = () => {
     return sortVaults(chosenVaults).slice(0, numberOfVaultsVisible)
   }
 
+  const renderLegacyVaults = (): Vault[] => {
+    let chosenVaults = legacyVaults
+
+    if (stakedOnly) {
+      chosenVaults = chosenVaults.filter(
+        (vault) => vault.userData && new BigNumber(vault.userData.stakedBalance).isGreaterThan(0),
+      )
+    }
+
+    if (vaultType !== 'allTypes') {
+      chosenVaults = chosenVaults.filter((vault) => vault.type === vaultType.toUpperCase())
+    }
+
+    if (searchQuery) {
+      const lowercaseQuery = searchQuery.toLowerCase()
+      chosenVaults = chosenVaults.filter((vault) =>
+        `${vault?.stakeToken?.symbol.toLowerCase()}-${vault?.rewardToken?.symbol.toLowerCase()}`.includes(
+          lowercaseQuery,
+        ),
+      )
+    }
+    return chosenVaults.slice(0, numberOfVaultsVisible)
+  }
+
   useSetZapOutputList(
     activeVaults?.slice(1).map((vault) => {
       return { currencyIdA: vault?.token?.address[chainId], currencyIdB: vault?.quoteToken?.address[chainId] }
@@ -222,9 +246,7 @@ const VaultsV3: React.FC = () => {
                 </>
               )}
               <DisplayVaults vaults={renderVaults()} openId={urlSearchedVault} />
-              {!isActive && (
-                <DisplayVaults vaults={legacyVaults.slice(0, numberOfVaultsVisible)} openId={urlSearchedVault} />
-              )}
+              {!isActive && <DisplayVaults vaults={renderLegacyVaults()} openId={urlSearchedVault} />}
             </>
           )}
         </ListViewLayout>

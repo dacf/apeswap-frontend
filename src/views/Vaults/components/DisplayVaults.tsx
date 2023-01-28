@@ -70,6 +70,10 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
     const userTokenBalanceUsd = `$${(parseFloat(userTokenBalance || '0') * vault?.stakeTokenPrice).toFixed(2)}`
     const userStakedBalance = getBalanceNumber(new BigNumber(vault?.userData?.stakedBalance))
     const userStakedBalanceUsd = `$${((userStakedBalance || 0) * vault?.stakeTokenPrice).toFixed(2)}`
+    const userStakedAndRewardBalance = getBalanceNumber(
+      new BigNumber(vault?.userData?.stakedBalance).plus(new BigNumber(vault?.userData?.pendingRewards)),
+    )
+    const userStakedAndRewardBalanceUsd = `$${((userStakedAndRewardBalance || 0) * vault?.stakeTokenPrice).toFixed(2)}`
 
     const { tokenDisplay, stakeLp, earnLp } = vaultTokenDisplay(vault.stakeToken, vault.rewardToken)
     const explorerLink = BLOCK_EXPLORER[chainId]
@@ -105,7 +109,7 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
       infoContentPosition: 'translate(8%, 0%)',
       toolTipIconWidth: isMobile && '20px',
       toolTipStyle: isMobile && { marginTop: '10px', marginRight: '10px' },
-      expandedContentJustified: vault.version === VaultVersion.V1 && 'center',
+      expandedContentJustified: (vault.version === VaultVersion.V1 || vault.pid === 0) && 'center',
       open: openId === vault.id,
       cardContent: (
         <>
@@ -141,8 +145,14 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
             height={50}
           />
           <ListViewContent
-            title={vault.version === VaultVersion.V1 ? t('Staked') : t('Earned')}
-            value={vault.version === VaultVersion.V1 ? userStakedBalanceUsd : userEarningsUsd}
+            title={vault.version === VaultVersion.V1 || vault.pid === 0 ? t('Staked') : t('Earned')}
+            value={
+              vault.version === VaultVersion.V1
+                ? userStakedBalanceUsd
+                : vault.version === VaultVersion.V3 && vault.pid === 0
+                ? userStakedAndRewardBalanceUsd
+                : userEarningsUsd
+            }
             width={isMobile ? 50 : 115}
             height={50}
           />
@@ -198,12 +208,18 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
               />
             )}
           </ActionContainer>
-          {vault.version === VaultVersion.V1
+          {vault.version === VaultVersion.V1 || vault.pid === 0
             ? !isMobile && <NextArrow ml="30px" mr="50px" />
             : !isMobile && <NextArrow />}
           <Actions
             allowance={userAllowance?.toString()}
-            stakedBalance={vault?.userData?.stakedBalance?.toString()}
+            stakedBalance={
+              vault.pid === 0 && vault.version === VaultVersion.V3
+                ? new BigNumber(vault?.userData?.stakedBalance)
+                    .plus(new BigNumber(vault?.userData?.pendingRewards))
+                    .toString()
+                : vault?.userData?.stakedBalance?.toString()
+            }
             stakedTokenSymbol={vault?.stakeToken?.symbol}
             stakingTokenBalance={vault?.userData?.tokenBalance?.toString()}
             stakeTokenAddress={vault?.stakeToken?.address[chainId]}
@@ -212,8 +228,10 @@ const DisplayVaults: React.FC<{ vaults: Vault[]; openId?: number }> = ({ vaults,
             pid={vault.pid}
             vaultVersion={vault.version}
           />
-          {(vault.version === VaultVersion.V2 || vault.version === VaultVersion.V3) && !isMobile && <NextArrow />}
-          {(vault.version === VaultVersion.V2 || vault.version === VaultVersion.V3) && (
+          {(vault.version === VaultVersion.V2 || vault.version === VaultVersion.V3) && vault.pid !== 0 && !isMobile && (
+            <NextArrow />
+          )}
+          {(vault.version === VaultVersion.V2 || vault.version === VaultVersion.V3) && vault.pid !== 0 && (
             <HarvestAction
               pid={vault?.pid}
               disabled={userEarnings <= 0}

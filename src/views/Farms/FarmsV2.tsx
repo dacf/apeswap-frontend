@@ -168,6 +168,21 @@ const FarmsV2: React.FC = () => {
     }
   }
 
+  const renderLegacyFarms = () => {
+    let farms = legacyFarms
+
+    if (stakedOnly) {
+      farms = legacyFarms.filter((farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0))
+    }
+
+    if (query) {
+      farms = legacyFarms.filter((farm) => {
+        return farm.lpSymbol.toUpperCase().includes(query.toUpperCase())
+      })
+    }
+    return farms.slice(0, numberOfFarmsVisible)
+  }
+
   // Set zap output list to match farms
   useSetZapOutputList(
     activeFarms?.map((farm) => {
@@ -254,12 +269,7 @@ const FarmsV2: React.FC = () => {
                 <DisplayFarms farms={renderFarms()} openPid={urlSearchedFarm} farmTags={null} v2Flag={true} />
               </Flex>
               {!isActive && (
-                <DisplayFarms
-                  farms={legacyFarms?.slice(1, numberOfFarmsVisible)}
-                  openPid={urlSearchedFarm}
-                  farmTags={null}
-                  v2Flag={false}
-                />
+                <DisplayFarms farms={renderLegacyFarms()} openPid={urlSearchedFarm} farmTags={null} v2Flag={false} />
               )}
             </>
           )}

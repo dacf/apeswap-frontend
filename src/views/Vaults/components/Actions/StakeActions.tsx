@@ -87,6 +87,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
       max={stakedBalance}
       title={t('Unstake LP tokens')}
       withdrawFee={withdrawFee}
+      auto={pid === 0 && vaultVersion === VaultVersion.V3}
       onConfirm={async (val) => {
         setPendingWithdrawTrx(true)
         await onUnstake(val)

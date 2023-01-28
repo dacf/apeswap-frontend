@@ -12,6 +12,7 @@ interface WithdrawModalProps {
   onDismiss?: () => void
   title: string
   withdrawFee?: string
+  auto?: boolean
 }
 
 const modalProps = {
@@ -24,7 +25,7 @@ const modalProps = {
   },
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max, title, withdrawFee }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max, title, withdrawFee, auto }) => {
   const [val, setVal] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const { t } = useTranslation()
@@ -52,6 +53,11 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
         max={fullBalance}
         inputTitle={t('Unstake')}
       />
+      {auto && (
+        <Flex sx={{ padding: '20px 0 10px 0', justifyContent: 'center', textAlign: 'center' }}>
+          <Text>Select Max withdraw to remove your rewarded BANANA</Text>{' '}
+        </Flex>
+      )}
       {withdrawFee && (
         <Flex sx={{ padding: '20px 0 10px 0', justifyContent: 'center' }}>
           <Text>{t(`Withdrawing will have a %withdrawFee%% fee`, { withdrawFee })}</Text>
