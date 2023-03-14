@@ -61,7 +61,9 @@ const BillsListView: React.FC = () => {
     let billsToReturn = []
     bills?.forEach((bill) => {
       if (bill.inactive) return
-      const disabled = isSoldOut(bill)
+      //hardcoded to test bills
+      const disabled = false
+      //const disabled = isSoldOut(bill)
       const discount = hasDiscount(bill)
       if (showAvailable && disabled) return
       if (!showAvailable && !disabled) return

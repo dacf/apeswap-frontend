@@ -37,7 +37,9 @@ const BillsRows: React.FC<BillsRowsProps> = ({ billsToRender, noResults }) => {
 
     const thresholdToHide = new BigNumber(11).div(earnTokenPrice)
     const thresholdToShow = new BigNumber(5).div(earnTokenPrice)
-    const disabled = new BigNumber(available).lte(thresholdToHide) || discount === '100.00'
+    //hardcoded to test bills
+    const disabled = false
+    //const disabled = new BigNumber(available).lte(thresholdToHide) || discount === '100.00'
 
     const displayAvailable = available.minus(thresholdToShow).toFixed(0)
     const explorerLink = BLOCK_EXPLORER[chainId]
